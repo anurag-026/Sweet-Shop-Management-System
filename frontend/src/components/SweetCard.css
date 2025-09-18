@@ -1,0 +1,294 @@
+.sweet-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sweet-card:hover {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  }
+  
+  .sweet-image {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+  }
+  
+  .sweet-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .sweet-card:hover .sweet-image img {
+    transform: scale(1.05);
+  }
+  
+  .sweet-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .sweet-card:hover .sweet-overlay {
+    opacity: 1;
+  }
+  
+  .quick-add-btn {
+    background: linear-gradient(135deg, #d2691e, #8b4513);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+  }
+  
+  .sweet-card:hover .quick-add-btn {
+    transform: translateY(0);
+  }
+  
+  .sweet-info {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sweet-category {
+    color: #d2691e;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .sweet-name {
+    font-family: "Playfair Display", serif;
+    color: #8b4513;
+    font-size: 1.3rem;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.3;
+  }
+  
+  .sweet-description {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    flex: 1;
+  }
+  
+  .sweet-footer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .price-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .sweet-price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #8b4513;
+    font-family: "Playfair Display", serif;
+  }
+  
+  .stock-info {
+    color: #6c757d;
+    font-size: 0.75rem;
+    background: #e9ecef;
+    padding: 0.2rem 0.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+  }
+  
+  .add-to-cart-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #d2691e, #8b4513);
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+  }
+  
+  .add-to-cart-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(139, 69, 19, 0.3);
+  }
+  
+  .add-to-cart-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .quantity-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: #f8f9fa;
+    border-radius: 25px;
+    padding: 0.5rem;
+    border: 2px solid #e9ecef;
+  }
+
+  .quantity-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .minus-btn {
+    background: #ff6b6b;
+    color: white;
+  }
+
+  .minus-btn:hover {
+    background: #ff5252;
+    transform: scale(1.05);
+  }
+
+  .plus-btn {
+    background: #28a745;
+    color: white;
+  }
+
+  .plus-btn:hover:not(:disabled) {
+    background: #218838;
+    transform: scale(1.05);
+  }
+
+  .plus-btn:disabled,
+  .plus-btn.disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    opacity: 0.6;
+  }
+
+  .plus-btn.disabled:hover {
+    background: #6c757d;
+    transform: none;
+  }
+
+  .quantity-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .quantity-display {
+    background: white;
+    color: #8b4513;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    min-width: 30px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+  }
+
+  .stock-limit-message {
+    font-size: 0.7rem;
+    color: #dc3545;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1;
+  }
+  
+  .low-stock-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #ff4757;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    animation: pulse 2s infinite;
+  }
+
+  .in-cart-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: #28a745;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .sweet-image {
+      height: 200px;
+    }
+  
+    .sweet-info {
+      padding: 1rem;
+    }
+  
+    .sweet-name {
+      font-size: 1.1rem;
+    }
+  
+    .sweet-price {
+      font-size: 1.3rem;
+    }
+  }
+  
