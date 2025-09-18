@@ -45,15 +45,15 @@ const Login = () => {
 
   return (
     <motion.div
-      className="login-container"
+      className="sd-login-container"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="login-card">
+      <div className="sd-login-card">
         <motion.div
-          className="login-header"
+          className="sd-login-header"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -64,14 +64,14 @@ const Login = () => {
 
         <motion.form
           onSubmit={handleSubmit}
-          className="login-form"
+          className="sd-login-form"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
           {error && (
             <motion.div
-              className="error-message"
+              className="sd-login-error"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
             >
@@ -79,7 +79,7 @@ const Login = () => {
             </motion.div>
           )}
 
-          <div className="form-group">
+          <div className="sd-login-form-group">
             <label htmlFor="email">Email</label>
             <input
               type="email"
@@ -92,9 +92,9 @@ const Login = () => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="sd-login-form-group">
             <label htmlFor="password">Password</label>
-            <div className="password-input-container">
+            <div className="sd-login-password-container">
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
@@ -106,7 +106,7 @@ const Login = () => {
               />
               <button 
                 type="button" 
-                className="password-toggle-btn"
+                className="sd-login-password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? "👁️" : "👁️‍🗨️"}
@@ -116,7 +116,7 @@ const Login = () => {
 
           <motion.button
             type="submit"
-            className="login-btn"
+            className="sd-login-submit-btn"
             disabled={loading}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -126,7 +126,7 @@ const Login = () => {
         </motion.form>
 
         <motion.div
-          className="login-footer"
+          className="sd-login-footer"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}

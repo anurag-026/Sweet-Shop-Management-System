@@ -11,6 +11,9 @@ const AdminPanel = () => {
   const { sweets, setSweets } = useContext(CartContext)
   const [showAddForm, setShowAddForm] = useState(false)
   const [editingSweet, setEditingSweet] = useState(null)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState(null)
+  const [showEditModal, setShowEditModal] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -74,15 +77,67 @@ const AdminPanel = () => {
       category: sweet.category,
       description: sweet.description,
       image: sweet.image,
-      stock: sweet.stock.toString(),
+      stock: sweet.quantity.toString(), // Changed from stock to quantity
     })
-    setShowAddForm(true)
+    setShowEditModal(true)
+  }
+  
+  const confirmEdit = () => {
+    if (editingSweet) {
+      const updatedSweets = sweets.map((sweet) => {
+        if (sweet.id === editingSweet.id) {
+          return {
+            ...sweet,
+            name: formData.name,
+            price: parseFloat(formData.price),
+            category: formData.category,
+            description: formData.description,
+            image: formData.image,
+            quantity: parseInt(formData.stock),
+          }
+        }
+        return sweet
+      })
+      setSweets(updatedSweets)
+      setShowEditModal(false)
+      setEditingSweet(null)
+      resetForm()
+    }
+  }
+  
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      price: "",
+      category: "",
+      description: "",
+      image: "",
+      stock: "",
+    })
   }
 
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this sweet?")) {
-      setSweets(sweets.filter((sweet) => sweet.id !== id))
+  const cancelEdit = () => {
+    setShowEditModal(false)
+    setEditingSweet(null)
+    resetForm()
+  }
+
+  const handleDelete = (sweet) => {
+    setDeleteTarget(sweet)
+    setShowDeleteModal(true)
+  }
+  
+  const confirmDelete = () => {
+    if (deleteTarget) {
+      setSweets(sweets.filter((sweet) => sweet.id !== deleteTarget.id))
+      setShowDeleteModal(false)
+      setDeleteTarget(null)
     }
+  }
+  
+  const cancelDelete = () => {
+    setShowDeleteModal(false)
+    setDeleteTarget(null)
   }
 
   return (
@@ -198,7 +253,7 @@ const AdminPanel = () => {
                 <button className="edit-btn" onClick={() => handleEdit(sweet)}>
                   Edit
                 </button>
-                <button className="delete-btn" onClick={() => handleDelete(sweet.id)}>
+                <button className="delete-btn" onClick={() => handleDelete(sweet)}>
                   Delete
                 </button>
               </div>
@@ -206,6 +261,198 @@ const AdminPanel = () => {
           ))}
         </div>
       </div>
+
+      {/* Custom Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <motion.div 
+          className="modal-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.div 
+            className="delete-modal"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+          >
+            <div className="modal-header">
+              <h3>Confirm Delete</h3>
+            </div>
+            <div className="modal-content">
+              {deleteTarget && (
+                <>
+                  <div className="product-preview">
+                    <img src={deleteTarget.image} alt={deleteTarget.name} className="product-image" />
+                    <div className="product-info">
+                      <h4>{deleteTarget.name}</h4>
+                      <p className="product-price">${deleteTarget.price}</p>
+                      <p className="product-category">{deleteTarget.category}</p>
+                    </div>
+                  </div>
+                  <p className="confirmation-message">
+                    Are you sure you want to delete this sweet? This action cannot be undone.
+                  </p>
+                </>
+              )}
+            </div>
+            <div className="modal-actions">
+              <motion.button 
+                className="cancel-btn"
+                onClick={cancelDelete}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Cancel
+              </motion.button>
+              <motion.button 
+                className="confirm-delete-btn"
+                onClick={confirmDelete}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Delete
+              </motion.button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Custom Edit Modal */}
+      {showEditModal && (
+        <motion.div 
+          className="modal-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.div 
+            className="edit-modal"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+          >
+            <div className="modal-header edit-header">
+              <h3>Edit Sweet</h3>
+            </div>
+            <div className="modal-content">
+              {editingSweet && (
+                <div className="edit-form">
+                  <div className="form-row">
+                    <label htmlFor="name">Name</label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="form-row">
+                    <label htmlFor="price">Price ($)</label>
+                    <input
+                      type="number"
+                      id="price"
+                      name="price"
+                      step="0.01"
+                      min="0"
+                      value={formData.price}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="form-row">
+                    <label htmlFor="category">Category</label>
+                    <select
+                      id="category"
+                      name="category"
+                      value={formData.category}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value="">Select a category</option>
+                      <option value="chocolate">Chocolate</option>
+                      <option value="gummies">Gummies</option>
+                      <option value="hard candy">Hard Candy</option>
+                      <option value="fudge">Fudge</option>
+                      <option value="caramel">Caramel</option>
+                      <option value="truffles">Truffles</option>
+                      <option value="macarons">Macarons</option>
+                      <option value="brittle">Brittle</option>
+                      <option value="lollipops">Lollipops</option>
+                    </select>
+                  </div>
+                  
+                  <div className="form-row">
+                    <label htmlFor="stock">Stock</label>
+                    <input
+                      type="number"
+                      id="stock"
+                      name="stock"
+                      min="0"
+                      value={formData.stock}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="form-row">
+                    <label htmlFor="description">Description</label>
+                    <textarea
+                      id="description"
+                      name="description"
+                      value={formData.description}
+                      onChange={handleInputChange}
+                      required
+                    ></textarea>
+                  </div>
+                  
+                  <div className="form-row">
+                    <label htmlFor="image">Image URL</label>
+                    <input
+                      type="text"
+                      id="image"
+                      name="image"
+                      value={formData.image}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+
+                  <div className="image-preview">
+                    {formData.image && (
+                      <img src={formData.image} alt="Sweet preview" />
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="modal-actions">
+              <motion.button 
+                className="cancel-btn"
+                onClick={cancelEdit}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Cancel
+              </motion.button>
+              <motion.button 
+                className="confirm-edit-btn"
+                onClick={confirmEdit}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Save Changes
+              </motion.button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
     </motion.div>
   )
 }

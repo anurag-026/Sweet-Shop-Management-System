@@ -1,172 +1,171 @@
-.register-container {
-    min-height: calc(100vh - 100px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.sd-register-container {
+  min-height: calc(100vh - 100px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f5f1eb 0%, #e8ddd4 100%);
+  margin-top: 100px;
+}
+
+.sd-register-card {
+  background: white;
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(139, 69, 19, 0.1);
+  width: 100%;
+  max-width: 450px;
+  border: 1px solid rgba(139, 69, 19, 0.1);
+}
+
+.sd-register-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.sd-register-header h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 2.5rem;
+  color: #8b4513;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.sd-register-header p {
+  font-family: "Inter", sans-serif;
+  color: #666;
+  font-size: 1rem;
+}
+
+.sd-register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sd-register-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sd-register-form-group label {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  color: #8b4513;
+  font-size: 0.9rem;
+}
+
+.sd-register-form-group input {
+  padding: 1rem;
+  border: 2px solid #e8ddd4;
+  border-radius: 12px;
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #fafafa;
+  width: 100%;
+}
+
+.sd-register-password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sd-register-password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #8b4513;
+  padding: 5px;
+}
+
+.sd-register-password-toggle:focus {
+  outline: none;
+}
+
+.sd-register-form-group input:focus {
+  outline: none;
+  border-color: #d2691e;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.1);
+}
+
+.sd-register-submit-btn {
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #d2691e 0%, #8b4513 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.sd-register-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(139, 69, 19, 0.3);
+}
+
+.sd-register-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.sd-register-footer {
+  text-align: center;
+  margin-top: 15px;
+  /* padding-top: 2rem; */
+  border-top: 1px solid #e8ddd4;
+}
+
+.sd-register-footer p {
+  font-family: "Inter", sans-serif;
+  color: #666;
+}
+
+.sd-register-footer a {
+  color: #d2691e;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.sd-register-footer a:hover {
+  color: #8b4513;
+}
+
+.sd-register-error {
+  background: #fee;
+  color: #c53030;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #fed7d7;
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .sd-register-container {
+    padding: 1rem;
+  }
+
+  .sd-register-card {
     padding: 2rem;
-    background: linear-gradient(135deg, #f5f1eb 0%, #e8ddd4 100%);
-    margin-top: 100px;
   }
-  
-  .register-card {
-    background: white;
-    padding: 3rem;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(139, 69, 19, 0.1);
-    width: 100%;
-    max-width: 450px;
-    border: 1px solid rgba(139, 69, 19, 0.1);
+
+  .sd-register-header h1 {
+    font-size: 2rem;
   }
-  
-  .register-header {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-  
-  .register-header h1 {
-    font-family: "Playfair Display", serif;
-    font-size: 2.5rem;
-    color: #8b4513;
-    margin-bottom: 0.5rem;
-    font-weight: 700;
-  }
-  
-  .register-header p {
-    font-family: "Inter", sans-serif;
-    color: #666;
-    font-size: 1rem;
-  }
-  
-  .register-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .form-group label {
-    font-family: "Inter", sans-serif;
-    font-weight: 600;
-    color: #8b4513;
-    font-size: 0.9rem;
-  }
-  
-  .form-group input {
-    padding: 1rem;
-    border: 2px solid #e8ddd4;
-    border-radius: 12px;
-    font-family: "Inter", sans-serif;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    background: #fafafa;
-    width: 100%;
-  }
-  
-  .password-input-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  
-  .password-toggle-btn {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-    color: #8b4513;
-    padding: 5px;
-  }
-  
-  .password-toggle-btn:focus {
-    outline: none;
-  }
-  
-  .form-group input:focus {
-    outline: none;
-    border-color: #d2691e;
-    background: white;
-    box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.1);
-  }
-  
-  .register-btn {
-    padding: 1rem 2rem;
-    background: linear-gradient(135deg, #d2691e 0%, #8b4513 100%);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-family: "Inter", sans-serif;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 1rem;
-  }
-  
-  .register-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(139, 69, 19, 0.3);
-  }
-  
-  .register-btn:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    transform: none;
-  }
-  
-  .register-footer {
-    text-align: center;
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid #e8ddd4;
-  }
-  
-  .register-footer p {
-    font-family: "Inter", sans-serif;
-    color: #666;
-  }
-  
-  .register-footer a {
-    color: #d2691e;
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
-  }
-  
-  .register-footer a:hover {
-    color: #8b4513;
-  }
-  
-  .error-message {
-    background: #fee;
-    color: #c53030;
-    padding: 1rem;
-    border-radius: 8px;
-    border: 1px solid #fed7d7;
-    font-family: "Inter", sans-serif;
-    font-size: 0.9rem;
-    text-align: center;
-  }
-  
-  @media (max-width: 768px) {
-    .register-container {
-      padding: 1rem;
-    }
-  
-    .register-card {
-      padding: 2rem;
-    }
-  
-    .register-header h1 {
-      font-size: 2rem;
-    }
-  }
-  
+}

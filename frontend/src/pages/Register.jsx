@@ -60,15 +60,15 @@ const Register = () => {
 
   return (
     <motion.div
-      className="register-container"
+      className="sd-register-container"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="register-card">
+      <div className="sd-register-card">
         <motion.div
-          className="register-header"
+          className="sd-register-header"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -79,14 +79,14 @@ const Register = () => {
 
         <motion.form
           onSubmit={handleSubmit}
-          className="register-form"
+          className="sd-register-form"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
           {error && (
             <motion.div
-              className="error-message"
+              className="sd-register-error"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
             >
@@ -94,7 +94,7 @@ const Register = () => {
             </motion.div>
           )}
 
-          <div className="form-group">
+          <div className="sd-register-form-group">
             <label htmlFor="name">Full Name</label>
             <input
               type="text"
@@ -107,7 +107,7 @@ const Register = () => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="sd-register-form-group">
             <label htmlFor="email">Email</label>
             <input
               type="email"
@@ -120,9 +120,9 @@ const Register = () => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="sd-register-form-group">
             <label htmlFor="password">Password</label>
-            <div className="password-input-container">
+            <div className="sd-register-password-container">
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
@@ -134,7 +134,7 @@ const Register = () => {
               />
               <button 
                 type="button" 
-                className="password-toggle-btn"
+                className="sd-register-password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? "👁️" : "👁️‍🗨️"}
@@ -142,9 +142,9 @@ const Register = () => {
             </div>
           </div>
 
-          <div className="form-group">
+          <div className="sd-register-form-group">
             <label htmlFor="confirmPassword">Confirm Password</label>
-            <div className="password-input-container">
+            <div className="sd-register-password-container">
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 id="confirmPassword"
@@ -156,7 +156,7 @@ const Register = () => {
               />
               <button 
                 type="button" 
-                className="password-toggle-btn"
+                className="sd-register-password-toggle"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
@@ -166,7 +166,7 @@ const Register = () => {
 
           <motion.button
             type="submit"
-            className="register-btn"
+            className="sd-register-submit-btn"
             disabled={loading}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -176,7 +176,7 @@ const Register = () => {
         </motion.form>
 
         <motion.div
-          className="register-footer"
+          className="sd-register-footer"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}

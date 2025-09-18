@@ -1,233 +1,445 @@
 .admin-panel {
-    min-height: calc(100vh - 100px);
-    padding: 2rem;
-    background: linear-gradient(135deg, #f5f1eb 0%, #e8ddd4 100%);
-    font-family: "Inter", sans-serif;
-    margin-top: 100px;
+  min-height: calc(100vh - 100px);
+  padding: 2rem;
+  background: linear-gradient(135deg, #f5f1eb 0%, #e8ddd4 100%);
+  font-family: "Inter", sans-serif;
+  margin-top: 100px;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #8b4513;
+}
+
+.admin-header h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 2.5rem;
+  color: #8b4513;
+  margin: 0;
+}
+
+.add-sweet-btn {
+  background: linear-gradient(135deg, #d2691e, #8b4513);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-sweet-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(139, 69, 19, 0.3);
+}
+
+.add-sweet-form {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.add-sweet-form h2 {
+  font-family: "Playfair Display", serif;
+  color: #8b4513;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.add-sweet-form input,
+.add-sweet-form select,
+.add-sweet-form textarea {
+  flex: 1;
+  padding: 0.75rem;
+  border: 2px solid #e8ddd4;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.add-sweet-form input:focus,
+.add-sweet-form select:focus,
+.add-sweet-form textarea:focus {
+  outline: none;
+  border-color: #d2691e;
+}
+
+.add-sweet-form textarea {
+  min-height: 100px;
+  resize: vertical;
+  width: 100%;
+}
+
+.submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #d2691e, #8b4513);
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(139, 69, 19, 0.3);
+}
+
+.sweets-management h2 {
+  font-family: "Playfair Display", serif;
+  color: #8b4513;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.sweets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.admin-sweet-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.admin-sweet-card:hover {
+  transform: translateY(-5px);
+}
+
+.admin-sweet-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.sweet-info {
+  padding: 1rem;
+}
+
+.sweet-info h3 {
+  font-family: "Playfair Display", serif;
+  color: #8b4513;
+  margin-bottom: 0.5rem;
+}
+
+.sweet-info .price {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #d2691e;
+  margin-bottom: 0.25rem;
+}
+
+.sweet-info .stock,
+.sweet-info .category {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: #f8f8f8;
+}
+
+.edit-btn,
+.delete-btn {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.edit-btn {
+  background: #4caf50;
+  color: white;
+}
+
+.edit-btn:hover {
+  background: #45a049;
+}
+
+.delete-btn {
+  background: #f44336;
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #da190b;
+}
+
+.access-denied {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.access-denied h2 {
+  font-family: "Playfair Display", serif;
+  color: #8b4513;
+  margin-bottom: 1rem;
+}
+
+.access-denied p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Custom Delete Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+
+.delete-modal {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 450px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(139, 69, 19, 0.1);
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #d2691e, #8b4513);
+  color: white;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-size: 1.5rem;
+}
+
+.modal-content {
+  padding: 1.5rem;
+}
+
+.product-preview {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e8ddd4;
+}
+
+.product-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.product-info h4 {
+  margin: 0 0 0.5rem 0;
+  font-family: "Playfair Display", serif;
+  color: #8b4513;
+}
+
+.product-price {
+  font-weight: 600;
+  color: #d2691e;
+  margin: 0 0 0.25rem 0;
+}
+
+.product-category {
+  color: #666;
+  text-transform: capitalize;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.confirmation-message {
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.modal-actions {
+  display: flex;
+  padding: 1.25rem;
+  gap: 1rem;
+  background: #f8f8f8;
+}
+
+.cancel-btn,
+.confirm-delete-btn {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn {
+  background: #f0f0f0;
+  color: #555;
+  border: 1px solid #ddd;
+}
+
+.cancel-btn:hover {
+  background: #e0e0e0;
+}
+
+.confirm-delete-btn {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  color: white;
+}
+
+.confirm-delete-btn:hover {
+  background: linear-gradient(135deg, #d32f2f, #b71c1c);
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+}
+
+/* Edit Modal Styles */
+.edit-modal {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(139, 69, 19, 0.1);
+}
+
+.edit-header {
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.edit-form .form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.edit-form label {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.edit-form input,
+.edit-form select,
+.edit-form textarea {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 100%;
+  background: #f9f9f9;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.edit-form input:focus,
+.edit-form select:focus,
+.edit-form textarea:focus {
+  border-color: #8b4513;
+  box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.1);
+  outline: none;
+}
+
+.edit-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.image-preview {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.image-preview img {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.confirm-edit-btn {
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  width: 100%;
+}
+
+.confirm-edit-btn:hover {
+  background: linear-gradient(135deg, #2e7d32, #1b5e20);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+}
+
+@media (max-width: 768px) {
+  .admin-panel {
+    padding: 1rem;
   }
-  
+
   .admin-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid #8b4513;
-  }
-  
-  .admin-header h1 {
-    font-family: "Playfair Display", serif;
-    font-size: 2.5rem;
-    color: #8b4513;
-    margin: 0;
-  }
-  
-  .add-sweet-btn {
-    background: linear-gradient(135deg, #d2691e, #8b4513);
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 25px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .add-sweet-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(139, 69, 19, 0.3);
-  }
-  
-  .add-sweet-form {
-    background: white;
-    padding: 2rem;
-    border-radius: 15px;
-    margin-bottom: 2rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  }
-  
-  .add-sweet-form h2 {
-    font-family: "Playfair Display", serif;
-    color: #8b4513;
-    margin-bottom: 1.5rem;
-    text-align: center;
-  }
-  
-  .form-row {
-    display: flex;
+    flex-direction: column;
     gap: 1rem;
-    margin-bottom: 1rem;
-  }
-  
-  .add-sweet-form input,
-  .add-sweet-form select,
-  .add-sweet-form textarea {
-    flex: 1;
-    padding: 0.75rem;
-    border: 2px solid #e8ddd4;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-  }
-  
-  .add-sweet-form input:focus,
-  .add-sweet-form select:focus,
-  .add-sweet-form textarea:focus {
-    outline: none;
-    border-color: #d2691e;
-  }
-  
-  .add-sweet-form textarea {
-    min-height: 100px;
-    resize: vertical;
-    width: 100%;
-  }
-  
-  .submit-btn {
-    width: 100%;
-    background: linear-gradient(135deg, #d2691e, #8b4513);
-    color: white;
-    border: none;
-    padding: 1rem;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(139, 69, 19, 0.3);
-  }
-  
-  .sweets-management h2 {
-    font-family: "Playfair Display", serif;
-    color: #8b4513;
-    margin-bottom: 1.5rem;
     text-align: center;
   }
-  
+
+  .form-row {
+    flex-direction: column;
+  }
+
   .sweets-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: 1fr;
   }
-  
-  .admin-sweet-card {
-    background: white;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-  }
-  
-  .admin-sweet-card:hover {
-    transform: translateY(-5px);
-  }
-  
-  .admin-sweet-card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-  }
-  
-  .sweet-info {
-    padding: 1rem;
-  }
-  
-  .sweet-info h3 {
-    font-family: "Playfair Display", serif;
-    color: #8b4513;
-    margin-bottom: 0.5rem;
-  }
-  
-  .sweet-info .price {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #d2691e;
-    margin-bottom: 0.25rem;
-  }
-  
-  .sweet-info .stock,
-  .sweet-info .category {
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 0.25rem;
-  }
-  
-  .admin-actions {
-    display: flex;
-    gap: 0.5rem;
-    padding: 1rem;
-    background: #f8f8f8;
-  }
-  
-  .edit-btn,
-  .delete-btn {
-    flex: 1;
-    padding: 0.5rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-  }
-  
-  .edit-btn {
-    background: #4caf50;
-    color: white;
-  }
-  
-  .edit-btn:hover {
-    background: #45a049;
-  }
-  
-  .delete-btn {
-    background: #f44336;
-    color: white;
-  }
-  
-  .delete-btn:hover {
-    background: #da190b;
-  }
-  
-  .access-denied {
-    text-align: center;
-    padding: 4rem 2rem;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  }
-  
-  .access-denied h2 {
-    font-family: "Playfair Display", serif;
-    color: #8b4513;
-    margin-bottom: 1rem;
-  }
-  
-  .access-denied p {
-    color: #666;
-    font-size: 1.1rem;
-  }
-  
-  @media (max-width: 768px) {
-    .admin-panel {
-      padding: 1rem;
-    }
-  
-    .admin-header {
-      flex-direction: column;
-      gap: 1rem;
-      text-align: center;
-    }
-  
-    .form-row {
-      flex-direction: column;
-    }
-  
-    .sweets-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-  
+}
