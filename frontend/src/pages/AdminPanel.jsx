@@ -150,21 +150,25 @@ const AdminPanel = () => {
                 required
               />
             </div>
-            <textarea
-              name="description"
-              placeholder="Description"
-              value={formData.description}
-              onChange={handleInputChange}
-              required
-            />
-            <input
-              type="url"
-              name="image"
-              placeholder="Image URL"
-              value={formData.image}
-              onChange={handleInputChange}
-              required
-            />
+            <div className="form-row">
+              <textarea
+                name="description"
+                placeholder="Description"
+                value={formData.description}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="form-row">
+              <input
+                type="url"
+                name="image"
+                placeholder="Image URL"
+                value={formData.image}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
             <motion.button type="submit" className="submit-btn" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               {editingSweet ? "Update Sweet" : "Add Sweet"}
             </motion.button>

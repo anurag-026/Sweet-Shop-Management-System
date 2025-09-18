@@ -80,7 +80,7 @@
   .add-sweet-form textarea {
     min-height: 100px;
     resize: vertical;
-    margin-bottom: 1rem;
+    width: 100%;
   }
   
   .submit-btn {

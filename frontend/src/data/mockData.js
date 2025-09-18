@@ -123,7 +123,7 @@ export const mockUsers = [
   },
   {
     id: 2,
-    email: "user@example.com",
+    email: "user@gmail.com",
     password: "user123",
     name: "Sweet Lover",
     role: "user",

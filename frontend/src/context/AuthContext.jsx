@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect } from "react"
+import { mockUsers } from "../data/mockData"
 
 const AuthContext = createContext()
 
@@ -17,27 +18,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [loading, setLoading] = useState(true)
 
-  // Mock users data
-  const mockUsers = [
-    {
-      id: 1,
-      name: "Admin User",
-      email: "admin@sweetstore.com",
-      password: "admin123",
-      role: "admin",
-      phone: "+1 (555) 123-4567",
-      address: "123 Sweet Street, Candy City, CC 12345",
-    },
-    {
-      id: 2,
-      name: "John Doe",
-      email: "john@example.com",
-      password: "user123",
-      role: "user",
-      phone: "+1 (555) 987-6543",
-      address: "456 Sugar Lane, Dessert Town, DT 67890",
-    },
-  ]
+  // Using mockUsers imported from mockData.js
 
   useEffect(() => {
     // Check if user is logged in on app start

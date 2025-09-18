@@ -64,6 +64,30 @@
     font-size: 1rem;
     transition: all 0.3s ease;
     background: #fafafa;
+    width: 100%;
+  }
+  
+  .password-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .password-toggle-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #8b4513;
+    padding: 5px;
+  }
+  
+  .password-toggle-btn:focus {
+    outline: none;
   }
   
   .form-group input:focus {
