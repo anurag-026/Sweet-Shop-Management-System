@@ -26,8 +26,13 @@ public class DataSourceConfig {
     @Bean
     @Primary
     public DataSource dataSource() {
-        // Create database if it doesn't exist before creating DataSource
-        createDatabaseIfNotExists();
+        // Try to create database if it doesn't exist before creating DataSource
+        // If database creation fails, continue with DataSource creation anyway
+        try {
+            createDatabaseIfNotExists();
+        } catch (Exception e) {
+            System.err.println("⚠️  Warning: Could not create database, continuing with existing database: " + e.getMessage());
+        }
         
         return DataSourceBuilder.create()
                 .url(databaseUrl)
@@ -64,6 +69,7 @@ public class DataSourceConfig {
             }
         } catch (Exception e) {
             System.err.println("❌ Error creating database: " + e.getMessage());
+            // Re-throw as RuntimeException to be caught by the calling method
             throw new RuntimeException("Failed to create database", e);
         }
     }
