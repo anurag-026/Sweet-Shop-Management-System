@@ -239,122 +239,84 @@ Before setting up the project, ensure you have the following installed:
    - Test login with default credentials
    - Verify all features are working
 
-### Default Credentials
-
-- **Admin**: `admin@sweetshop.com` / `admin123`
-- **User**: `user@sweetshop.com` / `user123`
-
 ## 📸 Screenshots
 
 ### 🏠 Homepage & Authentication
 
-#### Login Page
+<div align="center">
 
-![Login Page](screenshot/Screenshot%202025-09-19%20171050.png)
-_Clean and modern login interface with form validation_
+| Login Page | Registration Page | Product Catalog |
+|:---:|:---:|:---:|
+| ![Login Page](screenshot/Screenshot%202025-09-19%20171050.png) | ![Registration Page](screenshot/Screenshot%202025-09-19%20171056.png) | ![Product Catalog](screenshot/Screenshot%202025-09-19%20171108.png) |
+| _Clean and modern login interface with form validation_ | _User registration form with comprehensive validation_ | _Comprehensive product catalog with search and filtering capabilities_ |
 
-#### Registration Page
-
-![Registration Page](screenshot/Screenshot%202025-09-19%20171056.png)
-_User registration form with comprehensive validation_
+</div>
 
 ### 🛍️ Product Catalog & Shopping
 
-#### Product Catalog
+<div align="center">
 
-![Product Catalog](screenshot/Screenshot%202025-09-19%20171108.png)
-_Comprehensive product catalog with search and filtering capabilities_
+| Product Details | Shopping Cart | Admin Dashboard |
+|:---:|:---:|:---:|
+| ![Product Details](screenshot/Screenshot%202025-09-19%20171115.png) | ![Shopping Cart](screenshot/Screenshot%202025-09-19%20171119.png) | ![Admin Dashboard](screenshot/Screenshot%202025-09-19%20171138.png) |
+| _Detailed product view with add to cart functionality_ | _Shopping cart with quantity management and checkout options_ | _Comprehensive admin dashboard with key metrics and analytics_ |
 
-#### Product Details
-
-![Product Details](screenshot/Screenshot%202025-09-19%20171115.png)
-_Detailed product view with add to cart functionality_
-
-#### Shopping Cart
-
-![Shopping Cart](screenshot/Screenshot%202025-09-19%20171119.png)
-_Shopping cart with quantity management and checkout options_
+</div>
 
 ### 📊 Admin Dashboard & Analytics
 
-#### Admin Dashboard Overview
+<div align="center">
 
-![Admin Dashboard](screenshot/Screenshot%202025-09-19%20171138.png)
-_Comprehensive admin dashboard with key metrics and analytics_
+| Sales Analytics | Order Management | Customer Analytics |
+|:---:|:---:|:---:|
+| ![Sales Analytics](screenshot/Screenshot%202025-09-19%20171151.png) | ![Order Management](screenshot/Screenshot%202025-09-19%20171208.png) | ![Customer Analytics](screenshot/Screenshot%202025-09-19%20171214.png) |
+| _Detailed sales analytics with charts and trends_ | _Order management interface with status updates and tracking_ | _Customer segmentation and behavior analysis_ |
 
-#### Sales Analytics
-
-![Sales Analytics](screenshot/Screenshot%202025-09-19%20171151.png)
-_Detailed sales analytics with charts and trends_
-
-#### Order Management
-
-![Order Management](screenshot/Screenshot%202025-09-19%20171208.png)
-_Order management interface with status updates and tracking_
-
-#### Customer Analytics
-
-![Customer Analytics](screenshot/Screenshot%202025-09-19%20171214.png)
-_Customer segmentation and behavior analysis_
-
-#### Inventory Management
-
-![Inventory Management](screenshot/Screenshot%202025-09-19%20171224.png)
-_Inventory status with low-stock alerts and management tools_
+</div>
 
 ### 🔧 System Management
 
-#### Admin Panel
+<div align="center">
 
-![Admin Panel](screenshot/Screenshot%202025-09-19%20171240.png)
-_Administrative panel for system configuration_
+| Inventory Management | Admin Panel | User Profile |
+|:---:|:---:|:---:|
+| ![Inventory Management](screenshot/Screenshot%202025-09-19%20171224.png) | ![Admin Panel](screenshot/Screenshot%202025-09-19%20171240.png) | ![User Profile](screenshot/Screenshot%202025-09-19%20171246.png) |
+| _Inventory status with low-stock alerts and management tools_ | _Administrative panel for system configuration_ | _User profile management with personal information_ |
 
-#### User Profile
-
-![User Profile](screenshot/Screenshot%202025-09-19%20171246.png)
-_User profile management with personal information_
-
-#### System Alerts
-
-![System Alerts](screenshot/Screenshot%202025-09-19%20171255.png)
-_Real-time system alerts and notifications_
+</div>
 
 ### 📈 Advanced Analytics
 
-#### Monthly Sales Trends
+<div align="center">
 
-![Monthly Sales](screenshot/Screenshot%202025-09-19%20171304.png)
-_Monthly sales trends with growth indicators_
+| System Alerts | Monthly Sales Trends | Category Performance |
+|:---:|:---:|:---:|
+| ![System Alerts](screenshot/Screenshot%202025-09-19%20171255.png) | ![Monthly Sales](screenshot/Screenshot%202025-09-19%20171304.png) | ![Category Performance](screenshot/Screenshot%202025-09-19%20171324.png) |
+| _Real-time system alerts and notifications_ | _Monthly sales trends with growth indicators_ | _Sales performance by product category_ |
 
-#### Category Performance
+</div>
 
-![Category Performance](screenshot/Screenshot%202025-09-19%20171324.png)
-_Sales performance by product category_
+### 📊 Performance Metrics
 
-#### Top Products
+<div align="center">
 
-![Top Products](screenshot/Screenshot%202025-09-19%20171332.png)
-_Top-selling products with revenue metrics_
+| Top Products | Conversion Funnel | Shipping Metrics |
+|:---:|:---:|:---:|
+| ![Top Products](screenshot/Screenshot%202025-09-19%20171332.png) | ![Conversion Funnel](screenshot/Screenshot%202025-09-19%20171343.png) | ![Shipping Metrics](screenshot/Screenshot%202025-09-19%20171349.png) |
+| _Top-selling products with revenue metrics_ | _Website conversion funnel analysis_ | _Shipping performance and delivery metrics_ |
 
-#### Conversion Funnel
+</div>
 
-![Conversion Funnel](screenshot/Screenshot%202025-09-19%20171343.png)
-_Website conversion funnel analysis_
+### 🚨 Inventory & Orders
 
-#### Shipping Metrics
+<div align="center">
 
-![Shipping Metrics](screenshot/Screenshot%202025-09-19%20171349.png)
-_Shipping performance and delivery metrics_
+| Low Stock Alerts | Recent Orders | |
+|:---:|:---:|:---:|
+| ![Low Stock Alerts](screenshot/Screenshot%202025-09-19%20171405.png) | ![Recent Orders](screenshot/Screenshot%202025-09-19%20171411.png) | |
+| _Inventory alerts for low-stock items_ | _Recent orders with status and customer information_ | |
 
-#### Low Stock Alerts
-
-![Low Stock Alerts](screenshot/Screenshot%202025-09-19%20171405.png)
-_Inventory alerts for low-stock items_
-
-#### Recent Orders
-
-![Recent Orders](screenshot/Screenshot%202025-09-19%20171411.png)
-_Recent orders with status and customer information_
+</div>
 
 ## 📚 API Documentation
 
@@ -406,6 +368,19 @@ The backend provides a comprehensive REST API with detailed documentation:
 - `GET /api/admin/alerts` - System alerts
 
 For complete API documentation, see [API_DOCUMENTATION.md](API_DOCUMENTATION.md).
+
+## 🌐 Live Application
+
+### Deployed URLs
+
+- **Frontend (Vercel)**: [https://sweet-shop-management-system-9jk6.vercel.app/login](https://sweet-shop-management-system-9jk6.vercel.app/login)
+- **Backend (Railway)**: [https://sweetshop-backend-production.up.railway.app](https://sweetshop-backend-production.up.railway.app)
+- **Database (NeonDB)**: Serverless PostgreSQL hosted on NeonDB
+
+### Default Login Credentials
+
+- **Admin**: `admin@sweetshop.com` / `admin123`
+- **User**: `user@sweetshop.com` / `user123`
 
 ## 🚀 Deployment
 
