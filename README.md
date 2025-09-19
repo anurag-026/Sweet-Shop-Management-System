@@ -6,6 +6,19 @@ A comprehensive full-stack e-commerce application for managing a sweet shop with
 
 The Sweet Shop Management System is a modern, full-stack web application designed to streamline the operations of a sweet shop business. It provides a complete solution for inventory management, customer orders, analytics, and administrative tasks.
 
+## 🌐 Live Application
+
+### Deployed URLs
+
+- **Frontend (Vercel)**: [https://sweet-shop-management-system-9jk6.vercel.app](https://sweet-shop-management-system-9jk6.vercel.app)
+- **Backend (Railway)**: [https://sweetshop-backend-production.up.railway.app](https://sweetshop-backend-production.up.railway.app)
+- **Database (NeonDB)**: Serverless PostgreSQL hosted on NeonDB
+
+### Default Login Credentials
+
+- **Admin**: `admin@sweetshop.com` / `admin123`
+- **User**: `user@sweetshop.com` / `user123`
+
 ### Key Capabilities
 
 - **User Management**: Secure authentication with JWT tokens and role-based access control
@@ -85,19 +98,6 @@ The application follows a modern three-tier architecture:
 - Customer lifetime value analysis
 - Conversion funnel tracking
 - Shipping performance metrics
-
-## 🌐 Live Application
-
-### Deployed URLs
-
-- **Frontend (Vercel)**: [https://sweet-shop-management-system-9jk6.vercel.app](https://sweet-shop-management-system-9jk6.vercel.app)
-- **Backend (Railway)**: [https://sweetshop-backend-production.up.railway.app](https://sweetshop-backend-production.up.railway.app)
-- **Database (NeonDB)**: Serverless PostgreSQL hosted on NeonDB
-
-### Default Login Credentials
-
-- **Admin**: `admin@sweetshop.com` / `admin123`
-- **User**: `user@sweetshop.com` / `user123`
 
 ## 🛠️ Tech Stack
 
@@ -201,10 +201,10 @@ The application follows a modern three-tier architecture:
 
 <div align="center">
 
-|                           Login Page                           |                           Registration Page                           |                            Product Catalog                             |
-| :------------------------------------------------------------: | :-------------------------------------------------------------------: | :--------------------------------------------------------------------: |
-| ![Login Page](screenshot/01-login-page.png) | ![Registration Page](screenshot/02-registration-page.png) |  ![Product Catalog](screenshot/04-product-catalog.png)   |
-|    _Clean and modern login interface with form validation_     |        _User registration form with comprehensive validation_         | _Comprehensive product catalog with search and filtering capabilities_ |
+|                       Login Page                        |                     Registration Page                     |                            Product Catalog                             |
+| :-----------------------------------------------------: | :-------------------------------------------------------: | :--------------------------------------------------------------------: |
+|       ![Login Page](screenshot/01-login-page.png)       | ![Registration Page](screenshot/02-registration-page.png) |         ![Product Catalog](screenshot/04-product-catalog.png)          |
+| _Clean and modern login interface with form validation_ |  _User registration form with comprehensive validation_   | _Comprehensive product catalog with search and filtering capabilities_ |
 
 </div>
 
@@ -212,10 +212,10 @@ The application follows a modern three-tier architecture:
 
 <div align="center">
 
-|                           Product Details                           |                           Shopping Cart                           |                           Admin Dashboard                           |
-| :-----------------------------------------------------------------: | :---------------------------------------------------------------: | :-----------------------------------------------------------------: |
-| ![Product Details](screenshot/05-product-details.png) | ![Shopping Cart](screenshot/06-shopping-cart.png) | ![Admin Dashboard](screenshot/07-admin-dashboard.png) |
-|       _Detailed product view with add to cart functionality_        |   _Shopping cart with quantity management and checkout options_   |   _Comprehensive admin dashboard with key metrics and analytics_    |
+|                    Product Details                     |                         Shopping Cart                         |                        Admin Dashboard                         |
+| :----------------------------------------------------: | :-----------------------------------------------------------: | :------------------------------------------------------------: |
+| ![Product Details](screenshot/05-product-details.png)  |       ![Shopping Cart](screenshot/06-shopping-cart.png)       |     ![Admin Dashboard](screenshot/07-admin-dashboard.png)      |
+| _Detailed product view with add to cart functionality_ | _Shopping cart with quantity management and checkout options_ | _Comprehensive admin dashboard with key metrics and analytics_ |
 
 </div>
 
@@ -223,10 +223,10 @@ The application follows a modern three-tier architecture:
 
 <div align="center">
 
-|                           Sales Analytics                           |                           Order Management                           |                           Customer Analytics                           |
-| :-----------------------------------------------------------------: | :------------------------------------------------------------------: | :--------------------------------------------------------------------: |
-| ![Sales Analytics](screenshot/08-sales-analytics.png) | ![Order Management](screenshot/09-order-management.png) | ![Customer Analytics](screenshot/10-customer-analytics.png) |
-|          _Detailed sales analytics with charts and trends_          |    _Order management interface with status updates and tracking_     |             _Customer segmentation and behavior analysis_              |
+|                    Sales Analytics                    |                       Order Management                        |                     Customer Analytics                      |
+| :---------------------------------------------------: | :-----------------------------------------------------------: | :---------------------------------------------------------: |
+| ![Sales Analytics](screenshot/08-sales-analytics.png) |    ![Order Management](screenshot/09-order-management.png)    | ![Customer Analytics](screenshot/10-customer-analytics.png) |
+|   _Detailed sales analytics with charts and trends_   | _Order management interface with status updates and tracking_ |        _Customer segmentation and behavior analysis_        |
 
 </div>
 
@@ -234,10 +234,10 @@ The application follows a modern three-tier architecture:
 
 <div align="center">
 
-|                           Inventory Management                           |                           Admin Panel                           |                           User Profile                           |
-| :----------------------------------------------------------------------: | :-------------------------------------------------------------: | :--------------------------------------------------------------: |
-| ![Inventory Management](screenshot/11-inventory-management.png) | ![Admin Panel](screenshot/12-admin-panel.png) | ![User Profile](screenshot/13-user-profile.png) |
-|      _Inventory status with low-stock alerts and management tools_       |         _Administrative panel for system configuration_         |       _User profile management with personal information_        |
+|                      Inventory Management                       |                   Admin Panel                   |                    User Profile                     |
+| :-------------------------------------------------------------: | :---------------------------------------------: | :-------------------------------------------------: |
+| ![Inventory Management](screenshot/11-inventory-management.png) |  ![Admin Panel](screenshot/12-admin-panel.png)  |   ![User Profile](screenshot/13-user-profile.png)   |
+|  _Inventory status with low-stock alerts and management tools_  | _Administrative panel for system configuration_ | _User profile management with personal information_ |
 
 </div>
 
@@ -245,10 +245,10 @@ The application follows a modern three-tier architecture:
 
 <div align="center">
 
-|                           System Alerts                           |                       Monthly Sales Trends                        |                           Category Performance                           |
-| :---------------------------------------------------------------: | :---------------------------------------------------------------: | :----------------------------------------------------------------------: |
+|                   System Alerts                   |                   Monthly Sales Trends                   |                      Category Performance                       |
+| :-----------------------------------------------: | :------------------------------------------------------: | :-------------------------------------------------------------: |
 | ![System Alerts](screenshot/14-system-alerts.png) | ![Monthly Sales](screenshot/15-monthly-sales-trends.png) | ![Category Performance](screenshot/16-category-performance.png) |
-|            _Real-time system alerts and notifications_            |           _Monthly sales trends with growth indicators_           |                 _Sales performance by product category_                  |
+|    _Real-time system alerts and notifications_    |      _Monthly sales trends with growth indicators_       |             _Sales performance by product category_             |
 
 </div>
 
@@ -256,10 +256,10 @@ The application follows a modern three-tier architecture:
 
 <div align="center">
 
-|                           Top Products                           |                           Conversion Funnel                           |                           Shipping Metrics                           |
-| :--------------------------------------------------------------: | :-------------------------------------------------------------------: | :------------------------------------------------------------------: |
+|                  Top Products                   |                     Conversion Funnel                     |                    Shipping Metrics                     |
+| :---------------------------------------------: | :-------------------------------------------------------: | :-----------------------------------------------------: |
 | ![Top Products](screenshot/17-top-products.png) | ![Conversion Funnel](screenshot/18-conversion-funnel.png) | ![Shipping Metrics](screenshot/19-shipping-metrics.png) |
-|           _Top-selling products with revenue metrics_            |                 _Website conversion funnel analysis_                  |             _Shipping performance and delivery metrics_              |
+|   _Top-selling products with revenue metrics_   |           _Website conversion funnel analysis_            |       _Shipping performance and delivery metrics_       |
 
 </div>
 
@@ -267,10 +267,10 @@ The application follows a modern three-tier architecture:
 
 <div align="center">
 
-|                           Low Stock Alerts                           |                           Recent Orders                           |     |
-| :------------------------------------------------------------------: | :---------------------------------------------------------------: | :-: |
-| ![Low Stock Alerts](screenshot/20-low-stock-alerts.png) | ![Recent Orders](screenshot/21-recent-orders.png) |     |
-|                _Inventory alerts for low-stock items_                |       _Recent orders with status and customer information_        |     |
+|                    Low Stock Alerts                     |                    Recent Orders                     |     |
+| :-----------------------------------------------------: | :--------------------------------------------------: | :-: |
+| ![Low Stock Alerts](screenshot/20-low-stock-alerts.png) |  ![Recent Orders](screenshot/21-recent-orders.png)   |     |
+|         _Inventory alerts for low-stock items_          | _Recent orders with status and customer information_ |     |
 
 </div>
 
