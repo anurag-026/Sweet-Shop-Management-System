@@ -7,8 +7,8 @@ A comprehensive full-stack e-commerce application for managing a sweet shop with
 - [Project Overview](#-project-overview)
 - [Architecture](#-architecture)
 - [Features](#-features)
+- [Live Application](#-live-application)
 - [Tech Stack](#-tech-stack)
-- [Prerequisites](#-prerequisites)
 - [Setup Instructions](#-setup-instructions)
   - [Database Setup](#database-setup)
   - [Backend Setup](#backend-setup)
@@ -104,6 +104,19 @@ The application follows a modern three-tier architecture:
 - Conversion funnel tracking
 - Shipping performance metrics
 
+## 🌐 Live Application
+
+### Deployed URLs
+
+- **Frontend (Vercel)**: [https://sweet-shop-management-system-9jk6.vercel.app](https://sweet-shop-management-system-9jk6.vercel.app)
+- **Backend (Railway)**: [https://sweetshop-backend-production.up.railway.app](https://sweetshop-backend-production.up.railway.app)
+- **Database (NeonDB)**: Serverless PostgreSQL hosted on NeonDB
+
+### Default Login Credentials
+
+- **Admin**: `admin@sweetshop.com` / `admin123`
+- **User**: `user@sweetshop.com` / `user123`
+
 ## 🛠️ Tech Stack
 
 ### Frontend
@@ -137,17 +150,6 @@ The application follows a modern three-tier architecture:
 - **Java 17** - Backend runtime
 - **Maven** - Backend build tool
 - **Git** - Version control
-
-## 📋 Prerequisites
-
-Before setting up the project, ensure you have the following installed:
-
-- **Node.js** (v16 or higher)
-- **Java** (v17 or higher)
-- **Maven** (v3.6 or higher)
-- **Git**
-- **PostgreSQL client** (for database setup)
-- **IDE** (VS Code, IntelliJ IDEA, or similar)
 
 ## 🚀 Setup Instructions
 
@@ -245,10 +247,10 @@ Before setting up the project, ensure you have the following installed:
 
 <div align="center">
 
-| Login Page | Registration Page | Product Catalog |
-|:---:|:---:|:---:|
-| ![Login Page](screenshot/Screenshot%202025-09-19%20171050.png) | ![Registration Page](screenshot/Screenshot%202025-09-19%20171056.png) | ![Product Catalog](screenshot/Screenshot%202025-09-19%20171108.png) |
-| _Clean and modern login interface with form validation_ | _User registration form with comprehensive validation_ | _Comprehensive product catalog with search and filtering capabilities_ |
+|                           Login Page                           |                           Registration Page                           |                            Product Catalog                             |
+| :------------------------------------------------------------: | :-------------------------------------------------------------------: | :--------------------------------------------------------------------: |
+| ![Login Page](screenshot/Screenshot%202025-09-19%20171050.png) | ![Registration Page](screenshot/Screenshot%202025-09-19%20171056.png) |  ![Product Catalog](screenshot/Screenshot%202025-09-19%20171108.png)   |
+|    _Clean and modern login interface with form validation_     |        _User registration form with comprehensive validation_         | _Comprehensive product catalog with search and filtering capabilities_ |
 
 </div>
 
@@ -256,10 +258,10 @@ Before setting up the project, ensure you have the following installed:
 
 <div align="center">
 
-| Product Details | Shopping Cart | Admin Dashboard |
-|:---:|:---:|:---:|
+|                           Product Details                           |                           Shopping Cart                           |                           Admin Dashboard                           |
+| :-----------------------------------------------------------------: | :---------------------------------------------------------------: | :-----------------------------------------------------------------: |
 | ![Product Details](screenshot/Screenshot%202025-09-19%20171115.png) | ![Shopping Cart](screenshot/Screenshot%202025-09-19%20171119.png) | ![Admin Dashboard](screenshot/Screenshot%202025-09-19%20171138.png) |
-| _Detailed product view with add to cart functionality_ | _Shopping cart with quantity management and checkout options_ | _Comprehensive admin dashboard with key metrics and analytics_ |
+|       _Detailed product view with add to cart functionality_        |   _Shopping cart with quantity management and checkout options_   |   _Comprehensive admin dashboard with key metrics and analytics_    |
 
 </div>
 
@@ -267,10 +269,10 @@ Before setting up the project, ensure you have the following installed:
 
 <div align="center">
 
-| Sales Analytics | Order Management | Customer Analytics |
-|:---:|:---:|:---:|
+|                           Sales Analytics                           |                           Order Management                           |                           Customer Analytics                           |
+| :-----------------------------------------------------------------: | :------------------------------------------------------------------: | :--------------------------------------------------------------------: |
 | ![Sales Analytics](screenshot/Screenshot%202025-09-19%20171151.png) | ![Order Management](screenshot/Screenshot%202025-09-19%20171208.png) | ![Customer Analytics](screenshot/Screenshot%202025-09-19%20171214.png) |
-| _Detailed sales analytics with charts and trends_ | _Order management interface with status updates and tracking_ | _Customer segmentation and behavior analysis_ |
+|          _Detailed sales analytics with charts and trends_          |    _Order management interface with status updates and tracking_     |             _Customer segmentation and behavior analysis_              |
 
 </div>
 
@@ -278,10 +280,10 @@ Before setting up the project, ensure you have the following installed:
 
 <div align="center">
 
-| Inventory Management | Admin Panel | User Profile |
-|:---:|:---:|:---:|
+|                           Inventory Management                           |                           Admin Panel                           |                           User Profile                           |
+| :----------------------------------------------------------------------: | :-------------------------------------------------------------: | :--------------------------------------------------------------: |
 | ![Inventory Management](screenshot/Screenshot%202025-09-19%20171224.png) | ![Admin Panel](screenshot/Screenshot%202025-09-19%20171240.png) | ![User Profile](screenshot/Screenshot%202025-09-19%20171246.png) |
-| _Inventory status with low-stock alerts and management tools_ | _Administrative panel for system configuration_ | _User profile management with personal information_ |
+|      _Inventory status with low-stock alerts and management tools_       |         _Administrative panel for system configuration_         |       _User profile management with personal information_        |
 
 </div>
 
@@ -289,10 +291,10 @@ Before setting up the project, ensure you have the following installed:
 
 <div align="center">
 
-| System Alerts | Monthly Sales Trends | Category Performance |
-|:---:|:---:|:---:|
+|                           System Alerts                           |                       Monthly Sales Trends                        |                           Category Performance                           |
+| :---------------------------------------------------------------: | :---------------------------------------------------------------: | :----------------------------------------------------------------------: |
 | ![System Alerts](screenshot/Screenshot%202025-09-19%20171255.png) | ![Monthly Sales](screenshot/Screenshot%202025-09-19%20171304.png) | ![Category Performance](screenshot/Screenshot%202025-09-19%20171324.png) |
-| _Real-time system alerts and notifications_ | _Monthly sales trends with growth indicators_ | _Sales performance by product category_ |
+|            _Real-time system alerts and notifications_            |           _Monthly sales trends with growth indicators_           |                 _Sales performance by product category_                  |
 
 </div>
 
@@ -300,10 +302,10 @@ Before setting up the project, ensure you have the following installed:
 
 <div align="center">
 
-| Top Products | Conversion Funnel | Shipping Metrics |
-|:---:|:---:|:---:|
+|                           Top Products                           |                           Conversion Funnel                           |                           Shipping Metrics                           |
+| :--------------------------------------------------------------: | :-------------------------------------------------------------------: | :------------------------------------------------------------------: |
 | ![Top Products](screenshot/Screenshot%202025-09-19%20171332.png) | ![Conversion Funnel](screenshot/Screenshot%202025-09-19%20171343.png) | ![Shipping Metrics](screenshot/Screenshot%202025-09-19%20171349.png) |
-| _Top-selling products with revenue metrics_ | _Website conversion funnel analysis_ | _Shipping performance and delivery metrics_ |
+|           _Top-selling products with revenue metrics_            |                 _Website conversion funnel analysis_                  |             _Shipping performance and delivery metrics_              |
 
 </div>
 
@@ -311,10 +313,10 @@ Before setting up the project, ensure you have the following installed:
 
 <div align="center">
 
-| Low Stock Alerts | Recent Orders | |
-|:---:|:---:|:---:|
-| ![Low Stock Alerts](screenshot/Screenshot%202025-09-19%20171405.png) | ![Recent Orders](screenshot/Screenshot%202025-09-19%20171411.png) | |
-| _Inventory alerts for low-stock items_ | _Recent orders with status and customer information_ | |
+|                           Low Stock Alerts                           |                           Recent Orders                           |     |
+| :------------------------------------------------------------------: | :---------------------------------------------------------------: | :-: |
+| ![Low Stock Alerts](screenshot/Screenshot%202025-09-19%20171405.png) | ![Recent Orders](screenshot/Screenshot%202025-09-19%20171411.png) |     |
+|                _Inventory alerts for low-stock items_                |       _Recent orders with status and customer information_        |     |
 
 </div>
 
@@ -368,19 +370,6 @@ The backend provides a comprehensive REST API with detailed documentation:
 - `GET /api/admin/alerts` - System alerts
 
 For complete API documentation, see [API_DOCUMENTATION.md](API_DOCUMENTATION.md).
-
-## 🌐 Live Application
-
-### Deployed URLs
-
-- **Frontend (Vercel)**: [https://sweet-shop-management-system-9jk6.vercel.app/login](https://sweet-shop-management-system-9jk6.vercel.app/login)
-- **Backend (Railway)**: [https://sweetshop-backend-production.up.railway.app](https://sweetshop-backend-production.up.railway.app)
-- **Database (NeonDB)**: Serverless PostgreSQL hosted on NeonDB
-
-### Default Login Credentials
-
-- **Admin**: `admin@sweetshop.com` / `admin123`
-- **User**: `user@sweetshop.com` / `user123`
 
 ## 🚀 Deployment
 
