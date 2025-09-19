@@ -1,7 +1,4 @@
-"use client";
-
 import { createContext, useContext, useState, useEffect } from "react";
-import { mockSweets } from "../data/mockData";
 import { cartService } from "../services/cartService";
 import { useAuth } from "./AuthContext";
 
@@ -17,7 +14,7 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
-  const [sweets, setSweets] = useState(mockSweets);
+  const [sweets, setSweets] = useState([]);
   const { isAuthenticated } = useAuth();
 
   useEffect(() => {

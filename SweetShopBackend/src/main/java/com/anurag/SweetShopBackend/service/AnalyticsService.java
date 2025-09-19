@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,6 +51,9 @@ public class AnalyticsService {
     
     @Autowired
     private SystemAlertRepository systemAlertRepository;
+    
+    @Autowired
+    private OrderItemRepository orderItemRepository;
     
     public Map<String, Object> getSalesOverview(String range) {
         Map<String, Object> result = new HashMap<>();
@@ -215,21 +219,72 @@ public class AnalyticsService {
     }
     
     public List<Map<String, Object>> getCustomerSegments(String range) {
-        // Get top customer segments
-        List<Object[]> segmentsData = customerAnalyticsRepository.getTopCustomerSegments();
+        // Parse date range
+        LocalDateTime endDate = LocalDateTime.now();
+        LocalDateTime startDate = getStartDateFromRange(endDate, range);
         
-        if (segmentsData != null && !segmentsData.isEmpty()) {
-            return segmentsData.stream().map(data -> {
-                Map<String, Object> segment = new HashMap<>();
-                segment.put("segment", data[0]);
-                segment.put("count", data[1]);
-                segment.put("avgOrderValue", data[2]);
-                return segment;
-            }).collect(Collectors.toList());
+        // Get all orders in the date range
+        List<Order> orders = orderRepository.findByOrderDateBetween(startDate, endDate);
+        
+        if (orders.isEmpty()) {
+            return new ArrayList<>();
         }
         
-        // Fallback to default segments
-        return getDefaultCustomerSegments();
+        // Calculate customer segments based on order frequency and value
+        Map<String, Map<String, Object>> customerStats = new HashMap<>();
+        
+        for (Order order : orders) {
+            String userEmail = order.getUser().getEmail();
+            double orderValue = order.getTotalAmount();
+            
+            if (customerStats.containsKey(userEmail)) {
+                Map<String, Object> stats = customerStats.get(userEmail);
+                stats.put("orderCount", (Integer) stats.get("orderCount") + 1);
+                stats.put("totalValue", (Double) stats.get("totalValue") + orderValue);
+            } else {
+                Map<String, Object> stats = new HashMap<>();
+                stats.put("email", userEmail);
+                stats.put("orderCount", 1);
+                stats.put("totalValue", orderValue);
+                customerStats.put(userEmail, stats);
+            }
+        }
+        
+        // Categorize customers into segments
+        List<Map<String, Object>> segments = new ArrayList<>();
+        Map<String, Integer> segmentCounts = new HashMap<>();
+        Map<String, Double> segmentValues = new HashMap<>();
+        
+        for (Map<String, Object> stats : customerStats.values()) {
+            int orderCount = (Integer) stats.get("orderCount");
+            double totalValue = (Double) stats.get("totalValue");
+            double avgOrderValue = totalValue / orderCount;
+            
+            String segment;
+            if (orderCount >= 5 && avgOrderValue >= 100) {
+                segment = "Premium Buyers";
+            } else if (orderCount >= 3 || avgOrderValue >= 50) {
+                segment = "Regular Customers";
+            } else {
+                segment = "Occasional Buyers";
+            }
+            
+            segmentCounts.put(segment, segmentCounts.getOrDefault(segment, 0) + 1);
+            segmentValues.put(segment, segmentValues.getOrDefault(segment, 0.0) + totalValue);
+        }
+        
+        // Create segment summaries
+        for (String segment : segmentCounts.keySet()) {
+            Map<String, Object> segmentData = new HashMap<>();
+            segmentData.put("segment", segment);
+            segmentData.put("count", segmentCounts.get(segment));
+            segmentData.put("avgOrderValue", segmentValues.get(segment) / segmentCounts.get(segment));
+            segments.add(segmentData);
+        }
+        
+        return segments.stream()
+            .sorted((a, b) -> Integer.compare((Integer) b.get("count"), (Integer) a.get("count")))
+            .collect(Collectors.toList());
     }
     
     public Map<String, Object> getWebsiteTraffic(String range) {
@@ -360,24 +415,67 @@ public class AnalyticsService {
     }
     
     public List<Map<String, Object>> getAlerts(int limit) {
-        // Get alerts from database
-        List<SystemAlert> alerts = systemAlertRepository.findByIsDismissedFalseOrderByCreatedAtDesc();
+        List<Map<String, Object>> alerts = new ArrayList<>();
         
-        if (alerts != null && !alerts.isEmpty()) {
-            return alerts.stream().limit(limit).map(alert -> {
-                Map<String, Object> alertMap = new HashMap<>();
-                alertMap.put("id", alert.getId().toString());
-                alertMap.put("type", alert.getAlertType());
-                alertMap.put("title", alert.getTitle());
-                alertMap.put("message", alert.getMessage());
-                alertMap.put("timestamp", alert.getCreatedAt().toString());
-                alertMap.put("priority", alert.getPriority());
-                return alertMap;
-            }).collect(Collectors.toList());
+        // Check for low stock items
+        List<Sweet> lowStockItems = sweetRepository.findByQuantityBetween(1, 10);
+        if (!lowStockItems.isEmpty()) {
+            Map<String, Object> alert = new HashMap<>();
+            alert.put("id", "low-stock-" + System.currentTimeMillis());
+            alert.put("type", "warning");
+            alert.put("title", "Low Stock Alert");
+            alert.put("message", lowStockItems.size() + " products are running low on stock");
+            alert.put("timestamp", LocalDateTime.now().toString());
+            alert.put("priority", "high");
+            alerts.add(alert);
         }
         
-        // Generate default alerts if none exist
-        return generateDefaultAlerts();
+        // Check for out of stock items
+        List<Sweet> outOfStockItems = sweetRepository.findByQuantity(0);
+        if (!outOfStockItems.isEmpty()) {
+            Map<String, Object> alert = new HashMap<>();
+            alert.put("id", "out-of-stock-" + System.currentTimeMillis());
+            alert.put("type", "error");
+            alert.put("title", "Out of Stock Alert");
+            alert.put("message", outOfStockItems.size() + " products are out of stock");
+            alert.put("timestamp", LocalDateTime.now().toString());
+            alert.put("priority", "high");
+            alerts.add(alert);
+        }
+        
+        // Check for recent orders
+        LocalDateTime oneHourAgo = LocalDateTime.now().minusHours(1);
+        List<Order> recentOrders = orderRepository.findByOrderDateBetween(oneHourAgo, LocalDateTime.now());
+        if (!recentOrders.isEmpty()) {
+            Map<String, Object> alert = new HashMap<>();
+            alert.put("id", "new-orders-" + System.currentTimeMillis());
+            alert.put("type", "info");
+            alert.put("title", "New Orders Received");
+            alert.put("message", recentOrders.size() + " new orders received in the last hour");
+            alert.put("timestamp", LocalDateTime.now().toString());
+            alert.put("priority", "medium");
+            alerts.add(alert);
+        }
+        
+        // Check for high-value orders
+        List<Order> highValueOrders = orderRepository.findByOrderDateBetween(
+            LocalDateTime.now().minusDays(1), LocalDateTime.now())
+            .stream()
+            .filter(order -> order.getTotalAmount() > 500)
+            .collect(Collectors.toList());
+        
+        if (!highValueOrders.isEmpty()) {
+            Map<String, Object> alert = new HashMap<>();
+            alert.put("id", "high-value-" + System.currentTimeMillis());
+            alert.put("type", "success");
+            alert.put("title", "High Value Orders");
+            alert.put("message", highValueOrders.size() + " high-value orders (>$500) received today");
+            alert.put("timestamp", LocalDateTime.now().toString());
+            alert.put("priority", "low");
+            alerts.add(alert);
+        }
+        
+        return alerts.stream().limit(limit).collect(Collectors.toList());
     }
     
     public Map<String, Object> getInventoryStatus() {
@@ -492,103 +590,164 @@ public class AnalyticsService {
     private List<Map<String, Object>> calculateMonthlySalesFromOrders(int months) {
         List<Map<String, Object>> monthlySales = new ArrayList<>();
         
-        // Calculate monthly data from orders
-        // Implementation would depend on the Order repository capabilities
-        // This is a simplified placeholder
+        // Get monthly sales data from orders
+        List<Object[]> monthlyData = orderRepository.getMonthlySalesData();
         
-        // Sample data for the last 12 months
-        String[] monthNames = {"Feb 2023", "Mar 2023", "Apr 2023", "May 2023", "Jun 2023", 
-                             "Jul 2023", "Aug 2023", "Sep 2023", "Oct 2023", "Nov 2023", 
-                             "Dec 2023", "Jan 2024"};
-        double[] revenues = {32150.0, 34520.0, 28950.0, 36780.0, 41230.0, 
-                           38950.0, 42340.0, 45680.0, 48920.0, 52340.0, 
-                           67890.0, 45680.5};
-        int[] orders = {856, 923, 745, 987, 1105, 
-                      1023, 1156, 1247, 1324, 1456, 
-                      1890, 1247};
-        double[] growth = {5.2, 7.4, -16.1, 27.0, 12.1, 
-                         -5.5, 8.7, 7.9, 7.1, 7.0, 
-                         29.7, -32.7};
-        
-        // Limit to requested number of months
-        int dataPoints = Math.min(months, monthNames.length);
-        int startIdx = monthNames.length - dataPoints;
-        
-        for (int i = startIdx; i < monthNames.length; i++) {
+        // Process the data and limit to requested months
+        int count = 0;
+        for (Object[] data : monthlyData) {
+            if (count >= months) break;
+            
+            Integer year = (Integer) data[0];
+            Integer month = (Integer) data[1];
+            Long orderCount = (Long) data[2];
+            Double totalRevenue = (Double) data[3];
+            
             Map<String, Object> monthData = new HashMap<>();
-            monthData.put("month", monthNames[i]);
-            monthData.put("revenue", revenues[i]);
-            monthData.put("orders", orders[i]);
-            monthData.put("growth", growth[i]);
+            monthData.put("month", getMonthYearString(month, year));
+            monthData.put("revenue", totalRevenue != null ? totalRevenue : 0.0);
+            monthData.put("orders", orderCount != null ? orderCount : 0);
+            
+            // Calculate growth percentage (simplified - would need previous month data)
+            monthData.put("growth", 0.0);
+            
             monthlySales.add(monthData);
+            count++;
         }
         
         return monthlySales;
     }
     
     private List<Map<String, Object>> calculateTopProductsFromOrders(int limit) {
-        // This would normally calculate top products from order items
-        // For now, return sample data
         List<Map<String, Object>> topProducts = new ArrayList<>();
         
-        // Sample data for top products
-        String[] names = {"Artisan Gummy Bears", "Chocolate Truffles", "French Macarons", 
-                        "Salted Caramel Bonbons", "Honey Lavender Lollipops"};
-        String[] categories = {"Gummies", "Chocolate", "Macarons", "Caramel", "Lollipops"};
-        int[] unitsSold = {245, 198, 156, 134, 98};
-        double[] revenues = {3675.0, 4950.0, 3120.0, 2680.0, 1470.0};
-        double[] profits = {1470.0, 1980.0, 1248.0, 1072.0, 588.0};
-        double[] margins = {40.0, 40.0, 40.0, 40.0, 40.0};
-        int[] stocks = {15, 8, 22, 12, 6};
-        String[] images = {
-            "https://i.postimg.cc/sMTg12Kg/artisan-gummy-bears-colorful.jpg",
-            "https://i.postimg.cc/dZRqFQLv/elegant-dark-chocolate-truffles.jpg",
-            "https://i.postimg.cc/JHC1SH7P/colorful-french-macarons-assortment.jpg",
-            "https://i.postimg.cc/KKKxzDR0/salted-caramel-bonbons-chocolate.jpg",
-            "https://i.postimg.cc/z3TDK7pM/honey-lavender-lollipops-purple.jpg"
-        };
+        // Get current month's data
+        LocalDate today = LocalDate.now();
+        LocalDate firstDayOfMonth = today.withDayOfMonth(1);
+        LocalDateTime startDate = firstDayOfMonth.atStartOfDay();
+        LocalDateTime endDate = LocalDateTime.now();
         
-        // Limit to requested number of products
-        int count = Math.min(limit, names.length);
+        // Get all orders in the current month
+        List<Order> orders = orderRepository.findByOrderDateBetween(startDate, endDate);
         
-        for (int i = 0; i < count; i++) {
-            Map<String, Object> product = new HashMap<>();
-            product.put("id", "prod-" + (i + 1));
-            product.put("name", names[i]);
-            product.put("category", categories[i]);
-            product.put("unitsSold", unitsSold[i]);
-            product.put("revenue", revenues[i]);
-            product.put("profit", profits[i]);
-            product.put("profitMargin", margins[i]);
-            product.put("stock", stocks[i]);
-            product.put("image", images[i]);
-            topProducts.add(product);
+        // Calculate product sales from order items
+        Map<UUID, Map<String, Object>> productStats = new HashMap<>();
+        
+        for (Order order : orders) {
+            List<OrderItem> orderItems = orderItemRepository.findByOrder(order);
+            for (OrderItem item : orderItems) {
+                UUID sweetId = item.getSweet().getId();
+                double revenue = item.getPrice() * item.getQuantity();
+                double profit = 0.0;
+                
+                // Calculate profit if cost is available
+                if (item.getSweet().getCost() != null) {
+                    profit = revenue - (item.getSweet().getCost() * item.getQuantity());
+                }
+                
+                if (productStats.containsKey(sweetId)) {
+                    Map<String, Object> stats = productStats.get(sweetId);
+                    stats.put("unitsSold", (Integer) stats.get("unitsSold") + item.getQuantity());
+                    stats.put("revenue", (Double) stats.get("revenue") + revenue);
+                    stats.put("profit", (Double) stats.get("profit") + profit);
+                } else {
+                    Map<String, Object> stats = new HashMap<>();
+                    stats.put("sweet", item.getSweet());
+                    stats.put("unitsSold", item.getQuantity());
+                    stats.put("revenue", revenue);
+                    stats.put("profit", profit);
+                    productStats.put(sweetId, stats);
+                }
+            }
         }
+        
+        // Convert to list and sort by revenue
+        topProducts = productStats.values().stream()
+            .map(stats -> {
+                Sweet sweet = (Sweet) stats.get("sweet");
+                Map<String, Object> product = new HashMap<>();
+                product.put("id", sweet.getId().toString());
+                product.put("name", sweet.getName());
+                product.put("category", sweet.getCategory());
+                product.put("unitsSold", stats.get("unitsSold"));
+                product.put("revenue", stats.get("revenue"));
+                product.put("profit", stats.get("profit"));
+                product.put("profitMargin", sweet.getProfitMargin());
+                product.put("stock", sweet.getQuantity());
+                product.put("image", sweet.getImage());
+                return product;
+            })
+            .sorted((a, b) -> Double.compare((Double) b.get("revenue"), (Double) a.get("revenue")))
+            .limit(limit)
+            .collect(Collectors.toList());
         
         return topProducts;
     }
     
     private List<Map<String, Object>> calculateSalesByCategoryFromOrders(LocalDateTime startDate, LocalDateTime endDate) {
-        // This would normally calculate sales by category from order items
-        // For now, return sample data
         List<Map<String, Object>> salesByCategory = new ArrayList<>();
         
-        // Sample data for sales by category
-        String[] categories = {"Chocolate", "Gummies", "Macarons", "Caramel", "Lollipops", "Fudge"};
-        double[] revenues = {15680.5, 12340.25, 8920.75, 4560.0, 2340.0, 1859.0};
-        double[] percentages = {34.3, 27.0, 19.5, 10.0, 5.1, 4.1};
-        int[] unitsSold = {456, 789, 234, 156, 98, 67};
-        double[] profits = {6272.2, 4936.1, 3568.3, 1824.0, 936.0, 743.6};
+        // Get all orders in the date range
+        List<Order> orders = orderRepository.findByOrderDateBetween(startDate, endDate);
         
-        for (int i = 0; i < categories.length; i++) {
-            Map<String, Object> category = new HashMap<>();
-            category.put("category", categories[i]);
-            category.put("revenue", revenues[i]);
-            category.put("percentage", percentages[i]);
-            category.put("unitsSold", unitsSold[i]);
-            category.put("profit", profits[i]);
-            salesByCategory.add(category);
+        // Calculate category sales from order items
+        Map<String, Map<String, Object>> categoryStats = new HashMap<>();
+        
+        for (Order order : orders) {
+            List<OrderItem> orderItems = orderItemRepository.findByOrder(order);
+            for (OrderItem item : orderItems) {
+                String category = item.getSweet().getCategory();
+                if (category == null || category.isEmpty()) {
+                    category = "Uncategorized";
+                }
+                
+                double revenue = item.getPrice() * item.getQuantity();
+                double profit = 0.0;
+                
+                // Calculate profit if cost is available
+                if (item.getSweet().getCost() != null) {
+                    profit = revenue - (item.getSweet().getCost() * item.getQuantity());
+                }
+                
+                if (categoryStats.containsKey(category)) {
+                    Map<String, Object> stats = categoryStats.get(category);
+                    stats.put("unitsSold", (Integer) stats.get("unitsSold") + item.getQuantity());
+                    stats.put("revenue", (Double) stats.get("revenue") + revenue);
+                    stats.put("profit", (Double) stats.get("profit") + profit);
+                } else {
+                    Map<String, Object> stats = new HashMap<>();
+                    stats.put("category", category);
+                    stats.put("unitsSold", item.getQuantity());
+                    stats.put("revenue", revenue);
+                    stats.put("profit", profit);
+                    categoryStats.put(category, stats);
+                }
+            }
         }
+        
+        // Calculate total revenue for percentage calculation
+        double totalRevenue = categoryStats.values().stream()
+            .mapToDouble(stats -> (Double) stats.get("revenue"))
+            .sum();
+        
+        // Convert to list and calculate percentages
+        salesByCategory = categoryStats.values().stream()
+            .map(stats -> {
+                Map<String, Object> category = new HashMap<>();
+                category.put("category", stats.get("category"));
+                category.put("revenue", stats.get("revenue"));
+                category.put("unitsSold", stats.get("unitsSold"));
+                category.put("profit", stats.get("profit"));
+                
+                // Calculate percentage
+                double percentage = totalRevenue > 0 ? 
+                    ((Double) stats.get("revenue") / totalRevenue) * 100 : 0.0;
+                category.put("percentage", Math.round(percentage * 10) / 10.0);
+                
+                return category;
+            })
+            .sorted((a, b) -> Double.compare((Double) b.get("revenue"), (Double) a.get("revenue")))
+            .collect(Collectors.toList());
         
         return salesByCategory;
     }

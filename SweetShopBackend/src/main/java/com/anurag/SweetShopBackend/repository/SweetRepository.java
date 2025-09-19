@@ -20,6 +20,8 @@ public interface SweetRepository extends JpaRepository<Sweet, UUID> {
     long countByQuantity(Integer quantity);
     
     List<Sweet> findByQuantityLessThan(Integer threshold);
+    List<Sweet> findByQuantityBetween(Integer min, Integer max);
+    List<Sweet> findByQuantity(Integer quantity);
     
     @Query("SELECT SUM(s.price * s.quantity) FROM Sweet s")
     Double calculateTotalInventoryValue();

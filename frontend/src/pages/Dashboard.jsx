@@ -1,23 +1,46 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useAuth } from "../context/AuthContext"
 import { useCart } from "../context/CartContext"
 import SweetCard from "../components/SweetCard"
 import SearchFilter from "../components/SearchFilter"
-import { mockSweets } from "../data/mockData"
+import { sweetService } from "../services/sweetService"
 import "./Catalog.css"
 
 const Catalog = () => {
   const { user } = useAuth()
   const { addToCart } = useCart()
-  const [sweets, setSweets] = useState(mockSweets)
-  const [filteredSweets, setFilteredSweets] = useState(mockSweets)
-  const [loading, setLoading] = useState(false)
+  const [sweets, setSweets] = useState([])
+  const [filteredSweets, setFilteredSweets] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("")
   const [priceRange, setPriceRange] = useState({ min: "", max: "" })
+
+  // Fetch sweets from API on component mount
+  useEffect(() => {
+    fetchSweets()
+  }, [])
+
+  const fetchSweets = async () => {
+    try {
+      setLoading(true)
+      setError("")
+      const sweetsData = await sweetService.getAllSweets()
+      setSweets(sweetsData)
+      setFilteredSweets(sweetsData)
+    } catch (err) {
+      console.error("Error fetching sweets:", err)
+      setError("Failed to load sweets. Please try again.")
+      setSweets([])
+      setFilteredSweets([])
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const applyFilters = () => {
     let filtered = sweets
@@ -127,6 +150,66 @@ const Catalog = () => {
     setFilteredSweets(sorted)
   }
 
+
+  // Show loading state
+  if (loading) {
+    return (
+      <motion.div
+        className="catalog-container"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="catalog-header">
+          <motion.div
+            className="welcome-section"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <h1>Welcome back, {user?.name}!</h1>
+            <p>Loading our delicious collection of sweets...</p>
+          </motion.div>
+        </div>
+        <div className="loading-state">
+          <div className="loading-spinner"></div>
+          <h2>Loading Sweets...</h2>
+          <p>Fetching fresh inventory from our kitchen</p>
+        </div>
+      </motion.div>
+    )
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <motion.div
+        className="catalog-container"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="catalog-header">
+          <motion.div
+            className="welcome-section"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <h1>Welcome back, {user?.name}!</h1>
+            <p>Discover our delicious collection of sweets</p>
+          </motion.div>
+        </div>
+        <div className="error-state">
+          <h2>Oops! Something went wrong</h2>
+          <p>{error}</p>
+          <button onClick={fetchSweets} className="retry-btn">
+            Try Again
+          </button>
+        </div>
+      </motion.div>
+    )
+  }
 
   return (
     <motion.div

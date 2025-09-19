@@ -49,7 +49,9 @@ export const orderService = {
   // Update order status (Admin only)
   updateOrderStatus: async (orderId, status) => {
     try {
-      const response = await axiosInstance.put(`/api/orders/${orderId}/status?status=${status}`)
+      const response = await axiosInstance.put(`/api/admin/orders/${orderId}/status`, {
+        status: status
+      })
       return response.data
     } catch (error) {
       console.error('Error updating order status:', error)

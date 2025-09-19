@@ -1,6 +1,7 @@
 # Sweet Shop Backend API Documentation
 
 ## Table of Contents
+
 1. [Overview](#overview)
 2. [Authentication](#authentication)
 3. [Base URL](#base-url)
@@ -19,6 +20,7 @@
 The Sweet Shop Backend API provides a comprehensive REST API for managing a sweet shop inventory system. It includes user authentication, product management, shopping cart functionality, order processing, and administrative features.
 
 **Key Features:**
+
 - JWT-based authentication
 - Role-based access control (USER/ADMIN)
 - Product catalog management
@@ -27,6 +29,7 @@ The Sweet Shop Backend API provides a comprehensive REST API for managing a swee
 - Admin dashboard
 
 ### Data Source Notes
+
 - All Admin Analytics endpoints return values computed from your database in the requested range. When no data exists, numeric fields return 0 and lists return [].
 - Order checkout supports optional payment metadata (Credit Card/PayPal) and shipping/customer notes.
 - Order status values include: PENDING, CONFIRMED, PROCESSING, SHIPPED, OUT_FOR_DELIVERY, DELIVERED, CANCELLED, REFUNDED.
@@ -48,12 +51,14 @@ http://localhost:8081
 ## Common Headers
 
 ### Request Headers
+
 ```
 Content-Type: application/json
 Authorization: Bearer <jwt-token>  (for protected endpoints)
 ```
 
 ### Response Headers
+
 ```
 Content-Type: application/json
 ```
@@ -73,6 +78,7 @@ All error responses follow this format:
 ```
 
 ### Common HTTP Status Codes
+
 - `200` - OK
 - `201` - Created
 - `400` - Bad Request
@@ -94,6 +100,7 @@ All error responses follow this format:
 **Access:** Public
 
 **Request Body:**
+
 ```json
 {
   "fullName": "John Doe",
@@ -103,16 +110,19 @@ All error responses follow this format:
 ```
 
 **Request Headers:**
+
 ```
 Content-Type: application/json
 ```
 
 **Response (Success - 200):**
+
 ```json
 "User registered successfully!"
 ```
 
 **Response (Error - 400):**
+
 ```json
 {
   "timestamp": "2025-09-19T04:30:00",
@@ -124,6 +134,7 @@ Content-Type: application/json
 ```
 
 **Validation Rules:**
+
 - Full name is required
 - Email must be valid format
 - Password is required
@@ -140,6 +151,7 @@ Content-Type: application/json
 **Access:** Public
 
 **Request Body:**
+
 ```json
 {
   "email": "user@sweetshop.com",
@@ -148,11 +160,13 @@ Content-Type: application/json
 ```
 
 **Request Headers:**
+
 ```
 Content-Type: application/json
 ```
 
 **Response (Success - 200):**
+
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTYzMjA0ODAwMCwiZXhwIjoxNjMyMTM0NDAwfQ.signature",
@@ -162,6 +176,7 @@ Content-Type: application/json
 ```
 
 **Response (Error - 401):**
+
 ```json
 {
   "timestamp": "2025-09-19T04:30:00",
@@ -183,16 +198,19 @@ Content-Type: application/json
 **Access:** Authenticated
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <jwt-token>
 ```
 
 **Response (Success - 200):**
+
 ```json
 "User logged out successfully!"
 ```
 
 **Response (Error - 400):**
+
 ```json
 {
   "timestamp": "2025-09-19T04:30:00",
@@ -204,6 +222,7 @@ Authorization: Bearer <jwt-token>
 ```
 
 **Notes:**
+
 - This endpoint invalidates the provided token by adding it to a blacklist
 - The token will no longer be usable for any API calls
 - Attempting to use an invalidated token will result in a 401 Unauthorized response
@@ -219,11 +238,13 @@ Authorization: Bearer <jwt-token>
 **Access:** Public (requires token in header, even if expired)
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <jwt-token>
 ```
 
 **Response (Success - 200):**
+
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwicm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTYzMjA0ODAwMCwiZXhwIjoxNjMyMTM0NDAwfQ.signature",
@@ -233,6 +254,7 @@ Authorization: Bearer <jwt-token>
 ```
 
 **Response (Error - 401):**
+
 ```json
 {
   "error": "Unauthorized",
@@ -242,6 +264,7 @@ Authorization: Bearer <jwt-token>
 ```
 
 **Notes:**
+
 - This endpoint allows refreshing an existing token
 - The token can be expired but must have a valid signature
 - Returns a new token with extended expiration time (1 minute)
@@ -261,11 +284,13 @@ Authorization: Bearer <jwt-token>
 **Access:** Authenticated
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <jwt-token>
 ```
 
 **Response (Success - 200):**
+
 ```json
 {
   "name": "John Doe",
@@ -277,6 +302,7 @@ Authorization: Bearer <jwt-token>
 ```
 
 **Response (Error - 401):**
+
 ```json
 {
   "timestamp": "2025-09-19T04:30:00",
@@ -298,6 +324,7 @@ Authorization: Bearer <jwt-token>
 **Access:** Authenticated
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <jwt-token>
 Content-Type: application/json
@@ -306,6 +333,7 @@ Content-Type: application/json
 **Important:** Make sure to set the `Content-Type` header to `application/json` when making this request. Many API testing tools default to `text/plain` which will cause a 415 Unsupported Media Type error.
 
 **Request Body:**
+
 ```json
 {
   "name": "John Smith",
@@ -315,11 +343,13 @@ Content-Type: application/json
 ```
 
 **Validation Rules:**
+
 - Name is required
 - Phone and address are optional
 - All fields are validated for proper format
 
 **Response (Success - 200):**
+
 ```json
 {
   "name": "John Smith",
@@ -331,6 +361,7 @@ Content-Type: application/json
 ```
 
 **Response (Error - 400):**
+
 ```json
 {
   "timestamp": "2025-09-19T04:30:00",
@@ -342,6 +373,7 @@ Content-Type: application/json
 ```
 
 **Response (Error - 401):**
+
 ```json
 {
   "timestamp": "2025-09-19T04:30:00",
@@ -353,6 +385,7 @@ Content-Type: application/json
 ```
 
 **Response (Error - 415):**
+
 ```json
 {
   "timestamp": "2025-09-19T05:22:43.9096184",
@@ -364,6 +397,7 @@ Content-Type: application/json
 ```
 
 **Troubleshooting:**
+
 - **415 Error:** Make sure your request includes `Content-Type: application/json` header
 - **400 Error:** Check that your JSON is properly formatted and all required fields are provided
 - **401 Error:** Ensure you're sending a valid JWT token in the Authorization header
@@ -381,17 +415,20 @@ Content-Type: application/json
 **Access:** Authenticated
 
 **Query Parameters:**
+
 - `name` (String, optional) - Search by name (partial match, case-insensitive)
 - `category` (String, optional) - Search by category (partial match, case-insensitive)
 - `min` (Double, optional) - Minimum price filter
 - `max` (Double, optional) - Maximum price filter
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <jwt-token>
 ```
 
 **Example Requests:**
+
 ```
 GET /api/sweets
 GET /api/sweets?name=chocolate
@@ -401,6 +438,7 @@ GET /api/sweets?name=chocolate&category=truffles&min=10.0&max=50.0
 ```
 
 **Response (Success - 200):**
+
 ```json
 [
   {
@@ -435,14 +473,17 @@ GET /api/sweets?name=chocolate&category=truffles&min=10.0&max=50.0
 **Access:** Authenticated
 
 **Path Parameters:**
+
 - `id` (UUID) - Sweet ID
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <jwt-token>
 ```
 
 **Response (Success - 200):**
+
 ```json
 {
   "id": 1,
@@ -456,6 +497,7 @@ Authorization: Bearer <jwt-token>
 ```
 
 **Response (Error - 404):**
+
 ```json
 {
   "timestamp": "2025-09-19T04:30:00",
@@ -477,12 +519,14 @@ Authorization: Bearer <jwt-token>
 **Access:** Admin
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <admin-jwt-token>
 Content-Type: application/json
 ```
 
 **Request Body:**
+
 ```json
 {
   "name": "Mysore Pak",
@@ -495,6 +539,7 @@ Content-Type: application/json
 ```
 
 **Response (Success - 200):**
+
 ```json
 {
   "id": 3,
@@ -508,6 +553,7 @@ Content-Type: application/json
 ```
 
 **Response (Error - 403):**
+
 ```json
 {
   "timestamp": "2025-09-19T04:30:00",
@@ -529,15 +575,18 @@ Content-Type: application/json
 **Access:** Admin
 
 **Path Parameters:**
+
 - `id` (UUID) - Sweet ID
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <admin-jwt-token>
 Content-Type: application/json
 ```
 
 **Request Body:**
+
 ```json
 {
   "name": "Gulab Jamun",
@@ -550,6 +599,7 @@ Content-Type: application/json
 ```
 
 **Response (Success - 200):**
+
 ```json
 {
   "id": 1,
@@ -573,14 +623,17 @@ Content-Type: application/json
 **Access:** Admin
 
 **Path Parameters:**
+
 - `id` (UUID) - Sweet ID
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <admin-jwt-token>
 ```
 
 **Response (Success - 200):**
+
 ```
 (Empty response body)
 ```
@@ -596,22 +649,27 @@ Authorization: Bearer <admin-jwt-token>
 **Access:** Authenticated
 
 **Path Parameters:**
+
 - `id` (UUID) - Sweet ID
 
 **Query Parameters:**
+
 - `qty` (Integer, required) - Quantity to purchase (must be greater than 0)
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <jwt-token>
 ```
 
 **Example Request:**
+
 ```
 POST /api/sweets/94e31aff-b1ad-4f48-bc91-46ef369ec05e/purchase?qty=2
 ```
 
 **Response (Success - 200):**
+
 ```json
 {
   "id": "94e31aff-b1ad-4f48-bc91-46ef369ec05e",
@@ -625,6 +683,7 @@ POST /api/sweets/94e31aff-b1ad-4f48-bc91-46ef369ec05e/purchase?qty=2
 ```
 
 **Response (Error - 400):**
+
 ```json
 {
   "timestamp": "2025-09-19T04:30:00",
@@ -636,6 +695,7 @@ POST /api/sweets/94e31aff-b1ad-4f48-bc91-46ef369ec05e/purchase?qty=2
 ```
 
 **Response (Error - 400 - Insufficient Stock):**
+
 ```json
 {
   "timestamp": "2025-09-19T04:30:00",
@@ -657,22 +717,27 @@ POST /api/sweets/94e31aff-b1ad-4f48-bc91-46ef369ec05e/purchase?qty=2
 **Access:** Admin
 
 **Path Parameters:**
+
 - `id` (UUID) - Sweet ID
 
 **Query Parameters:**
+
 - `qty` (Integer, optional) - Quantity to add (default: 1)
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <admin-jwt-token>
 ```
 
 **Example Request:**
+
 ```
 POST /api/sweets/94e31aff-b1ad-4f48-bc91-46ef369ec05e/restock?qty=10
 ```
 
 **Response (Success - 200):**
+
 ```json
 {
   "id": "94e31aff-b1ad-4f48-bc91-46ef369ec05e",
@@ -698,11 +763,13 @@ POST /api/sweets/94e31aff-b1ad-4f48-bc91-46ef369ec05e/restock?qty=10
 **Access:** Authenticated
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <jwt-token>
 ```
 
 **Response (Success - 200):**
+
 ```json
 [
   {
@@ -730,12 +797,14 @@ Authorization: Bearer <jwt-token>
 **Access:** Authenticated
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <jwt-token>
 Content-Type: application/json
 ```
 
 **Request Body:**
+
 ```json
 {
   "sweetId": "94e31aff-b1ad-4f48-bc91-46ef369ec05e",
@@ -744,6 +813,7 @@ Content-Type: application/json
 ```
 
 **Response (Success - 200):**
+
 ```json
 {
   "id": 1,
@@ -759,6 +829,7 @@ Content-Type: application/json
 ```
 
 **Response (Error - 400):**
+
 ```json
 {
   "timestamp": "2025-09-19T04:30:00",
@@ -780,22 +851,27 @@ Content-Type: application/json
 **Access:** Authenticated
 
 **Path Parameters:**
+
 - `cartItemId` (Long) - Cart item ID
 
 **Query Parameters:**
+
 - `quantity` (Integer) - New quantity
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <jwt-token>
 ```
 
 **Example Request:**
+
 ```
 PUT /api/cart/1?quantity=3
 ```
 
 **Response (Success - 200):**
+
 ```
 (Empty response body)
 ```
@@ -811,14 +887,17 @@ PUT /api/cart/1?quantity=3
 **Access:** Authenticated
 
 **Path Parameters:**
+
 - `cartItemId` (Long) - Cart item ID
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <jwt-token>
 ```
 
 **Response (Success - 200):**
+
 ```
 (Empty response body)
 ```
@@ -834,11 +913,13 @@ Authorization: Bearer <jwt-token>
 **Access:** Authenticated
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <jwt-token>
 ```
 
 **Response (Success - 200):**
+
 ```
 (Empty response body)
 ```
@@ -856,11 +937,13 @@ Authorization: Bearer <jwt-token>
 **Access:** Authenticated
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <jwt-token>
 ```
 
 **Request Body (optional):**
+
 ```json
 {
   "paymentMode": "CREDIT_CARD",
@@ -876,11 +959,14 @@ Authorization: Bearer <jwt-token>
   "customerNotes": "Please deliver after 5 PM"
 }
 ```
+
 Notes:
+
 - If no body is sent, the order will still be created with defaults.
 - For PayPal, set `paymentMode` to `PAYPAL` and provide `paypalEmail` in `paymentDetails`.
 
 **Response (Success - 200):**
+
 ```json
 {
   "id": 1,
@@ -912,6 +998,7 @@ Notes:
 ```
 
 **Response (Error - 400):**
+
 ```json
 {
   "timestamp": "2025-09-19T04:30:00",
@@ -933,11 +1020,13 @@ Notes:
 **Access:** Authenticated
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <jwt-token>
 ```
 
 **Response (Success - 200):**
+
 ```json
 [
   {
@@ -974,14 +1063,17 @@ Authorization: Bearer <jwt-token>
 **Access:** Authenticated
 
 **Path Parameters:**
+
 - `orderId` (Long) - Order ID
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <jwt-token>
 ```
 
 **Response (Success - 200):**
+
 ```json
 {
   "id": 1,
@@ -1016,23 +1108,28 @@ Authorization: Bearer <jwt-token>
 **Access:** Admin
 
 **Path Parameters:**
+
 - `orderId` (Long) - Order ID
 
 **Query Parameters:**
+
 - `status` (String) - New status. Allowed values:
   - `PENDING`, `CONFIRMED`, `PROCESSING`, `SHIPPED`, `OUT_FOR_DELIVERY`, `DELIVERED`, `CANCELLED`, `REFUNDED`
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <admin-jwt-token>
 ```
 
 **Example Request:**
+
 ```
 PUT /api/orders/1/status?status=CONFIRMED
 ```
 
 **Response (Success - 200):**
+
 ```json
 {
   "id": 1,
@@ -1065,17 +1162,21 @@ PUT /api/orders/1/status?status=CONFIRMED
 **Access:** Admin
 
 **Path Parameters:**
+
 - `orderId` (UUID) - Order ID
 
 **Query Parameters:**
+
 - `trackingNumber` (String, required)
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <admin-jwt-token>
 ```
 
 **Response (Success - 200):**
+
 ```json
 {
   "id": 1,
@@ -1098,11 +1199,13 @@ Authorization: Bearer <admin-jwt-token>
 **Access:** Admin
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <admin-jwt-token>
 ```
 
 **Response (Success - 200):**
+
 ```json
 {
   "totalUsers": 10,
@@ -1123,11 +1226,13 @@ Authorization: Bearer <admin-jwt-token>
 **Access:** Admin
 
 **Request Headers:**
+
 ```
 Authorization: Bearer <admin-jwt-token>
 ```
 
 **Response (Success - 200):**
+
 ```json
 {
   "status": "healthy",
@@ -1148,6 +1253,7 @@ All endpoints below require Admin access and return analytics data for the dashb
 **Endpoint:** `GET /api/admin/analytics/sales-overview?range=30d`
 
 **Response (Success - 200):**
+
 ```json
 {
   "range": "30d",
@@ -1167,6 +1273,7 @@ All endpoints below require Admin access and return analytics data for the dashb
 **Endpoint:** `GET /api/admin/analytics/monthly-sales?months=12`
 
 **Response (Success - 200):**
+
 ```json
 [
   { "month": "Feb 2023", "revenue": 32150.0, "orders": 856, "growth": 5.2 },
@@ -1189,13 +1296,64 @@ All endpoints below require Admin access and return analytics data for the dashb
 **Endpoint:** `GET /api/admin/analytics/top-products?limit=5`
 
 **Response (Success - 200):**
+
 ```json
 [
-  { "id": "prod-1", "name": "Artisan Gummy Bears", "category": "Gummies", "unitsSold": 245, "revenue": 3675.0, "profit": 1470.0, "profitMargin": 40.0, "stock": 15, "image": "https://i.postimg.cc/sMTg12Kg/artisan-gummy-bears-colorful.jpg" },
-  { "id": "prod-2", "name": "Chocolate Truffles", "category": "Chocolate", "unitsSold": 198, "revenue": 4950.0, "profit": 1980.0, "profitMargin": 40.0, "stock": 8, "image": "https://i.postimg.cc/dZRqFQLv/elegant-dark-chocolate-truffles.jpg" },
-  { "id": "prod-3", "name": "French Macarons", "category": "Macarons", "unitsSold": 156, "revenue": 3120.0, "profit": 1248.0, "profitMargin": 40.0, "stock": 22, "image": "https://i.postimg.cc/JHC1SH7P/colorful-french-macarons-assortment.jpg" },
-  { "id": "prod-4", "name": "Salted Caramel Bonbons", "category": "Caramel", "unitsSold": 134, "revenue": 2680.0, "profit": 1072.0, "profitMargin": 40.0, "stock": 12, "image": "https://i.postimg.cc/KKKxzDR0/salted-caramel-bonbons-chocolate.jpg" },
-  { "id": "prod-5", "name": "Honey Lavender Lollipops", "category": "Lollipops", "unitsSold": 98, "revenue": 1470.0, "profit": 588.0, "profitMargin": 40.0, "stock": 6, "image": "https://i.postimg.cc/z3TDK7pM/honey-lavender-lollipops-purple.jpg" }
+  {
+    "id": "prod-1",
+    "name": "Artisan Gummy Bears",
+    "category": "Gummies",
+    "unitsSold": 245,
+    "revenue": 3675.0,
+    "profit": 1470.0,
+    "profitMargin": 40.0,
+    "stock": 15,
+    "image": "https://i.postimg.cc/sMTg12Kg/artisan-gummy-bears-colorful.jpg"
+  },
+  {
+    "id": "prod-2",
+    "name": "Chocolate Truffles",
+    "category": "Chocolate",
+    "unitsSold": 198,
+    "revenue": 4950.0,
+    "profit": 1980.0,
+    "profitMargin": 40.0,
+    "stock": 8,
+    "image": "https://i.postimg.cc/dZRqFQLv/elegant-dark-chocolate-truffles.jpg"
+  },
+  {
+    "id": "prod-3",
+    "name": "French Macarons",
+    "category": "Macarons",
+    "unitsSold": 156,
+    "revenue": 3120.0,
+    "profit": 1248.0,
+    "profitMargin": 40.0,
+    "stock": 22,
+    "image": "https://i.postimg.cc/JHC1SH7P/colorful-french-macarons-assortment.jpg"
+  },
+  {
+    "id": "prod-4",
+    "name": "Salted Caramel Bonbons",
+    "category": "Caramel",
+    "unitsSold": 134,
+    "revenue": 2680.0,
+    "profit": 1072.0,
+    "profitMargin": 40.0,
+    "stock": 12,
+    "image": "https://i.postimg.cc/KKKxzDR0/salted-caramel-bonbons-chocolate.jpg"
+  },
+  {
+    "id": "prod-5",
+    "name": "Honey Lavender Lollipops",
+    "category": "Lollipops",
+    "unitsSold": 98,
+    "revenue": 1470.0,
+    "profit": 588.0,
+    "profitMargin": 40.0,
+    "stock": 6,
+    "image": "https://i.postimg.cc/z3TDK7pM/honey-lavender-lollipops-purple.jpg"
+  }
 ]
 ```
 
@@ -1204,14 +1362,51 @@ All endpoints below require Admin access and return analytics data for the dashb
 **Endpoint:** `GET /api/admin/analytics/sales-by-category?range=30d`
 
 **Response (Success - 200):**
+
 ```json
 [
-  { "category": "Chocolate", "revenue": 15680.5, "percentage": 34.3, "unitsSold": 456, "profit": 6272.2 },
-  { "category": "Gummies", "revenue": 12340.25, "percentage": 27.0, "unitsSold": 789, "profit": 4936.1 },
-  { "category": "Macarons", "revenue": 8920.75, "percentage": 19.5, "unitsSold": 234, "profit": 3568.3 },
-  { "category": "Caramel", "revenue": 4560.0, "percentage": 10.0, "unitsSold": 156, "profit": 1824.0 },
-  { "category": "Lollipops", "revenue": 2340.0, "percentage": 5.1, "unitsSold": 98, "profit": 936.0 },
-  { "category": "Fudge", "revenue": 1859.0, "percentage": 4.1, "unitsSold": 67, "profit": 743.6 }
+  {
+    "category": "Chocolate",
+    "revenue": 15680.5,
+    "percentage": 34.3,
+    "unitsSold": 456,
+    "profit": 6272.2
+  },
+  {
+    "category": "Gummies",
+    "revenue": 12340.25,
+    "percentage": 27.0,
+    "unitsSold": 789,
+    "profit": 4936.1
+  },
+  {
+    "category": "Macarons",
+    "revenue": 8920.75,
+    "percentage": 19.5,
+    "unitsSold": 234,
+    "profit": 3568.3
+  },
+  {
+    "category": "Caramel",
+    "revenue": 4560.0,
+    "percentage": 10.0,
+    "unitsSold": 156,
+    "profit": 1824.0
+  },
+  {
+    "category": "Lollipops",
+    "revenue": 2340.0,
+    "percentage": 5.1,
+    "unitsSold": 98,
+    "profit": 936.0
+  },
+  {
+    "category": "Fudge",
+    "revenue": 1859.0,
+    "percentage": 4.1,
+    "unitsSold": 67,
+    "profit": 743.6
+  }
 ]
 ```
 
@@ -1220,6 +1415,7 @@ All endpoints below require Admin access and return analytics data for the dashb
 **Endpoint:** `GET /api/admin/analytics/customers/summary?range=30d`
 
 **Response (Success - 200):**
+
 ```json
 {
   "totalCustomers": 2847,
@@ -1235,6 +1431,7 @@ All endpoints below require Admin access and return analytics data for the dashb
 **Endpoint:** `GET /api/admin/analytics/customers/segments?range=30d`
 
 **Response (Success - 200):**
+
 ```json
 [
   { "segment": "Premium Buyers", "count": 234, "avgOrderValue": 125.5 },
@@ -1248,6 +1445,7 @@ All endpoints below require Admin access and return analytics data for the dashb
 **Endpoint:** `GET /api/admin/analytics/performance/traffic?range=30d`
 
 **Response (Success - 200):**
+
 ```json
 {
   "websiteTraffic": {
@@ -1265,6 +1463,7 @@ All endpoints below require Admin access and return analytics data for the dashb
 **Endpoint:** `GET /api/admin/analytics/performance/conversion-funnel?range=30d`
 
 **Response (Success - 200):**
+
 ```json
 {
   "visitors": 45680,
@@ -1280,6 +1479,7 @@ All endpoints below require Admin access and return analytics data for the dashb
 **Endpoint:** `GET /api/admin/analytics/shipping-metrics?range=30d`
 
 **Response (Success - 200):**
+
 ```json
 {
   "avgShippingTime": "2.3 days",
@@ -1294,12 +1494,41 @@ All endpoints below require Admin access and return analytics data for the dashb
 **Endpoint:** `GET /api/admin/alerts?limit=20`
 
 **Response (Success - 200):**
+
 ```json
 [
-  { "id": 1, "type": "warning", "title": "Low Stock Alert", "message": "5 products are running low on stock", "timestamp": "2024-01-28T10:30:00Z", "priority": "high" },
-  { "id": 2, "type": "info", "title": "New Order Received", "message": "Order #ORD-2024-002 worth $156.75 received", "timestamp": "2024-01-28T09:15:00Z", "priority": "medium" },
-  { "id": 3, "type": "success", "title": "Monthly Target Achieved", "message": "January revenue target exceeded by 12%", "timestamp": "2024-01-28T08:00:00Z", "priority": "low" },
-  { "id": 4, "type": "warning", "title": "Payment Issue", "message": "Payment failed for Order #ORD-2024-005", "timestamp": "2024-01-27T16:45:00Z", "priority": "high" }
+  {
+    "id": 1,
+    "type": "warning",
+    "title": "Low Stock Alert",
+    "message": "5 products are running low on stock",
+    "timestamp": "2024-01-28T10:30:00Z",
+    "priority": "high"
+  },
+  {
+    "id": 2,
+    "type": "info",
+    "title": "New Order Received",
+    "message": "Order #ORD-2024-002 worth $156.75 received",
+    "timestamp": "2024-01-28T09:15:00Z",
+    "priority": "medium"
+  },
+  {
+    "id": 3,
+    "type": "success",
+    "title": "Monthly Target Achieved",
+    "message": "January revenue target exceeded by 12%",
+    "timestamp": "2024-01-28T08:00:00Z",
+    "priority": "low"
+  },
+  {
+    "id": 4,
+    "type": "warning",
+    "title": "Payment Issue",
+    "message": "Payment failed for Order #ORD-2024-005",
+    "timestamp": "2024-01-27T16:45:00Z",
+    "priority": "high"
+  }
 ]
 ```
 
@@ -1308,6 +1537,7 @@ All endpoints below require Admin access and return analytics data for the dashb
 **Endpoint:** `GET /api/admin/inventory/status`
 
 **Response (Success - 200):**
+
 ```json
 {
   "totalProducts": 45,
@@ -1324,12 +1554,49 @@ All endpoints below require Admin access and return analytics data for the dashb
 **Endpoint:** `GET /api/admin/inventory/low-stock?threshold=10`
 
 **Response (Success - 200):**
+
 ```json
 [
-  { "id": "ls-1", "name": "Pistachio Rose Turkish Delight", "category": "Turkish Delight", "currentStock": 3, "minThreshold": 10, "lastRestocked": "2024-01-15", "supplier": "Premium Sweets Co.", "image": "https://i.postimg.cc/rKJ8YpBN/pistachio-rose-turkish-delight-pink.jpg" },
-  { "id": "ls-2", "name": "Mint Chocolate Chip Brittle", "category": "Brittle", "currentStock": 7, "minThreshold": 10, "lastRestocked": "2024-01-20", "supplier": "Artisan Confections", "image": "https://i.postimg.cc/Yhkr3FsS/mint-chocolate-chip-brittle-green.jpg" },
-  { "id": "ls-3", "name": "Strawberry Cream Fudge", "category": "Fudge", "currentStock": 5, "minThreshold": 10, "lastRestocked": "2024-01-18", "supplier": "Sweet Dreams Ltd", "image": "https://i.postimg.cc/7CpDTJzw/strawberry-cream-fudge-pink-white.jpg" },
-  { "id": "ls-4", "name": "Coconut Lime Macaroons", "category": "Macaroons", "currentStock": 4, "minThreshold": 10, "lastRestocked": "2024-01-22", "supplier": "Tropical Treats", "image": "https://i.postimg.cc/TyhYbXHq/coconut-lime-macaroons-white-green.jpg" }
+  {
+    "id": "ls-1",
+    "name": "Pistachio Rose Turkish Delight",
+    "category": "Turkish Delight",
+    "currentStock": 3,
+    "minThreshold": 10,
+    "lastRestocked": "2024-01-15",
+    "supplier": "Premium Sweets Co.",
+    "image": "https://i.postimg.cc/rKJ8YpBN/pistachio-rose-turkish-delight-pink.jpg"
+  },
+  {
+    "id": "ls-2",
+    "name": "Mint Chocolate Chip Brittle",
+    "category": "Brittle",
+    "currentStock": 7,
+    "minThreshold": 10,
+    "lastRestocked": "2024-01-20",
+    "supplier": "Artisan Confections",
+    "image": "https://i.postimg.cc/Yhkr3FsS/mint-chocolate-chip-brittle-green.jpg"
+  },
+  {
+    "id": "ls-3",
+    "name": "Strawberry Cream Fudge",
+    "category": "Fudge",
+    "currentStock": 5,
+    "minThreshold": 10,
+    "lastRestocked": "2024-01-18",
+    "supplier": "Sweet Dreams Ltd",
+    "image": "https://i.postimg.cc/7CpDTJzw/strawberry-cream-fudge-pink-white.jpg"
+  },
+  {
+    "id": "ls-4",
+    "name": "Coconut Lime Macaroons",
+    "category": "Macaroons",
+    "currentStock": 4,
+    "minThreshold": 10,
+    "lastRestocked": "2024-01-22",
+    "supplier": "Tropical Treats",
+    "image": "https://i.postimg.cc/TyhYbXHq/coconut-lime-macaroons-white-green.jpg"
+  }
 ]
 ```
 
@@ -1342,11 +1609,30 @@ All endpoints below require Admin access and return analytics data for the dashb
 **Endpoint:** `GET /api/admin/orders?status=&page=0&size=20&sort=createdAt,desc`
 
 **Response (Success - 200):**
+
 ```json
 [
-  { "id": "ORD-2024-001", "username": "sarah.j@email.com", "totalAmount": 89.5, "status": "DELIVERED", "orderDate": "2024-01-28T12:30:00Z" },
-  { "id": "ORD-2024-002", "username": "m.chen@email.com", "totalAmount": 156.75, "status": "PROCESSING", "orderDate": "2024-01-28T09:15:00Z" },
-  { "id": "ORD-2024-003", "username": "emily.r@email.com", "totalAmount": 67.25, "status": "SHIPPED", "orderDate": "2024-01-27T16:45:00Z" }
+  {
+    "id": "ORD-2024-001",
+    "username": "sarah.j@email.com",
+    "totalAmount": 89.5,
+    "status": "DELIVERED",
+    "orderDate": "2024-01-28T12:30:00Z"
+  },
+  {
+    "id": "ORD-2024-002",
+    "username": "m.chen@email.com",
+    "totalAmount": 156.75,
+    "status": "PROCESSING",
+    "orderDate": "2024-01-28T09:15:00Z"
+  },
+  {
+    "id": "ORD-2024-003",
+    "username": "emily.r@email.com",
+    "totalAmount": 67.25,
+    "status": "SHIPPED",
+    "orderDate": "2024-01-27T16:45:00Z"
+  }
 ]
 ```
 
@@ -1355,16 +1641,36 @@ All endpoints below require Admin access and return analytics data for the dashb
 **Endpoint:** `GET /api/admin/orders/recent?limit=20`
 
 **Response (Success - 200):**
+
 ```json
 [
-  { "id": "ORD-2024-001", "customer": "Sarah Johnson", "email": "sarah.j@email.com", "total": 89.5, "status": "Delivered", "date": "2024-01-28", "items": 3, "paymentMethod": "Credit Card" },
-  { "id": "ORD-2024-002", "customer": "Michael Chen", "email": "m.chen@email.com", "total": 156.75, "status": "Processing", "date": "2024-01-28", "items": 5, "paymentMethod": "PayPal" }
+  {
+    "id": "ORD-2024-001",
+    "customer": "Sarah Johnson",
+    "email": "sarah.j@email.com",
+    "total": 89.5,
+    "status": "Delivered",
+    "date": "2024-01-28",
+    "items": 3,
+    "paymentMethod": "Credit Card"
+  },
+  {
+    "id": "ORD-2024-002",
+    "customer": "Michael Chen",
+    "email": "m.chen@email.com",
+    "total": 156.75,
+    "status": "Processing",
+    "date": "2024-01-28",
+    "items": 5,
+    "paymentMethod": "PayPal"
+  }
 ]
 ```
 
 ## Data Models
 
 ### User
+
 ```json
 {
   "id": 1,
@@ -1375,6 +1681,7 @@ All endpoints below require Admin access and return analytics data for the dashb
 ```
 
 ### Sweet
+
 ```json
 {
   "id": "94e31aff-b1ad-4f48-bc91-46ef369ec05e",
@@ -1396,6 +1703,7 @@ All endpoints below require Admin access and return analytics data for the dashb
 ```
 
 ### CartItem
+
 ```json
 {
   "id": 1,
@@ -1411,6 +1719,7 @@ All endpoints below require Admin access and return analytics data for the dashb
 ```
 
 ### Order
+
 ```json
 {
   "id": 1,
@@ -1430,6 +1739,7 @@ All endpoints below require Admin access and return analytics data for the dashb
 ```
 
 ### OrderItem
+
 ```json
 {
   "id": 1,
@@ -1449,10 +1759,12 @@ All endpoints below require Admin access and return analytics data for the dashb
 ## Security Notes
 
 ### Role-Based Access Control
+
 - **ROLE_USER**: Can access sweets, cart, and orders
 - **ROLE_ADMIN**: Can access all endpoints including admin functions
 
 ### Authentication
+
 - JWT tokens expire after 1 minute (short-lived tokens)
 - Include token in Authorization header for protected endpoints
 - Tokens are validated on every request to protected endpoints
@@ -1464,19 +1776,23 @@ All endpoints below require Admin access and return analytics data for the dashb
 - The frontend should use the refresh token endpoint to maintain sessions
 
 ### Error Handling
+
 - All errors return appropriate HTTP status codes
 - Error responses include descriptive messages
 - Security errors don't expose sensitive information
 
 ### Default Users
+
 - **Admin**: `admin@sweetshop.com` / `admin123`
 - **User**: `user@sweetshop.com` / `user123`
 
 ### Rate Limiting
+
 - No built-in rate limiting (can be added if needed)
 - Consider implementing for production use
 
 ### CORS
+
 - Configured for `http://localhost:3000` and `http://localhost:5173`
 - Update for production domains
 

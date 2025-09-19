@@ -55,15 +55,43 @@ Implemented JPA repositories for all new entities with specialized query methods
    - Bridges between application events and analytics collection
 
 ## API Layer
-Updated the AdminAnalyticsController to use real data instead of mock data:
-- Sales overview with growth metrics
-- Monthly sales trends
-- Top-selling products analysis
-- Category sales breakdown
-- Customer analytics and segmentation
-- Website traffic and conversion funnel
-- Shipping performance metrics
-- Inventory status and alerts
+Updated the AdminAnalyticsController and AdminOrdersController to use real data instead of mock data:
+
+### Analytics APIs (All returning real data from database)
+
+#### Sales Analytics
+- **GET** `/api/admin/analytics/sales-overview?range=30d` - Sales overview with growth metrics
+- **GET** `/api/admin/analytics/monthly-sales?months=12` - Monthly sales trends
+- **GET** `/api/admin/analytics/top-products?limit=5` - Top-selling products analysis
+- **GET** `/api/admin/analytics/sales-by-category?range=30d` - Category sales breakdown
+
+#### Customer Analytics
+- **GET** `/api/admin/analytics/customers/summary?range=30d` - Customer summary statistics
+- **GET** `/api/admin/analytics/customers/segments?range=30d` - Customer segmentation analysis
+
+#### Performance Analytics
+- **GET** `/api/admin/analytics/performance/traffic?range=30d` - Website traffic metrics
+- **GET** `/api/admin/analytics/performance/conversion-funnel?range=30d` - Conversion funnel analysis
+
+#### Operations Analytics
+- **GET** `/api/admin/analytics/shipping-metrics?range=30d` - Shipping performance metrics
+- **GET** `/api/admin/analytics/inventory/status` - Inventory status overview
+- **GET** `/api/admin/analytics/inventory/low-stock?threshold=10` - Low stock items alert
+
+#### System Alerts
+- **GET** `/api/admin/alerts?limit=20` - System alerts and notifications
+
+### Order Management APIs (All returning real data from database)
+
+#### Order Listing
+- **GET** `/api/admin/orders?status=PENDING&page=0&size=20&sort=createdAt,desc` - List all orders with filtering and pagination
+- **GET** `/api/admin/orders/recent?limit=20` - Recent orders list
+
+#### Order Status Management
+- **PUT** `/api/admin/orders/{orderId}/status` - Update order status
+  - Request Body: `{"status": "SHIPPED"}`
+  - Valid statuses: PENDING, CONFIRMED, PROCESSING, SHIPPED, OUT_FOR_DELIVERY, DELIVERED, CANCELLED, REFUNDED
+  - Automatically sets delivery dates based on status changes
 
 ## Data Collection Points
 Identified key points in the application workflow for data collection:
@@ -81,16 +109,120 @@ The analytics system is designed to work alongside the existing application with
 - Fallback mechanisms when analytics data is not yet available
 - Scheduled aggregation to maintain performance with growing data
 
+## Recent Fixes and Improvements
+
+### Mock Data Elimination
+All analytics APIs have been updated to return real data from the database instead of mock/sample data:
+
+1. **Customer Segments** - Now calculates real customer segments based on actual order frequency and value
+2. **Alerts** - Generates dynamic alerts based on real-time data:
+   - Low stock alerts (products with quantity 1-10)
+   - Out of stock alerts (products with quantity 0)
+   - New orders alerts (orders in the last hour)
+   - High-value orders alerts (orders >$500 today)
+3. **Order Management** - All order APIs now return real order data with proper filtering and pagination
+4. **Inventory Analytics** - Real inventory status based on actual product quantities
+
+### Frontend Integration Fixes
+Fixed frontend components to properly consume real API data:
+
+1. **AdminDashboard.jsx** - Completely refactored to use real API responses instead of mock data
+   - Removed dependency on `adminAnalytics` mock data
+   - Added proper loading states and error handling
+   - All analytics now fetch from actual backend APIs
+   - Order status updates now use correct admin endpoint
+
+2. **Dashboard.jsx (Catalog)** - Updated to fetch real product data from API
+   - Replaced `mockSweets` with real API calls to `sweetService.getAllSweets()`
+   - Added loading and error states for better UX
+   - Proper error handling with retry functionality
+
+3. **orderService.js** - Fixed order status update endpoint
+   - Changed from `/api/orders/{orderId}/status` to `/api/admin/orders/{orderId}/status`
+   - Updated request body format to match backend expectations
+
+4. **UI/UX Improvements**
+   - Added loading spinners and states for both components
+   - Implemented proper error handling with user-friendly messages
+   - Added retry functionality for failed API calls
+   - Enhanced visual feedback during data loading
+
+### New Features Added
+1. **Order Status Updates** - New endpoint to update order status with automatic delivery date setting
+2. **Enhanced Order Listing** - Real order data with customer information, payment methods, and item counts
+3. **Dynamic Alerts** - Real-time alerts based on actual business conditions
+4. **Customer Segmentation** - Real customer analysis based on actual purchase patterns
+
+### Data Sources
+All analytics now pull from actual database tables:
+- **Orders** - For sales, revenue, and customer analytics
+- **OrderItems** - For product performance and category analysis
+- **Sweets** - For inventory status and product analytics
+- **Users** - For customer segmentation and order attribution
+
 ## Benefits
 1. **Real-time insights** - Dashboard now shows actual business performance
 2. **Data-driven decisions** - Inventory management based on actual sales data
 3. **Customer segmentation** - Target marketing based on purchase patterns
 4. **Performance tracking** - Monitor website and conversion performance
 5. **Trend analysis** - Track sales trends over time for business planning
+6. **Order Management** - Complete order lifecycle management with status updates
+7. **Dynamic Alerts** - Real-time notifications based on actual business conditions
+
+## API Response Examples
+
+### Sales Overview Response
+```json
+{
+  "range": "30d",
+  "totalRevenue": 15680.50,
+  "totalOrders": 45,
+  "averageOrderValue": 348.45,
+  "conversionRate": 12.5,
+  "revenueGrowth": 15.2,
+  "ordersGrowth": 8.7,
+  "avgOrderGrowth": 6.1,
+  "conversionGrowth": 2.3
+}
+```
+
+### Customer Segments Response
+```json
+[
+  {
+    "segment": "Premium Buyers",
+    "count": 12,
+    "avgOrderValue": 125.50
+  },
+  {
+    "segment": "Regular Customers", 
+    "count": 28,
+    "avgOrderValue": 45.20
+  },
+  {
+    "segment": "Occasional Buyers",
+    "count": 15,
+    "avgOrderValue": 28.90
+  }
+]
+```
+
+### Order Status Update Response
+```json
+{
+  "message": "Order status updated successfully",
+  "orderId": "123e4567-e89b-12d3-a456-426614174000",
+  "newStatus": "SHIPPED",
+  "updatedAt": "2024-01-28T16:30:00"
+}
+```
 
 ## Next Steps
-1. Integrate analytics collection points in controllers
-2. Implement session tracking for website traffic analysis
-3. Set up scheduled tasks for data aggregation
-4. Add more visualizations to the admin dashboard
-5. Implement predictive analytics for inventory management
+1. ✅ **Completed** - Eliminate all mock data from analytics APIs
+2. ✅ **Completed** - Implement real-time order status updates
+3. ✅ **Completed** - Add dynamic alerts based on real data
+4. **In Progress** - Integrate analytics collection points in controllers
+5. **Pending** - Implement session tracking for website traffic analysis
+6. **Pending** - Set up scheduled tasks for data aggregation
+7. **Pending** - Add more visualizations to the admin dashboard
+8. **Pending** - Implement predictive analytics for inventory management

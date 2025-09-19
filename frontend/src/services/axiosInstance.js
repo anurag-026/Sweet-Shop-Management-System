@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
 });
 
 // Maximum number of retries for any failed API (initial try + 2 retries = 3 total attempts)
-const MAX_RETRIES = 2;
+const MAX_RETRIES = 0;
 
 // Simple exponential backoff delay
 function delay(ms) {
