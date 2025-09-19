@@ -2,24 +2,6 @@
 
 A comprehensive full-stack e-commerce application for managing a sweet shop with advanced analytics, inventory management, and order processing capabilities.
 
-## 📋 Table of Contents
-
-- [Project Overview](#-project-overview)
-- [Architecture](#-architecture)
-- [Features](#-features)
-- [Live Application](#-live-application)
-- [Tech Stack](#-tech-stack)
-- [Setup Instructions](#-setup-instructions)
-  - [Database Setup](#database-setup)
-  - [Backend Setup](#backend-setup)
-  - [Frontend Setup](#frontend-setup)
-- [Screenshots](#-screenshots)
-- [API Documentation](#-api-documentation)
-- [Deployment](#-deployment)
-- [My AI Usage](#-my-ai-usage)
-- [Contributing](#-contributing)
-- [License](#-license)
-
 ## 🎯 Project Overview
 
 The Sweet Shop Management System is a modern, full-stack web application designed to streamline the operations of a sweet shop business. It provides a complete solution for inventory management, customer orders, analytics, and administrative tasks.
