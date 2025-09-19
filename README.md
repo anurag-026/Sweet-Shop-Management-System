@@ -126,13 +126,6 @@ The application follows a modern three-tier architecture:
 - **UUID** - Primary key generation
 - **JSONB** - Flexible data storage
 
-### Development Tools
-
-- **Node.js** - Frontend runtime
-- **Java 17** - Backend runtime
-- **Maven** - Backend build tool
-- **Git** - Version control
-
 ## 🚀 Setup Instructions
 
 ### Database Setup
@@ -231,7 +224,7 @@ The application follows a modern three-tier architecture:
 
 |                           Login Page                           |                           Registration Page                           |                            Product Catalog                             |
 | :------------------------------------------------------------: | :-------------------------------------------------------------------: | :--------------------------------------------------------------------: |
-| ![Login Page](screenshot/Screenshot%202025-09-19%20171050.png) | ![Registration Page](screenshot/Screenshot%202025-09-19%20171056.png) |  ![Product Catalog](screenshot/Screenshot%202025-09-19%20171108.png)   |
+| ![Login Page](screenshot/01-login-page.png) | ![Registration Page](screenshot/02-registration-page.png) |  ![Product Catalog](screenshot/04-product-catalog.png)   |
 |    _Clean and modern login interface with form validation_     |        _User registration form with comprehensive validation_         | _Comprehensive product catalog with search and filtering capabilities_ |
 
 </div>
@@ -242,7 +235,7 @@ The application follows a modern three-tier architecture:
 
 |                           Product Details                           |                           Shopping Cart                           |                           Admin Dashboard                           |
 | :-----------------------------------------------------------------: | :---------------------------------------------------------------: | :-----------------------------------------------------------------: |
-| ![Product Details](screenshot/Screenshot%202025-09-19%20171115.png) | ![Shopping Cart](screenshot/Screenshot%202025-09-19%20171119.png) | ![Admin Dashboard](screenshot/Screenshot%202025-09-19%20171138.png) |
+| ![Product Details](screenshot/05-product-details.png) | ![Shopping Cart](screenshot/06-shopping-cart.png) | ![Admin Dashboard](screenshot/07-admin-dashboard.png) |
 |       _Detailed product view with add to cart functionality_        |   _Shopping cart with quantity management and checkout options_   |   _Comprehensive admin dashboard with key metrics and analytics_    |
 
 </div>
@@ -253,7 +246,7 @@ The application follows a modern three-tier architecture:
 
 |                           Sales Analytics                           |                           Order Management                           |                           Customer Analytics                           |
 | :-----------------------------------------------------------------: | :------------------------------------------------------------------: | :--------------------------------------------------------------------: |
-| ![Sales Analytics](screenshot/Screenshot%202025-09-19%20171151.png) | ![Order Management](screenshot/Screenshot%202025-09-19%20171208.png) | ![Customer Analytics](screenshot/Screenshot%202025-09-19%20171214.png) |
+| ![Sales Analytics](screenshot/08-sales-analytics.png) | ![Order Management](screenshot/09-order-management.png) | ![Customer Analytics](screenshot/10-customer-analytics.png) |
 |          _Detailed sales analytics with charts and trends_          |    _Order management interface with status updates and tracking_     |             _Customer segmentation and behavior analysis_              |
 
 </div>
@@ -264,7 +257,7 @@ The application follows a modern three-tier architecture:
 
 |                           Inventory Management                           |                           Admin Panel                           |                           User Profile                           |
 | :----------------------------------------------------------------------: | :-------------------------------------------------------------: | :--------------------------------------------------------------: |
-| ![Inventory Management](screenshot/Screenshot%202025-09-19%20171224.png) | ![Admin Panel](screenshot/Screenshot%202025-09-19%20171240.png) | ![User Profile](screenshot/Screenshot%202025-09-19%20171246.png) |
+| ![Inventory Management](screenshot/11-inventory-management.png) | ![Admin Panel](screenshot/12-admin-panel.png) | ![User Profile](screenshot/13-user-profile.png) |
 |      _Inventory status with low-stock alerts and management tools_       |         _Administrative panel for system configuration_         |       _User profile management with personal information_        |
 
 </div>
@@ -275,7 +268,7 @@ The application follows a modern three-tier architecture:
 
 |                           System Alerts                           |                       Monthly Sales Trends                        |                           Category Performance                           |
 | :---------------------------------------------------------------: | :---------------------------------------------------------------: | :----------------------------------------------------------------------: |
-| ![System Alerts](screenshot/Screenshot%202025-09-19%20171255.png) | ![Monthly Sales](screenshot/Screenshot%202025-09-19%20171304.png) | ![Category Performance](screenshot/Screenshot%202025-09-19%20171324.png) |
+| ![System Alerts](screenshot/14-system-alerts.png) | ![Monthly Sales](screenshot/15-monthly-sales-trends.png) | ![Category Performance](screenshot/16-category-performance.png) |
 |            _Real-time system alerts and notifications_            |           _Monthly sales trends with growth indicators_           |                 _Sales performance by product category_                  |
 
 </div>
@@ -286,7 +279,7 @@ The application follows a modern three-tier architecture:
 
 |                           Top Products                           |                           Conversion Funnel                           |                           Shipping Metrics                           |
 | :--------------------------------------------------------------: | :-------------------------------------------------------------------: | :------------------------------------------------------------------: |
-| ![Top Products](screenshot/Screenshot%202025-09-19%20171332.png) | ![Conversion Funnel](screenshot/Screenshot%202025-09-19%20171343.png) | ![Shipping Metrics](screenshot/Screenshot%202025-09-19%20171349.png) |
+| ![Top Products](screenshot/17-top-products.png) | ![Conversion Funnel](screenshot/18-conversion-funnel.png) | ![Shipping Metrics](screenshot/19-shipping-metrics.png) |
 |           _Top-selling products with revenue metrics_            |                 _Website conversion funnel analysis_                  |             _Shipping performance and delivery metrics_              |
 
 </div>
@@ -297,7 +290,7 @@ The application follows a modern three-tier architecture:
 
 |                           Low Stock Alerts                           |                           Recent Orders                           |     |
 | :------------------------------------------------------------------: | :---------------------------------------------------------------: | :-: |
-| ![Low Stock Alerts](screenshot/Screenshot%202025-09-19%20171405.png) | ![Recent Orders](screenshot/Screenshot%202025-09-19%20171411.png) |     |
+| ![Low Stock Alerts](screenshot/20-low-stock-alerts.png) | ![Recent Orders](screenshot/21-recent-orders.png) |     |
 |                _Inventory alerts for low-stock items_                |       _Recent orders with status and customer information_        |     |
 
 </div>
