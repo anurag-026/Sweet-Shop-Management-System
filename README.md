@@ -101,30 +101,9 @@ The application follows a modern three-tier architecture:
 
 ## 🛠️ Tech Stack
 
-### Frontend
-
-- **React** 19.1.1 - UI framework
-- **React Router** 7.9.1 - Client-side routing
-- **Tailwind CSS** - Utility-first CSS framework
-- **Framer Motion** 12.23.15 - Animation library
-- **Axios** 1.12.2 - HTTP client
-- **Lucide React** 0.544.0 - Icon library
-
-### Backend
-
-- **Spring Boot** 3.5.6 - Application framework
-- **Spring Security** - Authentication and authorization
-- **Spring Data JPA** - Data persistence
-- **PostgreSQL** - Primary database
-- **JWT** - Token-based authentication
-- **Maven** - Dependency management
-
-### Database
-
-- **PostgreSQL** - Primary database
-- **NeonDB** - Serverless PostgreSQL hosting
-- **UUID** - Primary key generation
-- **JSONB** - Flexible data storage
+- **Frontend**: React, Tailwind CSS, Context API
+- **Backend**: Spring Boot, Spring Security, JWT
+- **Database**: PostgreSQL (NeonDB)
 
 ## 🚀 Setup Instructions
 
