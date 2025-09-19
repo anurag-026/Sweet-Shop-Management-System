@@ -172,16 +172,40 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    flex-wrap: wrap;
   }
   
   .user-name {
     font-weight: 500;
     color: var(--color-text);
   }
+
+  /* Admin buttons styling */
+  .admin-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .admin-btn {
+    background: var(--color-primary);
+    color: white;
+    border: 2px solid var(--color-primary);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .admin-btn:hover {
+    background: white;
+    color: var(--color-primary);
+    transform: translateY(-1px);
+  }
   
   @media (max-width: 768px) {
     .header-content {
       gap: 16px;
+      flex-wrap: wrap;
     }
   
     .nav-links {
@@ -198,12 +222,61 @@
     }
   
     .user-menu {
-      flex-direction: column;
+      flex-direction: row;
       gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
   
     .user-name {
       font-size: 14px;
+      order: -1;
+      width: 100%;
+      text-align: right;
+      margin-bottom: 4px;
+    }
+
+    .btn {
+      font-size: 12px;
+      padding: 6px 12px;
+      min-width: auto;
+    }
+
+    .admin-buttons {
+      gap: 6px;
+    }
+
+    .admin-btn {
+      font-size: 11px;
+      padding: 4px 8px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .user-menu {
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .user-name {
+      order: -1;
+      margin-bottom: 8px;
+    }
+
+    .btn {
+      width: 100%;
+      max-width: 120px;
+    }
+
+    .admin-buttons {
+      width: 100%;
+      flex-direction: column;
+    }
+
+    .admin-btn {
+      width: 100%;
+      max-width: 120px;
+      margin: 0 auto;
     }
   }
   

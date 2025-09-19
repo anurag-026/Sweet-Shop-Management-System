@@ -1,18 +1,38 @@
 "use client"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useCart } from "../context/CartContext"
 import CartItem from "../components/CartItem"
+import { cartService } from "../services/cartService"
+import { orderService } from "../services/orderService"
 import "./Cart.css"
 
 const Cart = () => {
   const { cartItems, getTotalPrice, clearCart } = useCart()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (cartItems.length === 0) return
 
-    // Simulate checkout process
-    alert("Checkout successful! Thank you for your purchase.")
-    clearCart()
+    try {
+      setLoading(true)
+      setError("")
+      setSuccess("")
+      
+      const order = await orderService.checkout()
+      setSuccess("Checkout successful! Thank you for your purchase.")
+      clearCart()
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => setSuccess(""), 3000)
+    } catch (err) {
+      console.error('Error during checkout:', err)
+      setError("Checkout failed. Please try again.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -34,6 +54,27 @@ const Cart = () => {
             {cartItems.length} {cartItems.length === 1 ? "item" : "items"} in your cart
           </p>
         </motion.div>
+
+        {/* Error and Success Messages */}
+        {error && (
+          <motion.div
+            className="error-message"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+          >
+            {error}
+          </motion.div>
+        )}
+        
+        {success && (
+          <motion.div
+            className="success-message"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+          >
+            {success}
+          </motion.div>
+        )}
 
         {cartItems.length === 0 ? (
           <motion.div
@@ -101,8 +142,9 @@ const Cart = () => {
                     onClick={handleCheckout}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
+                    disabled={loading}
                   >
-                    Checkout
+                    {loading ? "Processing..." : "Checkout"}
                   </motion.button>
                 </div>
               </div>

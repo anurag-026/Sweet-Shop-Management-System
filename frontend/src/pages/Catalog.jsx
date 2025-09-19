@@ -1,23 +1,44 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useAuth } from "../context/AuthContext"
 import { useCart } from "../context/CartContext"
 import SweetCard from "../components/SweetCard"
 import SearchFilter from "../components/SearchFilter"
-import { mockSweets } from "../data/mockData"
+import { sweetService } from "../services/sweetService"
 import "./Catalog.css"
 
 const Catalog = () => {
   const { user } = useAuth()
   const { addToCart } = useCart()
-  const [sweets, setSweets] = useState(mockSweets)
-  const [filteredSweets, setFilteredSweets] = useState(mockSweets)
-  const [loading, setLoading] = useState(false)
+  const [sweets, setSweets] = useState([])
+  const [filteredSweets, setFilteredSweets] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("")
   const [priceRange, setPriceRange] = useState({ min: "", max: "" })
+
+  // Fetch sweets on component mount
+  useEffect(() => {
+    fetchSweets()
+  }, [])
+
+  const fetchSweets = async () => {
+    try {
+      setLoading(true)
+      setError("")
+      const data = await sweetService.getAllSweets()
+      setSweets(data)
+      setFilteredSweets(data)
+    } catch (err) {
+      console.error('Error fetching sweets:', err)
+      setError("Failed to load sweets. Please try again.")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const applyFilters = () => {
     let filtered = sweets
@@ -48,57 +69,45 @@ const Catalog = () => {
     setFilteredSweets(filtered)
   }
 
-  const handleSearch = (term) => {
+  const handleSearch = async (term) => {
     setSearchTerm(term)
-    // Apply filters immediately when search changes
-    setTimeout(() => {
-      let filtered = sweets
-      if (term) {
-        filtered = filtered.filter(
-          (sweet) =>
-            sweet.name.toLowerCase().includes(term.toLowerCase()) ||
-            sweet.description.toLowerCase().includes(term.toLowerCase()),
-        )
+    try {
+      setLoading(true)
+      const filters = {
+        name: term,
+        category: selectedCategory,
+        min: priceRange.min,
+        max: priceRange.max
       }
-      if (selectedCategory) {
-        filtered = filtered.filter((sweet) => sweet.category === selectedCategory)
-      }
-      if (priceRange.min || priceRange.max) {
-        filtered = filtered.filter((sweet) => {
-          const min = priceRange.min ? parseFloat(priceRange.min) : 0
-          const max = priceRange.max ? parseFloat(priceRange.max) : Infinity
-          return sweet.price >= min && sweet.price <= max
-        })
-      }
-      setFilteredSweets(filtered)
-    }, 0)
+      const data = await sweetService.getAllSweets(filters)
+      setFilteredSweets(data)
+    } catch (err) {
+      console.error('Error searching sweets:', err)
+      setError("Failed to search sweets. Please try again.")
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleFilter = (filters) => {
+  const handleFilter = async (filters) => {
     setSelectedCategory(filters.category || "")
     setPriceRange(filters.priceRange || { min: "", max: "" })
-    // Apply filters immediately
-    setTimeout(() => {
-      let filtered = sweets
-      if (searchTerm) {
-        filtered = filtered.filter(
-          (sweet) =>
-            sweet.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            sweet.description.toLowerCase().includes(searchTerm.toLowerCase()),
-        )
+    try {
+      setLoading(true)
+      const searchFilters = {
+        name: searchTerm,
+        category: filters.category,
+        min: filters.priceRange?.min,
+        max: filters.priceRange?.max
       }
-      if (filters.category) {
-        filtered = filtered.filter((sweet) => sweet.category === filters.category)
-      }
-      if (filters.priceRange && (filters.priceRange.min || filters.priceRange.max)) {
-        filtered = filtered.filter((sweet) => {
-          const min = filters.priceRange.min ? parseFloat(filters.priceRange.min) : 0
-          const max = filters.priceRange.max ? parseFloat(filters.priceRange.max) : Infinity
-          return sweet.price >= min && sweet.price <= max
-        })
-      }
-      setFilteredSweets(filtered)
-    }, 0)
+      const data = await sweetService.getAllSweets(searchFilters)
+      setFilteredSweets(data)
+    } catch (err) {
+      console.error('Error filtering sweets:', err)
+      setError("Failed to filter sweets. Please try again.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleSort = (sortBy) => {
@@ -128,6 +137,21 @@ const Catalog = () => {
   }
 
 
+  if (loading && sweets.length === 0) {
+    return (
+      <motion.div
+        className="catalog-container"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="loading-container">
+          <h2>Loading sweets...</h2>
+        </div>
+      </motion.div>
+    )
+  }
+
   return (
     <motion.div
       className="catalog-container"
@@ -153,6 +177,16 @@ const Catalog = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
+        {error && (
+          <motion.div
+            className="error-message"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+          >
+            {error}
+          </motion.div>
+        )}
+
         <SearchFilter onSearch={handleSearch} onFilter={handleFilter} onSort={handleSort} />
 
         <div className="sweets-grid">

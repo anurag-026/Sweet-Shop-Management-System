@@ -1,19 +1,71 @@
 "use client"
 
-import { useState, useContext } from "react"
+import { useState, useContext, useEffect } from "react"
 import { motion } from "framer-motion"
 import { AuthContext } from "../context/AuthContext"
+import axiosInstance from "../services/axiosInstance"
 import "./Profile.css"
 
 const Profile = () => {
   const { user, updateUser } = useContext(AuthContext)
   const [isEditing, setIsEditing] = useState(false)
-  const [formData, setFormData] = useState({
-    name: user?.name || "",
-    email: user?.email || "",
-    phone: user?.phone || "",
-    address: user?.address || "",
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
+  const [profileData, setProfileData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    role: ""
   })
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    address: "",
+  })
+
+  // Fetch profile data on component mount
+  useEffect(() => {
+    fetchProfileData()
+  }, [])
+
+  // Update form data when profile data changes
+  useEffect(() => {
+    setFormData({
+      name: profileData.name || "",
+      phone: profileData.phone || "",
+      address: profileData.address || "",
+    })
+  }, [profileData])
+
+  const fetchProfileData = async () => {
+    try {
+      setLoading(true)
+      setError("")
+      
+      const response = await axiosInstance.get("/api/auth/profile")
+      
+      if (response.data) {
+        setProfileData({
+          name: response.data.name || "",
+          email: response.data.email || "",
+          phone: response.data.phone || "",
+          address: response.data.address || "",
+          role: response.data.role || ""
+        })
+      }
+    } catch (err) {
+      console.error("Error fetching profile:", err)
+      if (err.response?.status === 401) {
+        setError("Please log in again to view your profile")
+      } else {
+        setError("Failed to load profile data. Please try again.")
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleInputChange = (e) => {
     setFormData({
@@ -22,20 +74,67 @@ const Profile = () => {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    updateUser(formData)
-    setIsEditing(false)
+    setLoading(true)
+    setError("")
+    setSuccess("")
+
+    try {
+      const response = await axiosInstance.patch("/api/auth/profile", {
+        name: formData.name,
+        phone: formData.phone,
+        address: formData.address
+      })
+
+      if (response.data) {
+        // Update local profile data
+        setProfileData(prev => ({
+          ...prev,
+          name: response.data.name || formData.name,
+          phone: response.data.phone || formData.phone,
+          address: response.data.address || formData.address
+        }))
+
+        // Update auth context
+        updateUser({
+          name: response.data.name || formData.name,
+          phone: response.data.phone || formData.phone,
+          address: response.data.address || formData.address
+        })
+
+        setSuccess("Profile updated successfully!")
+        setIsEditing(false)
+        
+        // Clear success message after 3 seconds
+        setTimeout(() => setSuccess(""), 3000)
+      }
+    } catch (err) {
+      console.error("Error updating profile:", err)
+      
+      if (err.response?.status === 401) {
+        setError("Please log in again to update your profile")
+      } else if (err.response?.status === 400) {
+        setError(err.response.data?.message || "Invalid data. Please check your information.")
+      } else if (err.response?.status === 415) {
+        setError("Please ensure all fields are properly filled.")
+      } else {
+        setError("Failed to update profile. Please try again.")
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleCancel = () => {
     setFormData({
-      name: user?.name || "",
-      email: user?.email || "",
-      phone: user?.phone || "",
-      address: user?.address || "",
+      name: profileData.name || "",
+      phone: profileData.phone || "",
+      address: profileData.address || "",
     })
     setIsEditing(false)
+    setError("")
+    setSuccess("")
   }
 
   if (!user) {
@@ -43,6 +142,16 @@ const Profile = () => {
       <div className="profile-page">
         <div className="not-logged-in">
           <h2>Please log in to view your profile</h2>
+        </div>
+      </div>
+    )
+  }
+
+  if (loading && !isEditing) {
+    return (
+      <div className="profile-page">
+        <div className="loading-container">
+          <h2>Loading profile...</h2>
         </div>
       </div>
     )
@@ -75,6 +184,27 @@ const Profile = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.6 }}
         >
+          {/* Error and Success Messages */}
+          {error && (
+            <motion.div
+              className="error-message"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+            >
+              {error}
+            </motion.div>
+          )}
+          
+          {success && (
+            <motion.div
+              className="success-message"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+            >
+              {success}
+            </motion.div>
+          )}
+
           {!isEditing ? (
             <div className="profile-info">
               <div className="info-section">
@@ -82,19 +212,19 @@ const Profile = () => {
                 <div className="info-grid">
                   <div className="info-item">
                     <label>Full Name</label>
-                    <p>{user.name}</p>
+                    <p>{profileData.name || "Not provided"}</p>
                   </div>
                   <div className="info-item">
                     <label>Email</label>
-                    <p>{user.email}</p>
+                    <p>{profileData.email || "Not provided"}</p>
                   </div>
                   <div className="info-item">
                     <label>Phone</label>
-                    <p>{user.phone || "Not provided"}</p>
+                    <p>{profileData.phone || "Not provided"}</p>
                   </div>
                   <div className="info-item">
                     <label>Address</label>
-                    <p>{user.address || "Not provided"}</p>
+                    <p>{profileData.address || "Not provided"}</p>
                   </div>
                 </div>
               </div>
@@ -104,8 +234,9 @@ const Profile = () => {
                 onClick={() => setIsEditing(true)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                disabled={loading}
               >
-                Edit Profile
+                {loading ? "Loading..." : "Edit Profile"}
               </motion.button>
             </div>
           ) : (
@@ -113,13 +244,27 @@ const Profile = () => {
               <h3>Edit Profile</h3>
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                  <label>Full Name</label>
-                  <input type="text" name="name" value={formData.name} onChange={handleInputChange} required />
+                  <label>Full Name *</label>
+                  <input 
+                    type="text" 
+                    name="name" 
+                    value={formData.name} 
+                    onChange={handleInputChange} 
+                    required 
+                    disabled={loading}
+                  />
                 </div>
 
                 <div className="form-group">
                   <label>Email</label>
-                  <input type="email" name="email" value={formData.email} onChange={handleInputChange} required />
+                  <input 
+                    type="email" 
+                    value={profileData.email} 
+                    disabled 
+                    className="disabled-field"
+                    title="Email cannot be changed"
+                  />
+                  <small className="field-note">Email cannot be changed</small>
                 </div>
 
                 <div className="form-group">
@@ -130,6 +275,7 @@ const Profile = () => {
                     value={formData.phone}
                     onChange={handleInputChange}
                     placeholder="Enter your phone number"
+                    disabled={loading}
                   />
                 </div>
 
@@ -141,6 +287,7 @@ const Profile = () => {
                     onChange={handleInputChange}
                     placeholder="Enter your address"
                     rows="3"
+                    disabled={loading}
                   />
                 </div>
 
@@ -150,8 +297,9 @@ const Profile = () => {
                     className="save-btn"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    disabled={loading}
                   >
-                    Save Changes
+                    {loading ? "Saving..." : "Save Changes"}
                   </motion.button>
                   <motion.button
                     type="button"
@@ -159,6 +307,7 @@ const Profile = () => {
                     onClick={handleCancel}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    disabled={loading}
                   >
                     Cancel
                   </motion.button>

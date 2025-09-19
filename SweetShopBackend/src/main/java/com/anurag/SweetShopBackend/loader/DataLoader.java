@@ -60,43 +60,43 @@ public class DataLoader implements CommandLineRunner {
         // Load sweets from mock data
         sweetRepository.save(new Sweet(null, "Belgian Dark Chocolate Truffles", "chocolate", 24.99, 15, 
             "Luxurious handcrafted truffles made with 70% Belgian dark chocolate and premium cocoa powder.", 
-            "elegant-dark-chocolate-truffles.jpg"));
+            "https://i.postimg.cc/dZRqFQLv/elegant-dark-chocolate-truffles.jpg"));
         
         sweetRepository.save(new Sweet(null, "French Macarons Assortment", "macarons", 32.99, 8, 
             "Delicate almond-based cookies with smooth ganache filling in six exquisite flavors.", 
-            "colorful-french-macarons-assortment.jpg"));
+            "https://i.postimg.cc/JHC1SH7P/colorful-french-macarons-assortment.jpg"));
         
         sweetRepository.save(new Sweet(null, "Artisan Gummy Bears", "gummies", 12.99, 25, 
             "Premium gummy bears made with real fruit juices and natural flavors.", 
-            "artisan-gummy-bears-colorful.jpg"));
+            "https://i.postimg.cc/sMTg12Kg/artisan-gummy-bears-colorful.jpg"));
         
         sweetRepository.save(new Sweet(null, "Salted Caramel Bonbons", "caramel", 28.99, 12, 
             "Rich caramel centers enrobed in smooth milk chocolate with a hint of sea salt.", 
-            "salted-caramel-bonbons-chocolate.jpg"));
+            "https://i.postimg.cc/KKKxzDR0/salted-caramel-bonbons-chocolate.jpg"));
         
         sweetRepository.save(new Sweet(null, "Strawberry Cream Fudge", "fudge", 18.99, 20, 
             "Creamy vanilla fudge swirled with real strawberry puree and white chocolate chips.", 
-            "strawberry-cream-fudge-pink-white.jpg"));
+            "https://i.postimg.cc/7CpDTJzw/strawberry-cream-fudge-pink-white.jpg"));
         
         sweetRepository.save(new Sweet(null, "Honey Lavender Lollipops", "lollipops", 15.99, 30, 
             "Handcrafted lollipops infused with organic honey and dried lavender flowers.", 
-            "honey-lavender-lollipops-purple.jpg"));
+            "https://i.postimg.cc/z3TDK7pM/honey-lavender-lollipops-purple.jpg"));
         
         sweetRepository.save(new Sweet(null, "Pistachio Rose Turkish Delight", "turkish-delight", 22.99, 10, 
             "Traditional Turkish delight flavored with pistachios and rose water, dusted with powdered sugar.", 
-            "pistachio-rose-turkish-delight-pink.jpg"));
+            "https://i.postimg.cc/rKJ8YpBN/pistachio-rose-turkish-delight-pink.jpg"));
         
         sweetRepository.save(new Sweet(null, "Mint Chocolate Chip Brittle", "brittle", 16.99, 18, 
             "Crunchy peanut brittle infused with fresh mint and studded with dark chocolate chips.", 
-            "mint-chocolate-chip-brittle-green.jpg"));
+            "https://i.postimg.cc/Yhkr3FsS/mint-chocolate-chip-brittle-green.jpg"));
         
         sweetRepository.save(new Sweet(null, "Champagne Gummy Rings", "gummies", 19.99, 0, 
             "Sophisticated gummy rings with real champagne flavor and edible gold flakes.", 
-            "champagne-gummy-rings-gold-elegant.jpg"));
+            "https://i.postimg.cc/7G2HBn45/champagne-gummy-rings-gold-elegant.jpg"));
         
         sweetRepository.save(new Sweet(null, "Coconut Lime Macaroons", "macaroons", 21.99, 14, 
             "Chewy coconut macaroons with zesty lime zest and white chocolate drizzle.", 
-            "coconut-lime-macaroons-white-green.jpg"));
+            "https://i.postimg.cc/TyhYbXHq/coconut-lime-macaroons-white-green.jpg"));
 
         System.out.println("Sweets loaded successfully!");
     }

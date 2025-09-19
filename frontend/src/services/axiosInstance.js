@@ -1,8 +1,8 @@
 // axiosInstance.js
 import axios from "axios";
-import { getRefreshToken } from "./login"; // Adjust the import based on your project structure
+import { getRefreshToken } from "./refreshToken";
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8081";
 
 // Create an Axios instance
 const axiosInstance = axios.create({
@@ -49,7 +49,7 @@ axiosInstance.interceptors.response.use(
       } else {
         // If token refresh fails, clear storage and redirect to login
         localStorage.clear();
-        window.location.href = "/signin"; // Adjust the login path as needed
+        window.location.href = "/login"; // Adjust the login path as needed
         return Promise.reject(error);
       }
     }
@@ -60,21 +60,3 @@ axiosInstance.interceptors.response.use(
 );
 
 export default axiosInstance;
-
-// Function to refresh the token
-export const getRefreshToken = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/auth/refresh-token`, {
-      withCredentials: true,
-    });
-
-    if (response.data && response.data.access_token) {
-      localStorage.setItem("access_token", response.data.access_token);
-      return true;
-    }
-    return false;
-  } catch (error) {
-    console.error("Error refreshing token:", error);
-    return false;
-  }
-};

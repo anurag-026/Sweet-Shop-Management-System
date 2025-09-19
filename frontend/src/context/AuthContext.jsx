@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect } from "react"
 import { mockUsers } from "../data/mockData"
+import axiosInstance from "../services/axiosInstance"
 
 const AuthContext = createContext()
 
@@ -31,9 +32,17 @@ export const AuthProvider = ({ children }) => {
     setLoading(false)
   }, [])
 
-  const login = async (email, password) => {
+  const login = async (email, password, userData = null) => {
     try {
-      // Simulate API call
+      // If userData is provided (from API), use it directly
+      if (userData) {
+        setUser(userData)
+        setIsAuthenticated(true)
+        localStorage.setItem("user", JSON.stringify(userData))
+        return true
+      }
+
+      // Fallback to mock data for backward compatibility
       const foundUser = mockUsers.find((u) => u.email === email && u.password === password)
 
       if (foundUser) {
@@ -50,9 +59,17 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const register = async (name, email, password) => {
+  const register = async (name, email, password, userData = null) => {
     try {
-      // Check if user already exists
+      // If userData is provided (from API), use it directly
+      if (userData) {
+        setUser(userData)
+        setIsAuthenticated(true)
+        localStorage.setItem("user", JSON.stringify(userData))
+        return true
+      }
+
+      // Fallback to mock data for backward compatibility
       const existingUser = mockUsers.find((u) => u.email === email)
       if (existingUser) {
         return false
@@ -81,10 +98,31 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const logout = () => {
-    setUser(null)
-    setIsAuthenticated(false)
-    localStorage.removeItem("user")
+  const logout = async () => {
+    try {
+      // Call API logout endpoint if token exists
+      const token = localStorage.getItem("access_token")
+      if (token) {
+        try {
+          await axiosInstance.post("/api/auth/logout", {}, {
+            headers: {
+              "Authorization": `Bearer ${token}`
+            }
+          })
+        } catch (error) {
+          console.error("Logout API call failed:", error)
+          // Continue with local logout even if API call fails
+        }
+      }
+    } catch (error) {
+      console.error("Logout error:", error)
+    } finally {
+      // Always clear local state and storage
+      setUser(null)
+      setIsAuthenticated(false)
+      localStorage.removeItem("user")
+      localStorage.removeItem("access_token")
+    }
   }
 
   const updateUser = (updatedData) => {

@@ -11,9 +11,14 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Check user authentication status
+
   // Check if current route is login or register
   const isAuthPage =
     location.pathname === "/login" || location.pathname === "/register";
+
+  // Robust admin role detection: supports ROLE_ADMIN, ADMIN, admin, etc.
+  const isAdmin = !!(user && typeof user.role === "string" && user.role.replace(/^ROLE_/i, "").toLowerCase() === "admin");
 
   const cartCount = getTotalItems();
   return (
@@ -29,7 +34,7 @@ const Header = () => {
             className="logo"
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300 }}
-            onClick={() => navigate(user ? "/dashboard" : "/login")}
+            onClick={() => navigate(user ? "/catalog" : "/login")}
             style={{ cursor: "pointer" }}
           >
             <h1 className="logo-text">Sweet Delights</h1>
@@ -41,9 +46,9 @@ const Header = () => {
               <>
                 <div className="nav-links">
                   <Link
-                    to="/dashboard"
+                    to="/catalog"
                     className={`nav-link ${
-                      location.pathname === "/dashboard" ? "active" : ""
+                      location.pathname === "/catalog" ? "active" : ""
                     }`}
                   >
                     Catalog
@@ -56,6 +61,7 @@ const Header = () => {
                   >
                     Profile
                   </Link>
+                  {/* Admin links moved to user menu for better visibility */}
                 </div>
 
                 <div className="nav-actions">
@@ -86,13 +92,21 @@ const Header = () => {
               {!isAuthPage && user ? (
                 <div className="user-menu">
                   <span className="user-name">Hello, {user.name}!</span>
-                  {user.role === "admin" && (
-                    <button
-                      className="btn btn-secondary"
-                      onClick={() => navigate("/admin")}
-                    >
-                      Admin Panel
-                    </button>
+                  {isAdmin && (
+                    <div className="admin-buttons">
+                      <button
+                        className="btn admin-btn"
+                        onClick={() => navigate("/admin")}
+                      >
+                        Admin Panel
+                      </button>
+                      <button
+                        className="btn admin-btn"
+                        onClick={() => navigate("/admin-dashboard")}
+                      >
+                        Analytics
+                      </button>
+                    </div>
                   )}
                   <button className="btn btn-primary" onClick={logout}>
                     Logout

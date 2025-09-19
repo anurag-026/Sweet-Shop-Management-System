@@ -1,19 +1,23 @@
-"use client"
+"use client";
 
-import { useState, useContext } from "react"
-import { motion } from "framer-motion"
-import { AuthContext } from "../context/AuthContext"
-import { CartContext } from "../context/CartContext"
-import "./AdminPanel.css"
+import { useState, useContext, useEffect } from "react";
+import { motion } from "framer-motion";
+import { AuthContext } from "../context/AuthContext";
+import { CartContext } from "../context/CartContext";
+import { sweetService } from "../services/sweetService";
+import "./AdminPanel.css";
 
 const AdminPanel = () => {
-  const { user } = useContext(AuthContext)
-  const { sweets, setSweets } = useContext(CartContext)
-  const [showAddForm, setShowAddForm] = useState(false)
-  const [editingSweet, setEditingSweet] = useState(null)
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [deleteTarget, setDeleteTarget] = useState(null)
-  const [showEditModal, setShowEditModal] = useState(false)
+  const { user } = useContext(AuthContext);
+  const { sweets, setSweets } = useContext(CartContext);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [editingSweet, setEditingSweet] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -21,10 +25,29 @@ const AdminPanel = () => {
     description: "",
     image: "",
     stock: "",
-  })
+  });
+
+  // Fetch sweets on component mount
+  useEffect(() => {
+    fetchSweets();
+  }, []);
+
+  const fetchSweets = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      const data = await sweetService.getAllSweets();
+      setSweets(data);
+    } catch (err) {
+      console.error("Error fetching sweets:", err);
+      setError("Failed to load sweets. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Redirect if not admin
-  if (!user || user.role !== "admin") {
+  if (!user || user.role !== "ROLE_ADMIN") {
     return (
       <div className="admin-panel">
         <div className="access-denied">
@@ -32,45 +55,72 @@ const AdminPanel = () => {
           <p>You need admin privileges to access this page.</p>
         </div>
       </div>
-    )
+    );
   }
 
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    const newSweet = {
-      ...formData,
-      id: editingSweet ? editingSweet.id : Date.now(),
-      price: Number.parseFloat(formData.price),
-      stock: Number.parseInt(formData.stock),
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      setError("");
+      setSuccess("");
+
+      const sweetData = {
+        name: formData.name,
+        category: formData.category,
+        price: Number.parseFloat(formData.price),
+        quantity: Number.parseInt(formData.stock),
+        description: formData.description,
+        image: formData.image,
+      };
+
+      if (editingSweet) {
+        const updatedSweet = await sweetService.updateSweet(
+          editingSweet.id,
+          sweetData
+        );
+        setSweets(
+          sweets.map((sweet) =>
+            sweet.id === editingSweet.id ? updatedSweet : sweet
+          )
+        );
+        setEditingSweet(null);
+        setSuccess("Sweet updated successfully!");
+      } else {
+        const newSweet = await sweetService.createSweet(sweetData);
+        setSweets([...sweets, newSweet]);
+        setSuccess("Sweet created successfully!");
+      }
+
+      setFormData({
+        name: "",
+        price: "",
+        category: "",
+        description: "",
+        image: "",
+        stock: "",
+      });
+      setShowAddForm(false);
+
+      // Clear success message after 3 seconds
+      setTimeout(() => setSuccess(""), 3000);
+    } catch (err) {
+      console.error("Error saving sweet:", err);
+      setError("Failed to save sweet. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    if (editingSweet) {
-      setSweets(sweets.map((sweet) => (sweet.id === editingSweet.id ? newSweet : sweet)))
-      setEditingSweet(null)
-    } else {
-      setSweets([...sweets, newSweet])
-    }
-
-    setFormData({
-      name: "",
-      price: "",
-      category: "",
-      description: "",
-      image: "",
-      stock: "",
-    })
-    setShowAddForm(false)
-  }
+  };
 
   const handleEdit = (sweet) => {
-    setEditingSweet(sweet)
+    setEditingSweet(sweet);
     setFormData({
       name: sweet.name,
       price: sweet.price.toString(),
@@ -78,10 +128,10 @@ const AdminPanel = () => {
       description: sweet.description,
       image: sweet.image,
       stock: sweet.quantity.toString(), // Changed from stock to quantity
-    })
-    setShowEditModal(true)
-  }
-  
+    });
+    setShowEditModal(true);
+  };
+
   const confirmEdit = () => {
     if (editingSweet) {
       const updatedSweets = sweets.map((sweet) => {
@@ -94,17 +144,17 @@ const AdminPanel = () => {
             description: formData.description,
             image: formData.image,
             quantity: parseInt(formData.stock),
-          }
+          };
         }
-        return sweet
-      })
-      setSweets(updatedSweets)
-      setShowEditModal(false)
-      setEditingSweet(null)
-      resetForm()
+        return sweet;
+      });
+      setSweets(updatedSweets);
+      setShowEditModal(false);
+      setEditingSweet(null);
+      resetForm();
     }
-  }
-  
+  };
+
   const resetForm = () => {
     setFormData({
       name: "",
@@ -113,32 +163,46 @@ const AdminPanel = () => {
       description: "",
       image: "",
       stock: "",
-    })
-  }
+    });
+  };
 
   const cancelEdit = () => {
-    setShowEditModal(false)
-    setEditingSweet(null)
-    resetForm()
-  }
+    setShowEditModal(false);
+    setEditingSweet(null);
+    resetForm();
+  };
 
   const handleDelete = (sweet) => {
-    setDeleteTarget(sweet)
-    setShowDeleteModal(true)
-  }
-  
-  const confirmDelete = () => {
+    setDeleteTarget(sweet);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
     if (deleteTarget) {
-      setSweets(sweets.filter((sweet) => sweet.id !== deleteTarget.id))
-      setShowDeleteModal(false)
-      setDeleteTarget(null)
+      try {
+        setLoading(true);
+        setError("");
+        await sweetService.deleteSweet(deleteTarget.id);
+        setSweets(sweets.filter((sweet) => sweet.id !== deleteTarget.id));
+        setShowDeleteModal(false);
+        setDeleteTarget(null);
+        setSuccess("Sweet deleted successfully!");
+
+        // Clear success message after 3 seconds
+        setTimeout(() => setSuccess(""), 3000);
+      } catch (err) {
+        console.error("Error deleting sweet:", err);
+        setError("Failed to delete sweet. Please try again.");
+      } finally {
+        setLoading(false);
+      }
     }
-  }
-  
+  };
+
   const cancelDelete = () => {
-    setShowDeleteModal(false)
-    setDeleteTarget(null)
-  }
+    setShowDeleteModal(false);
+    setDeleteTarget(null);
+  };
 
   return (
     <motion.div
@@ -158,6 +222,27 @@ const AdminPanel = () => {
           {showAddForm ? "Cancel" : "Add New Sweet"}
         </motion.button>
       </div>
+
+      {/* Error and Success Messages */}
+      {error && (
+        <motion.div
+          className="error-message"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+        >
+          {error}
+        </motion.div>
+      )}
+
+      {success && (
+        <motion.div
+          className="success-message"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+        >
+          {success}
+        </motion.div>
+      )}
 
       {showAddForm && (
         <motion.div
@@ -188,7 +273,12 @@ const AdminPanel = () => {
               />
             </div>
             <div className="form-row">
-              <select name="category" value={formData.category} onChange={handleInputChange} required>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleInputChange}
+                required
+              >
                 <option value="">Select Category</option>
                 <option value="chocolate">Chocolate</option>
                 <option value="candy">Candy</option>
@@ -224,7 +314,12 @@ const AdminPanel = () => {
                 required
               />
             </div>
-            <motion.button type="submit" className="submit-btn" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <motion.button
+              type="submit"
+              className="submit-btn"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
               {editingSweet ? "Update Sweet" : "Add Sweet"}
             </motion.button>
           </form>
@@ -253,7 +348,10 @@ const AdminPanel = () => {
                 <button className="edit-btn" onClick={() => handleEdit(sweet)}>
                   Edit
                 </button>
-                <button className="delete-btn" onClick={() => handleDelete(sweet)}>
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDelete(sweet)}
+                >
                   Delete
                 </button>
               </div>
@@ -264,13 +362,13 @@ const AdminPanel = () => {
 
       {/* Custom Delete Confirmation Modal */}
       {showDeleteModal && (
-        <motion.div 
+        <motion.div
           className="modal-overlay"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <motion.div 
+          <motion.div
             className="delete-modal"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -284,21 +382,28 @@ const AdminPanel = () => {
               {deleteTarget && (
                 <>
                   <div className="product-preview">
-                    <img src={deleteTarget.image} alt={deleteTarget.name} className="product-image" />
+                    <img
+                      src={deleteTarget.image}
+                      alt={deleteTarget.name}
+                      className="product-image"
+                    />
                     <div className="product-info">
                       <h4>{deleteTarget.name}</h4>
                       <p className="product-price">${deleteTarget.price}</p>
-                      <p className="product-category">{deleteTarget.category}</p>
+                      <p className="product-category">
+                        {deleteTarget.category}
+                      </p>
                     </div>
                   </div>
                   <p className="confirmation-message">
-                    Are you sure you want to delete this sweet? This action cannot be undone.
+                    Are you sure you want to delete this sweet? This action
+                    cannot be undone.
                   </p>
                 </>
               )}
             </div>
             <div className="modal-actions">
-              <motion.button 
+              <motion.button
                 className="cancel-btn"
                 onClick={cancelDelete}
                 whileHover={{ scale: 1.05 }}
@@ -306,7 +411,7 @@ const AdminPanel = () => {
               >
                 Cancel
               </motion.button>
-              <motion.button 
+              <motion.button
                 className="confirm-delete-btn"
                 onClick={confirmDelete}
                 whileHover={{ scale: 1.05 }}
@@ -321,13 +426,13 @@ const AdminPanel = () => {
 
       {/* Custom Edit Modal */}
       {showEditModal && (
-        <motion.div 
+        <motion.div
           className="modal-overlay"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <motion.div 
+          <motion.div
             className="edit-modal"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -351,7 +456,7 @@ const AdminPanel = () => {
                       required
                     />
                   </div>
-                  
+
                   <div className="form-row">
                     <label htmlFor="price">Price ($)</label>
                     <input
@@ -365,7 +470,7 @@ const AdminPanel = () => {
                       required
                     />
                   </div>
-                  
+
                   <div className="form-row">
                     <label htmlFor="category">Category</label>
                     <select
@@ -387,7 +492,7 @@ const AdminPanel = () => {
                       <option value="lollipops">Lollipops</option>
                     </select>
                   </div>
-                  
+
                   <div className="form-row">
                     <label htmlFor="stock">Stock</label>
                     <input
@@ -400,7 +505,7 @@ const AdminPanel = () => {
                       required
                     />
                   </div>
-                  
+
                   <div className="form-row">
                     <label htmlFor="description">Description</label>
                     <textarea
@@ -411,7 +516,7 @@ const AdminPanel = () => {
                       required
                     ></textarea>
                   </div>
-                  
+
                   <div className="form-row">
                     <label htmlFor="image">Image URL</label>
                     <input
@@ -433,7 +538,7 @@ const AdminPanel = () => {
               )}
             </div>
             <div className="modal-actions">
-              <motion.button 
+              <motion.button
                 className="cancel-btn"
                 onClick={cancelEdit}
                 whileHover={{ scale: 1.05 }}
@@ -441,7 +546,7 @@ const AdminPanel = () => {
               >
                 Cancel
               </motion.button>
-              <motion.button 
+              <motion.button
                 className="confirm-edit-btn"
                 onClick={confirmEdit}
                 whileHover={{ scale: 1.05 }}
@@ -454,7 +559,7 @@ const AdminPanel = () => {
         </motion.div>
       )}
     </motion.div>
-  )
-}
+  );
+};
 
-export default AdminPanel
+export default AdminPanel;

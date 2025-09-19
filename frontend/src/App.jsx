@@ -9,9 +9,10 @@ import { AnimatePresence } from "framer-motion";
 import Header from "./components/Header";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
+import Catalog from "./pages/Catalog";
 import Cart from "./pages/Cart";
 import AdminPanel from "./pages/AdminPanel";
+import AdminDashboard from "./pages/AdminDashboard";
 import Profile from "./pages/Profile";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
@@ -25,8 +26,15 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (adminOnly && user?.role !== "admin") {
-    return <Navigate to="/dashboard" replace />;
+  // Robust admin role check - handles ROLE_ADMIN, admin, ADMIN formats
+  const isAdmin = !!(
+    user &&
+    typeof user.role === "string" &&
+    user.role.replace(/^ROLE_/i, "").toLowerCase() === "admin"
+  );
+
+  if (adminOnly && !isAdmin) {
+    return <Navigate to="/catalog" replace />;
   }
 
   return children;
@@ -37,7 +45,7 @@ const PublicRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/catalog" replace />;
   }
 
   return children;
@@ -55,7 +63,7 @@ function AppContent() {
             path="/"
             element={
               isAuthenticated ? (
-                <Navigate to="/dashboard" replace />
+                <Navigate to="/catalog" replace />
               ) : (
                 <Navigate to="/login" replace />
               )
@@ -78,10 +86,18 @@ function AppContent() {
             }
           />
           <Route
-            path="/dashboard"
+            path="/catalog"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <Catalog />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin-dashboard"
+            element={
+              <ProtectedRoute adminOnly={true}>
+                <AdminDashboard />
               </ProtectedRoute>
             }
           />

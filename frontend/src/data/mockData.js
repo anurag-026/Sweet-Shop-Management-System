@@ -1,14 +1,24 @@
-// Import all images
-import elegantDarkChocolateTruffles from "../assets/elegant-dark-chocolate-truffles.jpg";
-import colorfulFrenchMacarons from "../assets/colorful-french-macarons-assortment.jpg";
-import artisanGummyBears from "../assets/artisan-gummy-bears-colorful.jpg";
-import saltedCaramelBonbons from "../assets/salted-caramel-bonbons-chocolate.jpg";
-import strawberryCreamFudge from "../assets/strawberry-cream-fudge-pink-white.jpg";
-import honeyLavenderLollipops from "../assets/honey-lavender-lollipops-purple.jpg";
-import pistachioRoseTurkishDelight from "../assets/pistachio-rose-turkish-delight-pink.jpg";
-import mintChocolateChipBrittle from "../assets/mint-chocolate-chip-brittle-green.jpg";
-import champagneGummyRings from "../assets/champagne-gummy-rings-gold-elegant.jpg";
-import coconutLimeMacaroons from "../assets/coconut-lime-macaroons-white-green.jpg";
+// Image URLs
+const elegantDarkChocolateTruffles =
+  "https://i.postimg.cc/dZRqFQLv/elegant-dark-chocolate-truffles.jpg";
+const colorfulFrenchMacarons =
+  "https://i.postimg.cc/JHC1SH7P/colorful-french-macarons-assortment.jpg";
+const artisanGummyBears =
+  "https://i.postimg.cc/sMTg12Kg/artisan-gummy-bears-colorful.jpg";
+const saltedCaramelBonbons =
+  "https://i.postimg.cc/KKKxzDR0/salted-caramel-bonbons-chocolate.jpg";
+const strawberryCreamFudge =
+  "https://i.postimg.cc/7CpDTJzw/strawberry-cream-fudge-pink-white.jpg";
+const honeyLavenderLollipops =
+  "https://i.postimg.cc/z3TDK7pM/honey-lavender-lollipops-purple.jpg";
+const pistachioRoseTurkishDelight =
+  "https://i.postimg.cc/rKJ8YpBN/pistachio-rose-turkish-delight-pink.jpg";
+const mintChocolateChipBrittle =
+  "https://i.postimg.cc/Yhkr3FsS/mint-chocolate-chip-brittle-green.jpg";
+const champagneGummyRings =
+  "https://i.postimg.cc/7G2HBn45/champagne-gummy-rings-gold-elegant.jpg";
+const coconutLimeMacaroons =
+  "https://i.postimg.cc/TyhYbXHq/coconut-lime-macaroons-white-green.jpg";
 
 export const mockSweets = [
   {

@@ -1,47 +1,84 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { motion } from "framer-motion"
-import { useAuth } from "../context/AuthContext"
-import "./Login.css"
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useAuth } from "../context/AuthContext";
+import "./Login.css";
+import axiosInstance from "../services/axiosInstance";
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-  })
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const { login } = useAuth()
-  const navigate = useNavigate()
+  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
     try {
-      const success = await login(formData.email, formData.password)
-      if (success) {
-        navigate("/dashboard")
+      // Make API call to login endpoint
+      const response = await axiosInstance.post("/api/auth/login", {
+        email: formData.email,
+        password: formData.password
+      });
+
+      if (response.data && response.data.token) {
+        // Store token and user data
+        localStorage.setItem("access_token", response.data.token);
+        
+        // Update auth context with user data
+        const userData = {
+          email: response.data.email,
+          role: response.data.role,
+          name: response.data.email.split('@')[0] // Extract name from email for now
+        };
+        
+        // Call the login function from context to update state
+        await login(formData.email, formData.password, userData);
+        
+        navigate("/dashboard");
       } else {
-        setError("Invalid email or password")
+        setError("Invalid response from server");
       }
     } catch (err) {
-      setError("Login failed. Please try again.")
+      console.error("Login error:", err);
+      
+      // Handle different error types
+      if (err.response) {
+        // Server responded with error status
+        if (err.response.status === 401) {
+          setError("Invalid email or password");
+        } else if (err.response.status === 400) {
+          setError(err.response.data.message || "Invalid request");
+        } else {
+          setError(err.response.data.message || "Login failed. Please try again.");
+        }
+      } else if (err.request) {
+        // Network error
+        setError("Network error. Please check your connection.");
+      } else {
+        // Other error
+        setError("Login failed. Please try again.");
+      }
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <motion.div
@@ -104,8 +141,8 @@ const Login = () => {
                 required
                 placeholder="Enter your password"
               />
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="sd-login-password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
               >
@@ -137,7 +174,7 @@ const Login = () => {
         </motion.div>
       </div>
     </motion.div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

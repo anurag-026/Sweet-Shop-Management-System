@@ -1,9 +1,55 @@
-.profile-page {
+  .profile-page {
     min-height: calc(100vh - 100px);
     background: linear-gradient(135deg, #f5f1eb 0%, #e8ddd4 100%);
     padding: 2rem;
     font-family: "Inter", sans-serif;
     margin-top: 100px;
+  }
+
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+  }
+
+  .loading-container h2 {
+    color: #8b4513;
+    font-family: "Playfair Display", serif;
+  }
+
+  .error-message {
+    background: #fee;
+    color: #c53030;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #feb2b2;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  .success-message {
+    background: #f0fff4;
+    color: #2f855a;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #9ae6b4;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  .disabled-field {
+    background-color: #f7f7f7;
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  .field-note {
+    color: #666;
+    font-size: 0.875rem;
+    font-style: italic;
+    margin-top: 0.25rem;
   }
   
   .profile-container {

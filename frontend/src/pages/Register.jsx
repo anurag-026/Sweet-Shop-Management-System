@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
 import { useAuth } from "../context/AuthContext"
+import axiosInstance from "../services/axiosInstance"
 import "./Register.css"
 
 const Register = () => {
@@ -32,6 +33,7 @@ const Register = () => {
     setLoading(true)
     setError("")
 
+    // Client-side validation
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match")
       setLoading(false)
@@ -45,14 +47,71 @@ const Register = () => {
     }
 
     try {
-      const success = await register(formData.name, formData.email, formData.password)
-      if (success) {
-        navigate("/dashboard")
+      // Make API call to register endpoint
+      const response = await axiosInstance.post("/api/auth/register", {
+        fullName: formData.name,
+        email: formData.email,
+        password: formData.password
+      })
+
+      if (response.data && response.data.includes("successfully")) {
+        // Registration successful, now login the user
+        try {
+          const loginResponse = await axiosInstance.post("/api/auth/login", {
+            email: formData.email,
+            password: formData.password
+          })
+
+          if (loginResponse.data && loginResponse.data.token) {
+            // Store token and user data
+            localStorage.setItem("access_token", loginResponse.data.token)
+            
+            // Update auth context with user data
+            const userData = {
+              email: loginResponse.data.email,
+              role: loginResponse.data.role,
+              name: formData.name
+            }
+            
+            // Call the register function from context to update state
+            await register(formData.name, formData.email, formData.password, userData)
+            
+            navigate("/dashboard")
+          } else {
+            setError("Registration successful but login failed. Please try logging in manually.")
+          }
+        } catch (loginError) {
+          console.error("Auto-login after registration failed:", loginError)
+          setError("Registration successful! Please login with your credentials.")
+          navigate("/login")
+        }
       } else {
-        setError("Registration failed. Email might already exist.")
+        setError("Registration failed. Please try again.")
       }
     } catch (err) {
-      setError("Registration failed. Please try again.")
+      console.error("Registration error:", err)
+      
+      // Handle different error types
+      if (err.response) {
+        // Server responded with error status
+        if (err.response.status === 400) {
+          if (err.response.data && err.response.data.includes("already registered")) {
+            setError("Email is already registered. Please use a different email or try logging in.")
+          } else {
+            setError(err.response.data || "Invalid registration data. Please check your information.")
+          }
+        } else if (err.response.status === 422) {
+          setError("Please check your email format and ensure password meets requirements.")
+        } else {
+          setError(err.response.data || "Registration failed. Please try again.")
+        }
+      } else if (err.request) {
+        // Network error
+        setError("Network error. Please check your connection and try again.")
+      } else {
+        // Other error
+        setError("Registration failed. Please try again.")
+      }
     } finally {
       setLoading(false)
     }
