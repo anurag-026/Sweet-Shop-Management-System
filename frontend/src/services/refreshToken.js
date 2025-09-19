@@ -1,5 +1,7 @@
 // refreshToken.js
-import axiosInstance from "./axiosInstance";
+import axios from "axios";
+
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8081";
 
 // Function to refresh the token
 export const getRefreshToken = async () => {
@@ -9,10 +11,13 @@ export const getRefreshToken = async () => {
       return false;
     }
 
-    const response = await axiosInstance.post("/api/auth/refresh", {}, {
+    // Use a plain axios client to avoid interceptors and retry loops
+    const response = await axios.post(`${API_URL}/api/auth/refresh`, {}, {
       headers: {
-        "Authorization": `Bearer ${token}`
-      }
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      withCredentials: false // Disable credentials for refresh token call
     });
 
     if (response.data && response.data.token) {

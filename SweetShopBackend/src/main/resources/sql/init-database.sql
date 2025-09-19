@@ -65,12 +65,37 @@ CREATE TABLE IF NOT EXISTS cart_items (
     UNIQUE(user_id, sweet_id)
 );
 
+-- Create payment_mode enum
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'payment_mode') THEN
+        CREATE TYPE payment_mode AS ENUM ('CREDIT_CARD', 'PAYPAL', 'BANK_TRANSFER', 'CASH_ON_DELIVERY');
+    END IF;
+END $$;
+
+-- Create order_status enum
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'order_status') THEN
+        CREATE TYPE order_status AS ENUM ('PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'OUT_FOR_DELIVERY', 'DELIVERED', 'CANCELLED', 'REFUNDED');
+    END IF;
+END $$;
+
 -- Create orders table
 CREATE TABLE IF NOT EXISTS orders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     total_amount DECIMAL(10,2) NOT NULL,
-    status VARCHAR(50) NOT NULL DEFAULT 'PENDING',
+    status order_status NOT NULL DEFAULT 'PENDING',
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    payment_mode payment_mode NOT NULL DEFAULT 'CREDIT_CARD',
+    payment_transaction_id VARCHAR(255),
+    shipping_address TEXT,
+    customer_notes TEXT,
+    tracking_number VARCHAR(255),
+    estimated_delivery_date TIMESTAMP,
+    actual_delivery_date TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -83,6 +108,15 @@ CREATE TABLE IF NOT EXISTS order_items (
     quantity INTEGER NOT NULL,
     price DECIMAL(10,2) NOT NULL
 );
+
+-- Create indexes for better performance
+CREATE INDEX IF NOT EXISTS idx_orders_user_id ON orders(user_id);
+CREATE INDEX IF NOT EXISTS idx_orders_payment_mode ON orders(payment_mode);
+CREATE INDEX IF NOT EXISTS idx_orders_status_date ON orders(status, order_date);
+CREATE INDEX IF NOT EXISTS idx_orders_tracking_number ON orders(tracking_number);
+CREATE INDEX IF NOT EXISTS idx_orders_last_updated ON orders(last_updated);
+CREATE INDEX IF NOT EXISTS idx_order_items_order_id ON order_items(order_id);
+CREATE INDEX IF NOT EXISTS idx_order_items_sweet_id ON order_items(sweet_id);
 
 -- Grant necessary privileges
 GRANT ALL PRIVILEGES ON SCHEMA public TO sweetshop_user;

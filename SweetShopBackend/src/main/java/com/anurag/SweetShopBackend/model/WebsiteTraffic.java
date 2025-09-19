@@ -1,7 +1,6 @@
 package com.anurag.SweetShopBackend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -9,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -16,8 +16,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "sweets")
-public class Sweet {
+@Table(name = "website_traffic")
+public class WebsiteTraffic {
     
     @Id
     @GeneratedValue(generator = "UUID")
@@ -29,41 +29,41 @@ public class Sweet {
     private UUID id;
     
     @NotBlank
-    @Column(nullable = false, unique = true)
-    private String name;
-    
-    @Column
-    private String category;
-    
-    @NotNull
-    @Min(0)
-    @Column(nullable = false)
-    private Double price;
-    
-    @NotNull
-    @Min(0)
-    @Column(nullable = false)
-    private Integer quantity;
-    
-    @Column(columnDefinition = "TEXT")
-    private String description;
-    
-    @Column
-    private String image;
-    
-    @Column
-    private Double cost;
-    
-    @Column
-    private Double profitMargin;
+    @Column(name = "session_id", nullable = false, unique = true)
+    private String sessionId;
     
     @ManyToOne
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
+    @JoinColumn(name = "user_id")
+    private User user;
     
     @Column
-    private Integer minThreshold = 10;
+    private String ipAddress;
+    
+    @Column(columnDefinition = "TEXT")
+    private String userAgent;
     
     @Column
-    private LocalDateTime lastRestocked;
+    private String referrer;
+    
+    @Column
+    private String landingPage;
+    
+    @Column
+    private String exitPage;
+    
+    @Column
+    private Integer pageViews = 1;
+    
+    @Column
+    private Integer sessionDurationSeconds;
+    
+    @Column
+    private Boolean isBounce = false;
+    
+    @NotNull
+    @Column(nullable = false)
+    private LocalDate visitDate;
+    
+    @Column
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

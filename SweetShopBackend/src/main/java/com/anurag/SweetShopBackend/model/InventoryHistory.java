@@ -1,7 +1,6 @@
 package com.anurag.SweetShopBackend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -16,8 +15,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "sweets")
-public class Sweet {
+@Table(name = "inventory_history")
+public class InventoryHistory {
     
     @Id
     @GeneratedValue(generator = "UUID")
@@ -28,42 +27,33 @@ public class Sweet {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
     
+    @ManyToOne
+    @JoinColumn(name = "sweet_id", nullable = false)
+    private Sweet sweet;
+    
+    @NotNull
+    @Column(nullable = false)
+    private Integer previousQuantity;
+    
+    @NotNull
+    @Column(nullable = false)
+    private Integer newQuantity;
+    
     @NotBlank
-    @Column(nullable = false, unique = true)
-    private String name;
+    @Column(name = "change_reason", nullable = false)
+    private String changeReason; // 'restock', 'sale', 'adjustment', 'return', 'damaged'
     
     @Column
-    private String category;
-    
-    @NotNull
-    @Min(0)
-    @Column(nullable = false)
-    private Double price;
-    
-    @NotNull
-    @Min(0)
-    @Column(nullable = false)
-    private Integer quantity;
+    private UUID referenceId; // Could be order_id, supplier_order_id, etc.
     
     @Column(columnDefinition = "TEXT")
-    private String description;
-    
-    @Column
-    private String image;
-    
-    @Column
-    private Double cost;
-    
-    @Column
-    private Double profitMargin;
+    private String notes;
     
     @ManyToOne
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
+    @JoinColumn(name = "changed_by")
+    private User changedBy;
     
-    @Column
-    private Integer minThreshold = 10;
-    
-    @Column
-    private LocalDateTime lastRestocked;
+    @NotNull
+    @Column(nullable = false)
+    private LocalDateTime changedAt = LocalDateTime.now();
 }

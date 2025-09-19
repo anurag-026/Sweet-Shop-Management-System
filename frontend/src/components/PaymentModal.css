@@ -1,0 +1,285 @@
+.payment-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.payment-modal {
+  background: white;
+  border-radius: 20px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.payment-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 2rem 1rem;
+  border-bottom: 1px solid #e8ddd4;
+}
+
+.payment-modal-header h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 1.8rem;
+  color: #8b4513;
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+  background: #f5f5f5;
+  color: #8b4513;
+}
+
+.payment-modal-content {
+  padding: 2rem;
+}
+
+.order-summary {
+  background: linear-gradient(135deg, #f5f1eb 0%, #e8ddd4 100%);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.order-summary h3 {
+  font-family: "Playfair Display", serif;
+  font-size: 1.5rem;
+  color: #8b4513;
+  margin: 0;
+}
+
+.payment-modes h4 {
+  font-family: "Playfair Display", serif;
+  font-size: 1.3rem;
+  color: #8b4513;
+  margin-bottom: 1rem;
+}
+
+.payment-modes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.payment-mode-card {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  border: 2px solid #e8ddd4;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.payment-mode-card:hover {
+  border-color: #d2691e;
+  box-shadow: 0 5px 15px rgba(139, 69, 19, 0.1);
+}
+
+.payment-mode-card.selected {
+  border-color: #8b4513;
+  background: linear-gradient(135deg, #f5f1eb 0%, #e8ddd4 100%);
+  box-shadow: 0 5px 20px rgba(139, 69, 19, 0.2);
+}
+
+.payment-mode-icon {
+  font-size: 2rem;
+  margin-right: 1rem;
+}
+
+.payment-mode-info h5 {
+  font-family: "Inter", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #8b4513;
+  margin: 0 0 0.5rem 0;
+}
+
+.payment-mode-info p {
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+.payment-details {
+  background: #f9f9f9;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.payment-details h4 {
+  font-family: "Playfair Display", serif;
+  font-size: 1.3rem;
+  color: #8b4513;
+  margin-bottom: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-row:last-child {
+  margin-bottom: 0;
+}
+
+.credit-card-form .form-row:last-child {
+  grid-template-columns: 2fr 1fr;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #8b4513;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input {
+  padding: 0.8rem;
+  border: 2px solid #e8ddd4;
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #8b4513;
+  box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+}
+
+.form-group input::placeholder {
+  color: #999;
+}
+
+.payment-modal-actions {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 2rem 2rem;
+  border-top: 1px solid #e8ddd4;
+}
+
+.cancel-btn,
+.confirm-btn {
+  flex: 1;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn {
+  background: #f5f5f5;
+  color: #666;
+  border: 2px solid #e8ddd4;
+}
+
+.cancel-btn:hover:not(:disabled) {
+  background: #e8ddd4;
+  transform: translateY(-2px);
+}
+
+.confirm-btn {
+  background: linear-gradient(135deg, #d2691e 0%, #8b4513 100%);
+  color: white;
+}
+
+.confirm-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(139, 69, 19, 0.3);
+}
+
+.confirm-btn:disabled,
+.cancel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 768px) {
+  .payment-modal {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+  }
+
+  .payment-modal-header,
+  .payment-modal-content {
+    padding: 1.5rem;
+  }
+
+  .payment-modal-actions {
+    padding: 1rem 1.5rem 1.5rem;
+    flex-direction: column;
+  }
+
+  .payment-modes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .credit-card-form .form-row:last-child {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-modal-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .payment-mode-card {
+    padding: 1rem;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .payment-mode-icon {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+}

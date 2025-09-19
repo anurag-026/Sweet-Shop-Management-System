@@ -10,6 +10,14 @@ const axiosInstance = axios.create({
   withCredentials: true, // Ensures cookies are sent with requests
 });
 
+// Maximum number of retries for any failed API (initial try + 2 retries = 3 total attempts)
+const MAX_RETRIES = 2;
+
+// Simple exponential backoff delay
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 // Request interceptor to add the Authorization header to each request
 axiosInstance.interceptors.request.use(
   (config) => {
@@ -32,29 +40,46 @@ axiosInstance.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
+    const status = error?.response?.status;
+    const requestUrl = originalRequest?.url || "";
 
-    // Check if the error response is 401 and the request hasn't been retried yet
-    if (
-      error.response &&
-      error.response.status === 401 &&
-      !originalRequest._retry
-    ) {
-      originalRequest._retry = true;
+    // Never intercept the refresh token call itself
+    if (requestUrl && requestUrl.includes("/api/auth/refresh")) {
+      return Promise.reject(error);
+    }
+
+    // Handle 401: try refresh once per original request
+    if (status === 401 && !originalRequest._refreshTried) {
+      originalRequest._refreshTried = true;
 
       const refreshSuccess = await getRefreshToken();
       if (refreshSuccess) {
         const newToken = localStorage.getItem("access_token");
-        originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
-        return axiosInstance(originalRequest); // Retry the original request
-      } else {
-        // If token refresh fails, clear storage and redirect to login
-        localStorage.clear();
-        window.location.href = "/login"; // Adjust the login path as needed
-        return Promise.reject(error);
+        if (newToken) {
+          originalRequest.headers = originalRequest.headers || {};
+          originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+        }
+        return axiosInstance(originalRequest);
       }
+
+      // Refresh failed: clear and redirect, do not retry further
+      localStorage.clear();
+      window.location.href = "/login";
+      return Promise.reject(error);
     }
 
-    // If the error is not 401 or the request has already been retried, reject the promise
+    // Generic capped retry for transient failures (network errors, 5xx, timeouts)
+    const shouldRetry = !status || (status >= 500 && status < 600);
+    originalRequest._retryCount = originalRequest._retryCount || 0;
+
+    if (shouldRetry && originalRequest._retryCount < MAX_RETRIES) {
+      originalRequest._retryCount += 1;
+      const backoffMs = 300 * Math.pow(2, originalRequest._retryCount - 1); // 300ms, 600ms
+      await delay(backoffMs);
+      return axiosInstance(originalRequest);
+    }
+
+    // Give up
     return Promise.reject(error);
   }
 );

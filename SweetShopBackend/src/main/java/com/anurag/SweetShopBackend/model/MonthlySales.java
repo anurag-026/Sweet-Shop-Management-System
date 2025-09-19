@@ -1,8 +1,6 @@
 package com.anurag.SweetShopBackend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,8 +14,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "sweets")
-public class Sweet {
+@Table(name = "monthly_sales")
+public class MonthlySales {
     
     @Id
     @GeneratedValue(generator = "UUID")
@@ -28,42 +26,32 @@ public class Sweet {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
     
-    @NotBlank
-    @Column(nullable = false, unique = true)
-    private String name;
-    
-    @Column
-    private String category;
+    @NotNull
+    @Column(nullable = false)
+    private Integer month;
     
     @NotNull
-    @Min(0)
     @Column(nullable = false)
-    private Double price;
-    
-    @NotNull
-    @Min(0)
-    @Column(nullable = false)
-    private Integer quantity;
-    
-    @Column(columnDefinition = "TEXT")
-    private String description;
+    private Integer year;
     
     @Column
-    private String image;
+    private Double totalRevenue = 0.0;
     
     @Column
-    private Double cost;
+    private Integer totalOrders = 0;
     
     @Column
-    private Double profitMargin;
-    
-    @ManyToOne
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
+    private Double totalProfit = 0.0;
     
     @Column
-    private Integer minThreshold = 10;
+    private Double avgOrderValue = 0.0;
     
     @Column
-    private LocalDateTime lastRestocked;
+    private Double growthPercentage;
+    
+    @Column
+    private LocalDateTime createdAt = LocalDateTime.now();
+    
+    @Column
+    private LocalDateTime updatedAt = LocalDateTime.now();
 }

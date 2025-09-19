@@ -1,5 +1,6 @@
 package com.anurag.SweetShopBackend.controller;
 
+import com.anurag.SweetShopBackend.dto.CheckoutRequestDto;
 import com.anurag.SweetShopBackend.dto.OrderDto;
 import com.anurag.SweetShopBackend.model.Order;
 import com.anurag.SweetShopBackend.model.User;
@@ -25,9 +26,18 @@ public class OrderController {
     private UserRepository userRepository;
 
     @PostMapping("/checkout")
-    public ResponseEntity<OrderDto> checkout(Authentication authentication) {
+    public ResponseEntity<OrderDto> checkout(
+            Authentication authentication,
+            @RequestBody(required = false) CheckoutRequestDto checkoutRequest) {
         User user = getCurrentUser(authentication);
-        OrderDto order = orderService.checkout(user);
+        OrderDto order;
+        
+        if (checkoutRequest != null) {
+            order = orderService.checkout(user, checkoutRequest);
+        } else {
+            order = orderService.checkout(user);
+        }
+        
         return ResponseEntity.ok(order);
     }
 
@@ -55,6 +65,16 @@ public class OrderController {
             @RequestParam Order.OrderStatus status) {
         
         OrderDto order = orderService.updateOrderStatus(orderId, status);
+        return ResponseEntity.ok(order);
+    }
+    
+    @PutMapping("/{orderId}/tracking")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<OrderDto> updateOrderTracking(
+            @PathVariable UUID orderId,
+            @RequestParam String trackingNumber) {
+        
+        OrderDto order = orderService.updateOrderTracking(orderId, trackingNumber);
         return ResponseEntity.ok(order);
     }
 

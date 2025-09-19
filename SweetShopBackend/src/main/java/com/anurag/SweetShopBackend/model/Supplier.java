@@ -1,23 +1,22 @@
 package com.anurag.SweetShopBackend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "sweets")
-public class Sweet {
+@Table(name = "suppliers")
+public class Supplier {
     
     @Id
     @GeneratedValue(generator = "UUID")
@@ -29,41 +28,36 @@ public class Sweet {
     private UUID id;
     
     @NotBlank
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
     
     @Column
-    private String category;
+    private String contactPerson;
     
-    @NotNull
-    @Min(0)
-    @Column(nullable = false)
-    private Double price;
+    @Column
+    private String email;
     
-    @NotNull
-    @Min(0)
-    @Column(nullable = false)
-    private Integer quantity;
+    @Column
+    private String phone;
     
     @Column(columnDefinition = "TEXT")
-    private String description;
+    private String address;
     
     @Column
-    private String image;
+    private String website;
+    
+    @Column(columnDefinition = "TEXT")
+    private String notes;
     
     @Column
-    private Double cost;
+    private Boolean isActive = true;
     
     @Column
-    private Double profitMargin;
-    
-    @ManyToOne
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
+    private LocalDateTime createdAt = LocalDateTime.now();
     
     @Column
-    private Integer minThreshold = 10;
+    private LocalDateTime updatedAt = LocalDateTime.now();
     
-    @Column
-    private LocalDateTime lastRestocked;
+    @OneToMany(mappedBy = "supplier")
+    private List<Sweet> sweets;
 }

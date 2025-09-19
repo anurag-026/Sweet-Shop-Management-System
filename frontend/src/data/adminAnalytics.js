@@ -1,15 +1,36 @@
+const elegantDarkChocolateTruffles =
+  "https://i.postimg.cc/dZRqFQLv/elegant-dark-chocolate-truffles.jpg";
+const colorfulFrenchMacarons =
+  "https://i.postimg.cc/JHC1SH7P/colorful-french-macarons-assortment.jpg";
+const artisanGummyBears =
+  "https://i.postimg.cc/sMTg12Kg/artisan-gummy-bears-colorful.jpg";
+const saltedCaramelBonbons =
+  "https://i.postimg.cc/KKKxzDR0/salted-caramel-bonbons-chocolate.jpg";
+const strawberryCreamFudge =
+  "https://i.postimg.cc/7CpDTJzw/strawberry-cream-fudge-pink-white.jpg";
+const honeyLavenderLollipops =
+  "https://i.postimg.cc/z3TDK7pM/honey-lavender-lollipops-purple.jpg";
+const pistachioRoseTurkishDelight =
+  "https://i.postimg.cc/rKJ8YpBN/pistachio-rose-turkish-delight-pink.jpg";
+const mintChocolateChipBrittle =
+  "https://i.postimg.cc/Yhkr3FsS/mint-chocolate-chip-brittle-green.jpg";
+const champagneGummyRings =
+  "https://i.postimg.cc/7G2HBn45/champagne-gummy-rings-gold-elegant.jpg";
+const coconutLimeMacaroons =
+  "https://i.postimg.cc/TyhYbXHq/coconut-lime-macaroons-white-green.jpg";
+
 // Mock analytics data for admin dashboard
 export const adminAnalytics = {
   // Sales Overview
   salesOverview: {
-    totalRevenue: 45680.50,
+    totalRevenue: 45680.5,
     totalOrders: 1247,
     averageOrderValue: 36.65,
     conversionRate: 3.2,
     revenueGrowth: 12.5,
     ordersGrowth: 8.3,
     avgOrderGrowth: 4.1,
-    conversionGrowth: -0.8
+    conversionGrowth: -0.8,
   },
 
   // Inventory Status
@@ -19,7 +40,7 @@ export const adminAnalytics = {
     lowStock: 5,
     outOfStock: 2,
     totalValue: 125430.75,
-    lowStockThreshold: 10
+    lowStockThreshold: 10,
   },
 
   // Top Selling Products
@@ -29,56 +50,56 @@ export const adminAnalytics = {
       name: "Artisan Gummy Bears",
       category: "Gummies",
       unitsSold: 245,
-      revenue: 3675.00,
-      profit: 1470.00,
+      revenue: 3675.0,
+      profit: 1470.0,
       profitMargin: 40.0,
       stock: 15,
-      image: "/src/assets/artisan-gummy-bears-colorful.jpg"
+      image: artisanGummyBears,
     },
     {
       id: 2,
       name: "Chocolate Truffles",
       category: "Chocolate",
       unitsSold: 198,
-      revenue: 4950.00,
-      profit: 1980.00,
+      revenue: 4950.0,
+      profit: 1980.0,
       profitMargin: 40.0,
       stock: 8,
-      image: "/src/assets/elegant-dark-chocolate-truffles.jpg"
+      image: elegantDarkChocolateTruffles,
     },
     {
       id: 3,
       name: "French Macarons",
       category: "Macarons",
       unitsSold: 156,
-      revenue: 3120.00,
-      profit: 1248.00,
+      revenue: 3120.0,
+      profit: 1248.0,
       profitMargin: 40.0,
       stock: 22,
-      image: "/src/assets/colorful-french-macarons-assortment.jpg"
+      image: colorfulFrenchMacarons,
     },
     {
       id: 4,
       name: "Salted Caramel Bonbons",
       category: "Caramel",
       unitsSold: 134,
-      revenue: 2680.00,
-      profit: 1072.00,
+      revenue: 2680.0,
+      profit: 1072.0,
       profitMargin: 40.0,
       stock: 12,
-      image: "/src/assets/salted-caramel-bonbons-chocolate.jpg"
+      image: saltedCaramelBonbons,
     },
     {
       id: 5,
       name: "Honey Lavender Lollipops",
       category: "Lollipops",
       unitsSold: 98,
-      revenue: 1470.00,
-      profit: 588.00,
+      revenue: 1470.0,
+      profit: 588.0,
       profitMargin: 40.0,
       stock: 6,
-      image: "/src/assets/honey-lavender-lollipops-purple.jpg"
-    }
+      image: honeyLavenderLollipops,
+    },
   ],
 
   // Low Stock Products
@@ -91,7 +112,7 @@ export const adminAnalytics = {
       minThreshold: 10,
       lastRestocked: "2024-01-15",
       supplier: "Premium Sweets Co.",
-      image: "/src/assets/pistachio-rose-turkish-delight-pink.jpg"
+      image: pistachioRoseTurkishDelight,
     },
     {
       id: 7,
@@ -101,7 +122,7 @@ export const adminAnalytics = {
       minThreshold: 10,
       lastRestocked: "2024-01-20",
       supplier: "Artisan Confections",
-      image: "/src/assets/mint-chocolate-chip-brittle-green.jpg"
+      image: mintChocolateChipBrittle,
     },
     {
       id: 8,
@@ -111,7 +132,7 @@ export const adminAnalytics = {
       minThreshold: 10,
       lastRestocked: "2024-01-18",
       supplier: "Sweet Dreams Ltd",
-      image: "/src/assets/strawberry-cream-fudge-pink-white.jpg"
+      image: strawberryCreamFudge,
     },
     {
       id: 9,
@@ -121,7 +142,7 @@ export const adminAnalytics = {
       minThreshold: 10,
       lastRestocked: "2024-01-22",
       supplier: "Tropical Treats",
-      image: "/src/assets/coconut-lime-macaroons-white-green.jpg"
+      image: coconutLimeMacaroons,
     },
     {
       id: 10,
@@ -131,18 +152,54 @@ export const adminAnalytics = {
       minThreshold: 10,
       lastRestocked: "2024-01-25",
       supplier: "Luxury Gummies Inc",
-      image: "/src/assets/champagne-gummy-rings-gold-elegant.jpg"
-    }
+      image: champagneGummyRings,
+    },
   ],
 
   // Sales by Category
   salesByCategory: [
-    { category: "Chocolate", revenue: 15680.50, percentage: 34.3, unitsSold: 456, profit: 6272.20 },
-    { category: "Gummies", revenue: 12340.25, percentage: 27.0, unitsSold: 789, profit: 4936.10 },
-    { category: "Macarons", revenue: 8920.75, percentage: 19.5, unitsSold: 234, profit: 3568.30 },
-    { category: "Caramel", revenue: 4560.00, percentage: 10.0, unitsSold: 156, profit: 1824.00 },
-    { category: "Lollipops", revenue: 2340.00, percentage: 5.1, unitsSold: 98, profit: 936.00 },
-    { category: "Fudge", revenue: 1859.00, percentage: 4.1, unitsSold: 67, profit: 743.60 }
+    {
+      category: "Chocolate",
+      revenue: 15680.5,
+      percentage: 34.3,
+      unitsSold: 456,
+      profit: 6272.2,
+    },
+    {
+      category: "Gummies",
+      revenue: 12340.25,
+      percentage: 27.0,
+      unitsSold: 789,
+      profit: 4936.1,
+    },
+    {
+      category: "Macarons",
+      revenue: 8920.75,
+      percentage: 19.5,
+      unitsSold: 234,
+      profit: 3568.3,
+    },
+    {
+      category: "Caramel",
+      revenue: 4560.0,
+      percentage: 10.0,
+      unitsSold: 156,
+      profit: 1824.0,
+    },
+    {
+      category: "Lollipops",
+      revenue: 2340.0,
+      percentage: 5.1,
+      unitsSold: 98,
+      profit: 936.0,
+    },
+    {
+      category: "Fudge",
+      revenue: 1859.0,
+      percentage: 4.1,
+      unitsSold: 67,
+      profit: 743.6,
+    },
   ],
 
   // Recent Orders
@@ -151,11 +208,11 @@ export const adminAnalytics = {
       id: "ORD-2024-001",
       customer: "Sarah Johnson",
       email: "sarah.j@email.com",
-      total: 89.50,
+      total: 89.5,
       status: "Delivered",
       date: "2024-01-28",
       items: 3,
-      paymentMethod: "Credit Card"
+      paymentMethod: "Credit Card",
     },
     {
       id: "ORD-2024-002",
@@ -165,7 +222,7 @@ export const adminAnalytics = {
       status: "Processing",
       date: "2024-01-28",
       items: 5,
-      paymentMethod: "PayPal"
+      paymentMethod: "PayPal",
     },
     {
       id: "ORD-2024-003",
@@ -175,44 +232,44 @@ export const adminAnalytics = {
       status: "Shipped",
       date: "2024-01-27",
       items: 2,
-      paymentMethod: "Credit Card"
+      paymentMethod: "Credit Card",
     },
     {
       id: "ORD-2024-004",
       customer: "David Wilson",
       email: "d.wilson@email.com",
-      total: 234.00,
+      total: 234.0,
       status: "Delivered",
       date: "2024-01-27",
       items: 7,
-      paymentMethod: "Bank Transfer"
+      paymentMethod: "Bank Transfer",
     },
     {
       id: "ORD-2024-005",
       customer: "Lisa Anderson",
       email: "lisa.a@email.com",
-      total: 45.50,
+      total: 45.5,
       status: "Pending",
       date: "2024-01-26",
       items: 1,
-      paymentMethod: "Credit Card"
-    }
+      paymentMethod: "Credit Card",
+    },
   ],
 
   // Monthly Sales Data (last 12 months)
   monthlySales: [
-    { month: "Feb 2023", revenue: 32150.00, orders: 856, growth: 5.2 },
-    { month: "Mar 2023", revenue: 34520.00, orders: 923, growth: 7.4 },
-    { month: "Apr 2023", revenue: 28950.00, orders: 745, growth: -16.1 },
-    { month: "May 2023", revenue: 36780.00, orders: 987, growth: 27.0 },
-    { month: "Jun 2023", revenue: 41230.00, orders: 1105, growth: 12.1 },
-    { month: "Jul 2023", revenue: 38950.00, orders: 1023, growth: -5.5 },
-    { month: "Aug 2023", revenue: 42340.00, orders: 1156, growth: 8.7 },
-    { month: "Sep 2023", revenue: 45680.00, orders: 1247, growth: 7.9 },
-    { month: "Oct 2023", revenue: 48920.00, orders: 1324, growth: 7.1 },
-    { month: "Nov 2023", revenue: 52340.00, orders: 1456, growth: 7.0 },
-    { month: "Dec 2023", revenue: 67890.00, orders: 1890, growth: 29.7 },
-    { month: "Jan 2024", revenue: 45680.50, orders: 1247, growth: -32.7 }
+    { month: "Feb 2023", revenue: 32150.0, orders: 856, growth: 5.2 },
+    { month: "Mar 2023", revenue: 34520.0, orders: 923, growth: 7.4 },
+    { month: "Apr 2023", revenue: 28950.0, orders: 745, growth: -16.1 },
+    { month: "May 2023", revenue: 36780.0, orders: 987, growth: 27.0 },
+    { month: "Jun 2023", revenue: 41230.0, orders: 1105, growth: 12.1 },
+    { month: "Jul 2023", revenue: 38950.0, orders: 1023, growth: -5.5 },
+    { month: "Aug 2023", revenue: 42340.0, orders: 1156, growth: 8.7 },
+    { month: "Sep 2023", revenue: 45680.0, orders: 1247, growth: 7.9 },
+    { month: "Oct 2023", revenue: 48920.0, orders: 1324, growth: 7.1 },
+    { month: "Nov 2023", revenue: 52340.0, orders: 1456, growth: 7.0 },
+    { month: "Dec 2023", revenue: 67890.0, orders: 1890, growth: 29.7 },
+    { month: "Jan 2024", revenue: 45680.5, orders: 1247, growth: -32.7 },
   ],
 
   // Customer Analytics
@@ -220,13 +277,13 @@ export const adminAnalytics = {
     totalCustomers: 2847,
     newCustomers: 156,
     returningCustomers: 89,
-    averageCustomerValue: 65.40,
+    averageCustomerValue: 65.4,
     customerRetentionRate: 78.5,
     topCustomerSegments: [
-      { segment: "Premium Buyers", count: 234, avgOrderValue: 125.50 },
-      { segment: "Regular Customers", count: 1456, avgOrderValue: 45.20 },
-      { segment: "Occasional Buyers", count: 1157, avgOrderValue: 28.90 }
-    ]
+      { segment: "Premium Buyers", count: 234, avgOrderValue: 125.5 },
+      { segment: "Regular Customers", count: 1456, avgOrderValue: 45.2 },
+      { segment: "Occasional Buyers", count: 1157, avgOrderValue: 28.9 },
+    ],
   },
 
   // Performance Metrics
@@ -236,21 +293,21 @@ export const adminAnalytics = {
       uniqueVisitors: 23450,
       bounceRate: 32.5,
       avgSessionDuration: "3:45",
-      pageViews: 123450
+      pageViews: 123450,
     },
     conversionFunnel: {
       visitors: 45680,
       productViews: 23450,
       addToCart: 3456,
       checkout: 1247,
-      completed: 1156
+      completed: 1156,
     },
     shippingMetrics: {
       avgShippingTime: "2.3 days",
       onTimeDelivery: 94.2,
-      shippingCost: 8.50,
-      freeShippingThreshold: 75.00
-    }
+      shippingCost: 8.5,
+      freeShippingThreshold: 75.0,
+    },
   },
 
   // Alerts and Notifications
@@ -261,7 +318,7 @@ export const adminAnalytics = {
       title: "Low Stock Alert",
       message: "5 products are running low on stock",
       timestamp: "2024-01-28T10:30:00Z",
-      priority: "high"
+      priority: "high",
     },
     {
       id: 2,
@@ -269,7 +326,7 @@ export const adminAnalytics = {
       title: "New Order Received",
       message: "Order #ORD-2024-002 worth $156.75 received",
       timestamp: "2024-01-28T09:15:00Z",
-      priority: "medium"
+      priority: "medium",
     },
     {
       id: 3,
@@ -277,7 +334,7 @@ export const adminAnalytics = {
       title: "Monthly Target Achieved",
       message: "January revenue target exceeded by 12%",
       timestamp: "2024-01-28T08:00:00Z",
-      priority: "low"
+      priority: "low",
     },
     {
       id: 4,
@@ -285,9 +342,9 @@ export const adminAnalytics = {
       title: "Payment Issue",
       message: "Payment failed for Order #ORD-2024-005",
       timestamp: "2024-01-27T16:45:00Z",
-      priority: "high"
-    }
-  ]
-}
+      priority: "high",
+    },
+  ],
+};
 
-export default adminAnalytics
+export default adminAnalytics;

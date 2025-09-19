@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useCart } from "../context/CartContext"
 import CartItem from "../components/CartItem"
+import PaymentModal from "../components/PaymentModal"
 import { cartService } from "../services/cartService"
 import { orderService } from "../services/orderService"
 import "./Cart.css"
@@ -12,18 +13,23 @@ const Cart = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
+  const [showPaymentModal, setShowPaymentModal] = useState(false)
 
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
     if (cartItems.length === 0) return
+    setShowPaymentModal(true)
+  }
 
+  const handlePaymentConfirm = async (paymentData) => {
     try {
       setLoading(true)
       setError("")
       setSuccess("")
       
-      const order = await orderService.checkout()
+      const order = await orderService.checkoutWithPayment(paymentData)
       setSuccess("Checkout successful! Thank you for your purchase.")
       clearCart()
+      setShowPaymentModal(false)
       
       // Clear success message after 3 seconds
       setTimeout(() => setSuccess(""), 3000)
@@ -33,6 +39,10 @@ const Cart = () => {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handlePaymentCancel = () => {
+    setShowPaymentModal(false)
   }
 
   return (
@@ -151,6 +161,15 @@ const Cart = () => {
             </motion.div>
           </motion.div>
         )}
+
+        {/* Payment Modal */}
+        <PaymentModal
+          isOpen={showPaymentModal}
+          onClose={handlePaymentCancel}
+          onConfirm={handlePaymentConfirm}
+          totalAmount={getTotalPrice()}
+          loading={loading}
+        />
       </div>
     </motion.div>
   )

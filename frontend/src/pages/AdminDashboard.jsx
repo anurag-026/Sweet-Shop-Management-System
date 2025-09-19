@@ -27,6 +27,11 @@ const AdminDashboard = () => {
     fetchRealTimeData();
   }, []);
 
+  // Fetch analytics whenever time range changes
+  useEffect(() => {
+    fetchAnalytics(selectedTimeRange);
+  }, [selectedTimeRange]);
+
   const fetchRealTimeData = async () => {
     try {
       setLoading(true);
@@ -35,7 +40,7 @@ const AdminDashboard = () => {
       const [dashboardStats, systemStatus, recentOrders] = await Promise.all([
         adminService.getDashboardStats().catch(() => null),
         adminService.getSystemStatus().catch(() => null),
-        orderService.getUserOrders().catch(() => []),
+        adminService.getRecentOrders().catch(() => []),
       ]);
 
       setRealTimeData({
@@ -46,6 +51,81 @@ const AdminDashboard = () => {
     } catch (err) {
       console.error("Error fetching real-time data:", err);
       setError("Failed to load some dashboard data. Using mock data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchAnalytics = async (range) => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const [
+        salesOverview,
+        monthlySales,
+        topProducts,
+        salesByCategory,
+        customerSummary,
+        customerSegments,
+        websiteTrafficResp,
+        conversionFunnel,
+        shippingMetrics,
+        alerts,
+        inventoryStatus,
+        lowStockItems,
+        recentOrders,
+      ] = await Promise.all([
+        adminService.getSalesOverview(range),
+        adminService.getMonthlySales(12),
+        adminService.getTopProducts(5),
+        adminService.getSalesByCategory(range),
+        adminService.getCustomerSummary(range),
+        adminService.getCustomerSegments(range),
+        adminService.getWebsiteTraffic(range),
+        adminService.getConversionFunnel(range),
+        adminService.getShippingMetrics(range),
+        adminService.getAlerts(20),
+        adminService.getInventoryStatus(),
+        adminService.getLowStockItems(10),
+        adminService.getRecentOrders(20),
+      ]);
+
+      setAnalytics({
+        salesOverview: {
+          totalRevenue: salesOverview.totalRevenue,
+          totalOrders: salesOverview.totalOrders,
+          averageOrderValue: salesOverview.averageOrderValue,
+          conversionRate: salesOverview.conversionRate,
+          revenueGrowth: salesOverview.revenueGrowth,
+          ordersGrowth: salesOverview.ordersGrowth,
+          avgOrderGrowth: salesOverview.avgOrderGrowth,
+          conversionGrowth: salesOverview.conversionGrowth,
+        },
+        monthlySales,
+        topSellingProducts: topProducts,
+        salesByCategory,
+        customerAnalytics: {
+          totalCustomers: customerSummary.totalCustomers,
+          newCustomers: customerSummary.newCustomers,
+          returningCustomers: customerSummary.returningCustomers,
+          averageCustomerValue: customerSummary.averageCustomerValue,
+          customerRetentionRate: customerSummary.customerRetentionRate,
+          topCustomerSegments: customerSegments,
+        },
+        performanceMetrics: {
+          websiteTraffic: websiteTrafficResp.websiteTraffic,
+          conversionFunnel,
+          shippingMetrics,
+        },
+        inventoryStatus,
+        lowStockProducts: lowStockItems,
+        recentOrders,
+        alerts,
+      });
+    } catch (err) {
+      console.error("Error fetching analytics:", err);
+      setError("Failed to load analytics. Showing mock data.");
     } finally {
       setLoading(false);
     }
@@ -514,7 +594,7 @@ const AdminDashboard = () => {
                 <div>Date</div>
                 <div>Items</div>
                 <div>Payment</div>
-                <div>Actions</div>
+                <div>Update Status</div>
               </div>
               {analytics.recentOrders.map((order, index) => (
                 <motion.div
@@ -542,8 +622,44 @@ const AdminDashboard = () => {
                   <div className="items">{order.items} items</div>
                   <div className="payment">{order.paymentMethod}</div>
                   <div className="actions">
-                    <button className="action-btn view">View</button>
-                    <button className="action-btn edit">Edit</button>
+                    <select
+                      className="status-select"
+                      value={order.status}
+                      onChange={async (e) => {
+                        const newStatus = e.target.value
+                        try {
+                          await orderService.updateOrderStatus(order.id, newStatus)
+                          // update UI state optimistically
+                          setAnalytics((prev) => ({
+                            ...prev,
+                            recentOrders: prev.recentOrders.map((o) =>
+                              o.id === order.id ? { ...o, status: newStatus } : o
+                            ),
+                          }))
+                        } catch (err) {
+                          console.error('Failed to update order status', err)
+                          alert('Failed to update status. Please try again.')
+                        }
+                      }}
+                    >
+                      {[
+                        'PENDING',
+                        'CONFIRMED',
+                        'SHIPPED',
+                        'DELIVERED',
+                        'CANCELLED',
+                        // include current status if it's non-standard (e.g., PROCESSING)
+                        order.status && !['PENDING','CONFIRMED','SHIPPED','DELIVERED','CANCELLED'].includes(order.status)
+                          ? order.status
+                          : null,
+                      ]
+                        .filter(Boolean)
+                        .map((s) => (
+                          <option key={s} value={s}>
+                            {s}
+                          </option>
+                        ))}
+                    </select>
                   </div>
                 </motion.div>
               ))}

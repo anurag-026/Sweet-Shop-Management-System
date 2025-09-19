@@ -1,5 +1,6 @@
 package com.anurag.SweetShopBackend.service;
 
+import com.anurag.SweetShopBackend.dto.CheckoutRequestDto;
 import com.anurag.SweetShopBackend.dto.OrderDto;
 import com.anurag.SweetShopBackend.dto.OrderItemDto;
 import com.anurag.SweetShopBackend.model.*;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -29,6 +31,11 @@ public class OrderService {
 
     @Transactional
     public OrderDto checkout(User user) {
+        return checkout(user, null);
+    }
+    
+    @Transactional
+    public OrderDto checkout(User user, CheckoutRequestDto checkoutRequest) {
         List<CartItem> cartItems = cartItemRepository.findByUser(user);
         
         if (cartItems.isEmpty()) {
@@ -39,7 +46,30 @@ public class OrderService {
         Order order = new Order();
         order.setUser(user);
         order.setStatus(Order.OrderStatus.PENDING);
-        order.setOrderDate(java.time.LocalDateTime.now());
+        order.setOrderDate(LocalDateTime.now());
+        order.setLastUpdated(LocalDateTime.now());
+        
+        // Set payment information if provided
+        if (checkoutRequest != null) {
+            if (checkoutRequest.getPaymentMode() != null) {
+                order.setPaymentMode(checkoutRequest.getPaymentMode());
+            }
+            if (checkoutRequest.getShippingAddress() != null) {
+                order.setShippingAddress(checkoutRequest.getShippingAddress());
+            }
+            if (checkoutRequest.getCustomerNotes() != null) {
+                order.setCustomerNotes(checkoutRequest.getCustomerNotes());
+            }
+            
+            // Generate a payment transaction ID (in real-world, this would come from payment gateway)
+            if (checkoutRequest.getPaymentDetails() != null) {
+                String transactionId = generateTransactionId(checkoutRequest.getPaymentMode());
+                order.setPaymentTransactionId(transactionId);
+            }
+            
+            // Set estimated delivery date (7 days from now)
+            order.setEstimatedDeliveryDate(LocalDateTime.now().plusDays(7));
+        }
         
         double totalAmount = 0.0;
         
@@ -107,18 +137,61 @@ public class OrderService {
                 .orElseThrow(() -> new IllegalArgumentException("Order not found with id: " + orderId));
         
         order.setStatus(status);
+        order.setLastUpdated(LocalDateTime.now());
+        
+        // Set actual delivery date if order is delivered
+        if (status == Order.OrderStatus.DELIVERED) {
+            order.setActualDeliveryDate(LocalDateTime.now());
+        }
+        
         Order savedOrder = orderRepository.save(order);
         
         return convertToDto(savedOrder);
+    }
+    
+    @Transactional
+    public OrderDto updateOrderTracking(UUID orderId, String trackingNumber) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found with id: " + orderId));
+        
+        order.setTrackingNumber(trackingNumber);
+        order.setLastUpdated(LocalDateTime.now());
+        
+        // If adding tracking number, set status to SHIPPED if it's still PROCESSING
+        if (order.getStatus() == Order.OrderStatus.PROCESSING) {
+            order.setStatus(Order.OrderStatus.SHIPPED);
+        }
+        
+        Order savedOrder = orderRepository.save(order);
+        return convertToDto(savedOrder);
+    }
+    
+    private String generateTransactionId(Order.PaymentMode paymentMode) {
+        String prefix = paymentMode == Order.PaymentMode.CREDIT_CARD ? "CC" : 
+                       paymentMode == Order.PaymentMode.PAYPAL ? "PP" : "TX";
+        return prefix + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    }
+    
+    private String generateTrackingNumber() {
+        return "TRK" + System.currentTimeMillis() + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
 
     private OrderDto convertToDto(Order order) {
         OrderDto dto = new OrderDto();
         dto.setId(order.getId());
+        dto.setCustomerId(order.getUser().getId());
         dto.setUsername(order.getUser().getEmail());
         dto.setTotalAmount(order.getTotalAmount());
         dto.setStatus(order.getStatus());
         dto.setOrderDate(order.getOrderDate());
+        dto.setLastUpdated(order.getLastUpdated());
+        dto.setPaymentMode(order.getPaymentMode());
+        dto.setPaymentTransactionId(order.getPaymentTransactionId());
+        dto.setShippingAddress(order.getShippingAddress());
+        dto.setCustomerNotes(order.getCustomerNotes());
+        dto.setTrackingNumber(order.getTrackingNumber());
+        dto.setEstimatedDeliveryDate(order.getEstimatedDeliveryDate());
+        dto.setActualDeliveryDate(order.getActualDeliveryDate());
         
         List<OrderItem> orderItems = orderItemRepository.findByOrder(order);
         List<OrderItemDto> orderItemDtos = orderItems.stream()

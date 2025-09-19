@@ -14,9 +14,18 @@ import java.util.UUID;
 @AllArgsConstructor
 public class OrderDto {
     private UUID id;
+    private UUID customerId;
     private String username;
     private List<OrderItemDto> orderItems;
     private Double totalAmount;
     private Order.OrderStatus status;
     private LocalDateTime orderDate;
+    private LocalDateTime lastUpdated;
+    private Order.PaymentMode paymentMode;
+    private String paymentTransactionId;
+    private String shippingAddress;
+    private String customerNotes;
+    private String trackingNumber;
+    private LocalDateTime estimatedDeliveryDate;
+    private LocalDateTime actualDeliveryDate;
 }

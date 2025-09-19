@@ -132,26 +132,38 @@ const AdminPanel = () => {
     setShowEditModal(true);
   };
 
-  const confirmEdit = () => {
-    if (editingSweet) {
-      const updatedSweets = sweets.map((sweet) => {
-        if (sweet.id === editingSweet.id) {
-          return {
-            ...sweet,
-            name: formData.name,
-            price: parseFloat(formData.price),
-            category: formData.category,
-            description: formData.description,
-            image: formData.image,
-            quantity: parseInt(formData.stock),
-          };
-        }
-        return sweet;
-      });
-      setSweets(updatedSweets);
+  const confirmEdit = async () => {
+    if (!editingSweet) return;
+    try {
+      setLoading(true);
+      setError("");
+      setSuccess("");
+
+      const sweetData = {
+        name: formData.name,
+        category: formData.category,
+        price: parseFloat(formData.price),
+        quantity: parseInt(formData.stock),
+        description: formData.description,
+        image: formData.image,
+      };
+
+      const updatedSweet = await sweetService.updateSweet(editingSweet.id, sweetData);
+
+      setSweets(
+        sweets.map((sweet) => (sweet.id === editingSweet.id ? updatedSweet : sweet))
+      );
+
       setShowEditModal(false);
       setEditingSweet(null);
       resetForm();
+      setSuccess("Sweet updated successfully!");
+      setTimeout(() => setSuccess(""), 3000);
+    } catch (err) {
+      console.error("Error updating sweet:", err);
+      setError("Failed to update sweet. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -341,7 +353,7 @@ const AdminPanel = () => {
               <div className="sweet-info">
                 <h3>{sweet.name}</h3>
                 <p className="price">${sweet.price}</p>
-                <p className="stock">Stock: {sweet.stock}</p>
+                <p className="stock">Stock: {sweet.quantity}</p>
                 <p className="category">{sweet.category}</p>
               </div>
               <div className="admin-actions">

@@ -45,7 +45,36 @@ public class Order {
     @Column(nullable = false)
     private LocalDateTime orderDate = LocalDateTime.now();
     
+    @Column
+    private LocalDateTime lastUpdated = LocalDateTime.now();
+    
+    @Enumerated(EnumType.STRING)
+    @Column
+    private PaymentMode paymentMode = PaymentMode.CREDIT_CARD;
+    
+    @Column
+    private String paymentTransactionId;
+    
+    @Column
+    private String shippingAddress;
+    
+    @Column
+    private String customerNotes;
+    
+    @Column
+    private String trackingNumber;
+    
+    @Column
+    private LocalDateTime estimatedDeliveryDate;
+    
+    @Column
+    private LocalDateTime actualDeliveryDate;
+    
     public enum OrderStatus {
-        PENDING, CONFIRMED, SHIPPED, DELIVERED, CANCELLED
+        PENDING, CONFIRMED, PROCESSING, SHIPPED, OUT_FOR_DELIVERY, DELIVERED, CANCELLED, REFUNDED
+    }
+    
+    public enum PaymentMode {
+        CREDIT_CARD, PAYPAL, BANK_TRANSFER, CASH_ON_DELIVERY
     }
 }

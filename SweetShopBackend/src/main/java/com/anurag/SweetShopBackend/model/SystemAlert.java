@@ -1,9 +1,7 @@
 package com.anurag.SweetShopBackend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,8 +14,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "sweets")
-public class Sweet {
+@Table(name = "system_alerts")
+public class SystemAlert {
     
     @Id
     @GeneratedValue(generator = "UUID")
@@ -29,41 +27,30 @@ public class Sweet {
     private UUID id;
     
     @NotBlank
-    @Column(nullable = false, unique = true)
-    private String name;
-    
-    @Column
-    private String category;
-    
-    @NotNull
-    @Min(0)
     @Column(nullable = false)
-    private Double price;
+    private String alertType; // 'warning', 'info', 'success', 'error'
     
-    @NotNull
-    @Min(0)
+    @NotBlank
     @Column(nullable = false)
-    private Integer quantity;
+    private String title;
     
-    @Column(columnDefinition = "TEXT")
-    private String description;
+    @NotBlank
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String message;
     
-    @Column
-    private String image;
-    
-    @Column
-    private Double cost;
-    
-    @Column
-    private Double profitMargin;
-    
-    @ManyToOne
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
+    @NotBlank
+    @Column(nullable = false)
+    private String priority; // 'low', 'medium', 'high'
     
     @Column
-    private Integer minThreshold = 10;
+    private Boolean isRead = false;
     
     @Column
-    private LocalDateTime lastRestocked;
+    private Boolean isDismissed = false;
+    
+    @Column
+    private LocalDateTime createdAt = LocalDateTime.now();
+    
+    @Column
+    private LocalDateTime updatedAt = LocalDateTime.now();
 }

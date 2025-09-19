@@ -13,6 +13,17 @@ export const orderService = {
     }
   },
 
+  // Checkout with payment mode (create order from cart with payment details)
+  checkoutWithPayment: async (paymentData) => {
+    try {
+      const response = await axiosInstance.post('/api/orders/checkout', paymentData)
+      return response.data
+    } catch (error) {
+      console.error('Error during checkout with payment:', error)
+      throw error
+    }
+  },
+
   // Get all user orders
   getUserOrders: async () => {
     try {
@@ -42,6 +53,19 @@ export const orderService = {
       return response.data
     } catch (error) {
       console.error('Error updating order status:', error)
+      throw error
+    }
+  },
+
+  // Update order tracking number (Admin only)
+  updateOrderTracking: async (orderId, trackingNumber) => {
+    try {
+      const response = await axiosInstance.put(`/api/orders/${orderId}/tracking`, null, {
+        params: { trackingNumber }
+      })
+      return response.data
+    } catch (error) {
+      console.error('Error updating order tracking:', error)
       throw error
     }
   }
