@@ -316,15 +316,33 @@ public class AnalyticsService {
         Long pageViews = websiteTrafficRepository.getTotalPageViews(startLocalDate, endLocalDate);
         if (pageViews == null) pageViews = 0L;
         
+        // Get additional metrics
+        Long registeredUsers = websiteTrafficRepository.countRegisteredUsers(startLocalDate, endLocalDate);
+        if (registeredUsers == null) registeredUsers = 0L;
+        
+        Double avgPageViewsPerSession = websiteTrafficRepository.getAvgPageViewsPerSession(startLocalDate, endLocalDate);
+        if (avgPageViewsPerSession == null) avgPageViewsPerSession = 0.0;
+        
+        Long bounceSessions = websiteTrafficRepository.countBounceSessions(startLocalDate, endLocalDate);
+        if (bounceSessions == null) bounceSessions = 0L;
+        
         // Format session duration
         String formattedDuration = formatSessionDuration(avgSessionDuration);
+        
+        // Calculate additional metrics
+        double pagesPerVisit = totalVisits > 0 ? (double) pageViews / totalVisits : 0.0;
+        double bounceRatePercentage = Math.round(bounceRate * 10) / 10.0;
         
         // Populate result
         traffic.put("totalVisits", totalVisits);
         traffic.put("uniqueVisitors", uniqueVisitors);
-        traffic.put("bounceRate", bounceRate);
+        traffic.put("bounceRate", bounceRatePercentage);
         traffic.put("avgSessionDuration", formattedDuration);
         traffic.put("pageViews", pageViews);
+        traffic.put("registeredUsers", registeredUsers);
+        traffic.put("avgPageViewsPerSession", Math.round(avgPageViewsPerSession * 10) / 10.0);
+        traffic.put("bounceSessions", bounceSessions);
+        traffic.put("pagesPerVisit", Math.round(pagesPerVisit * 10) / 10.0);
         
         result.put("websiteTraffic", traffic);
         return result;
@@ -381,12 +399,34 @@ public class AnalyticsService {
             if (totalVisits != null) visitors = totalVisits;
         }
         
+        // Calculate conversion rates
+        double productViewRate = visitors > 0 ? (double) productViews / visitors * 100 : 0.0;
+        double addToCartRate = visitors > 0 ? (double) addToCart / visitors * 100 : 0.0;
+        double checkoutRate = visitors > 0 ? (double) checkout / visitors * 100 : 0.0;
+        double completionRate = visitors > 0 ? (double) completed / visitors * 100 : 0.0;
+        
+        // Calculate funnel drop-off rates
+        double productViewDropOff = productViews > 0 ? (double) (productViews - addToCart) / productViews * 100 : 0.0;
+        double addToCartDropOff = addToCart > 0 ? (double) (addToCart - checkout) / addToCart * 100 : 0.0;
+        double checkoutDropOff = checkout > 0 ? (double) (checkout - completed) / checkout * 100 : 0.0;
+        
         // Populate result
         result.put("visitors", visitors);
         result.put("productViews", productViews);
         result.put("addToCart", addToCart);
         result.put("checkout", checkout);
         result.put("completed", completed);
+        
+        // Add conversion rates
+        result.put("productViewRate", Math.round(productViewRate * 10) / 10.0);
+        result.put("addToCartRate", Math.round(addToCartRate * 10) / 10.0);
+        result.put("checkoutRate", Math.round(checkoutRate * 10) / 10.0);
+        result.put("completionRate", Math.round(completionRate * 10) / 10.0);
+        
+        // Add drop-off rates
+        result.put("productViewDropOff", Math.round(productViewDropOff * 10) / 10.0);
+        result.put("addToCartDropOff", Math.round(addToCartDropOff * 10) / 10.0);
+        result.put("checkoutDropOff", Math.round(checkoutDropOff * 10) / 10.0);
         
         return result;
     }
