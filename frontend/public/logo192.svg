@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <!-- Background circle -->
+  <circle cx="96" cy="96" r="90" fill="#FF6B6B" stroke="#E55555" stroke-width="4"/>
+  
+  <!-- Cupcake base -->
+  <rect x="66" y="114" width="60" height="30" fill="#8B4513" rx="4"/>
+  
+  <!-- Cupcake frosting -->
+  <path d="M54 114 Q66 84 78 96 Q90 72 102 96 Q114 84 126 114 Q114 102 102 114 Q96 96 96 114 Q90 96 84 114 Q72 102 54 114" fill="#FFB6C1"/>
+  
+  <!-- Cherry on top -->
+  <circle cx="96" cy="84" r="8" fill="#DC143C"/>
+  <path d="M96 78 Q90 72 84 78" stroke="#228B22" stroke-width="3" fill="none"/>
+  
+  <!-- Decorative sprinkles -->
+  <circle cx="78" cy="102" r="3" fill="#FFD700"/>
+  <circle cx="114" cy="108" r="3" fill="#FF69B4"/>
+  <circle cx="84" cy="120" r="3" fill="#00CED1"/>
+  <circle cx="108" cy="114" r="3" fill="#FFA500"/>
+  <circle cx="90" cy="108" r="2" fill="#FF1493"/>
+  <circle cx="102" cy="120" r="2" fill="#32CD32"/>
+  
+  <!-- Sparkle effects -->
+  <path d="M48 48 L54 54 L48 60 L42 54 Z" fill="#FFD700"/>
+  <path d="M144 36 L150 42 L144 48 L138 42 Z" fill="#FFD700"/>
+  <path d="M156 120 L162 126 L156 132 L150 126 Z" fill="#FFD700"/>
+  <path d="M36 144 L42 150 L36 156 L30 150 Z" fill="#FFD700"/>
+  <path d="M72 30 L78 36 L72 42 L66 36 Z" fill="#FFD700"/>
+  <path d="M120 150 L126 156 L120 162 L114 156 Z" fill="#FFD700"/>
+</svg>
