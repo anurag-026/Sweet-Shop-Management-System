@@ -32,21 +32,8 @@ const AdminDashboard = () => {
       setLoading(true);
       setError("");
 
-      const [
-        salesOverview,
-        monthlySales,
-        topProducts,
-        salesByCategory,
-        customerSummary,
-        customerSegments,
-        websiteTrafficResp,
-        conversionFunnel,
-        shippingMetrics,
-        alerts,
-        inventoryStatus,
-        lowStockItems,
-        recentOrders,
-      ] = await Promise.all([
+      // Use Promise.allSettled instead of Promise.all to handle individual failures
+      const results = await Promise.allSettled([
         adminService.getSalesOverview(range),
         adminService.getMonthlySales(12),
         adminService.getTopProducts(5),
@@ -62,10 +49,101 @@ const AdminDashboard = () => {
         adminService.getRecentOrders(20),
       ]);
 
+      // Extract successful results and log failures
+      const [
+        salesOverviewResult,
+        monthlySalesResult,
+        topProductsResult,
+        salesByCategoryResult,
+        customerSummaryResult,
+        customerSegmentsResult,
+        websiteTrafficResult,
+        conversionFunnelResult,
+        shippingMetricsResult,
+        alertsResult,
+        inventoryStatusResult,
+        lowStockItemsResult,
+        recentOrdersResult,
+      ] = results;
+
+      // Log individual API results
+      console.log("=== INDIVIDUAL API RESULTS ===");
+      results.forEach((result, index) => {
+        const apiNames = [
+          "Sales Overview", "Monthly Sales", "Top Products", "Sales by Category",
+          "Customer Summary", "Customer Segments", "Website Traffic", "Conversion Funnel",
+          "Shipping Metrics", "Alerts", "Inventory Status", "Low Stock Items", "Recent Orders"
+        ];
+        if (result.status === 'fulfilled') {
+          console.log(`${apiNames[index]}: SUCCESS`, result.value);
+        } else {
+          console.log(`${apiNames[index]}: FAILED`, result.reason);
+          // Log detailed error information
+          if (result.reason?.response) {
+            console.log(`${apiNames[index]} Error Details:`, {
+              status: result.reason.response.status,
+              statusText: result.reason.response.statusText,
+              data: result.reason.response.data,
+              url: result.reason.config?.url
+            });
+          }
+        }
+      });
+      console.log("=== END INDIVIDUAL API RESULTS ===");
+
+      // Check if we have any successful APIs
+      const successfulAPIs = results.filter(result => result.status === 'fulfilled');
+      const failedAPIs = results.filter(result => result.status === 'rejected');
       
-      console.log("API Response - Sales Overview:", salesOverview);
+      console.log(`Successful APIs: ${successfulAPIs.length}/${results.length}`);
+      console.log(`Failed APIs: ${failedAPIs.length}/${results.length}`);
       
-      setAnalytics({
+      if (failedAPIs.length > 0) {
+        const failedNames = failedAPIs.map((_, index) => {
+          const apiNames = [
+            "Sales Overview", "Monthly Sales", "Top Products", "Sales by Category",
+            "Customer Summary", "Customer Segments", "Website Traffic", "Conversion Funnel",
+            "Shipping Metrics", "Alerts", "Inventory Status", "Low Stock Items", "Recent Orders"
+          ];
+          return apiNames[index];
+        });
+        console.log("Failed APIs:", failedNames);
+        setError(`Some analytics failed to load: ${failedNames.join(', ')}. Showing available data.`);
+      }
+
+      // Extract data from successful results, use null for failed ones
+      const salesOverview = salesOverviewResult.status === 'fulfilled' ? salesOverviewResult.value : null;
+      const monthlySales = monthlySalesResult.status === 'fulfilled' ? monthlySalesResult.value : null;
+      const topProducts = topProductsResult.status === 'fulfilled' ? topProductsResult.value : null;
+      const salesByCategory = salesByCategoryResult.status === 'fulfilled' ? salesByCategoryResult.value : null;
+      const customerSummary = customerSummaryResult.status === 'fulfilled' ? customerSummaryResult.value : null;
+      const customerSegments = customerSegmentsResult.status === 'fulfilled' ? customerSegmentsResult.value : null;
+      const websiteTrafficResp = websiteTrafficResult.status === 'fulfilled' ? websiteTrafficResult.value : null;
+      const conversionFunnel = conversionFunnelResult.status === 'fulfilled' ? conversionFunnelResult.value : null;
+      const shippingMetrics = shippingMetricsResult.status === 'fulfilled' ? shippingMetricsResult.value : null;
+      const alerts = alertsResult.status === 'fulfilled' ? alertsResult.value : null;
+      const inventoryStatus = inventoryStatusResult.status === 'fulfilled' ? inventoryStatusResult.value : null;
+      const lowStockItems = lowStockItemsResult.status === 'fulfilled' ? lowStockItemsResult.value : null;
+      const recentOrders = recentOrdersResult.status === 'fulfilled' ? recentOrdersResult.value : null;
+
+      // Comprehensive API Response Logging
+      console.log("=== ANALYTICS API RESPONSES ===");
+      console.log("1. Sales Overview:", salesOverview);
+      console.log("2. Monthly Sales:", monthlySales);
+      console.log("3. Top Products:", topProducts);
+      console.log("4. Sales by Category:", salesByCategory);
+      console.log("5. Customer Summary:", customerSummary);
+      console.log("6. Customer Segments:", customerSegments);
+      console.log("7. Website Traffic:", websiteTrafficResp);
+      console.log("8. Conversion Funnel:", conversionFunnel);
+      console.log("9. Shipping Metrics:", shippingMetrics);
+      console.log("10. Alerts:", alerts);
+      console.log("11. Inventory Status:", inventoryStatus);
+      console.log("12. Low Stock Items:", lowStockItems);
+      console.log("13. Recent Orders:", recentOrders);
+      console.log("=== END API RESPONSES ===");
+      
+      const processedAnalytics = {
         salesOverview: {
           totalRevenue: salesOverview ? Number(salesOverview.totalRevenue) : 0,
           totalOrders: salesOverview ? Number(salesOverview.totalOrders) : 0,
@@ -120,10 +198,17 @@ const AdminDashboard = () => {
         lowStockProducts: lowStockItems || [],
         recentOrders: recentOrders || [],
         alerts: alerts || [],
-      });
+      };
+
+      console.log("=== PROCESSED ANALYTICS OBJECT ===");
+      console.log("Processed Analytics:", processedAnalytics);
+      console.log("=== END PROCESSED ANALYTICS ===");
+
+      setAnalytics(processedAnalytics);
     } catch (err) {
       console.error("Error fetching analytics:", err);
       setError("Failed to load analytics. Please try again.");
+      
       // Set empty analytics instead of mock data
       setAnalytics({
         salesOverview: {
@@ -204,6 +289,13 @@ const AdminDashboard = () => {
       </div>
     );
   }
+
+  // Debug logging for analytics state
+  console.log("=== COMPONENT RENDER STATE ===");
+  console.log("Loading:", loading);
+  console.log("Analytics:", analytics);
+  console.log("Error:", error);
+  console.log("=== END RENDER STATE ===");
 
   // Show loading state
   if (loading || !analytics) {
@@ -359,6 +451,10 @@ const AdminDashboard = () => {
         >
           {/* Key Metrics Cards */}
           <div className="metrics-grid">
+            {console.log("=== RENDERING METRICS ===")}
+            {console.log("Sales Overview Data:", analytics?.salesOverview)}
+            {console.log("Total Revenue:", analytics?.salesOverview?.totalRevenue)}
+            {console.log("Total Orders:", analytics?.salesOverview?.totalOrders)}
             <motion.div
               className="metric-card revenue"
               whileHover={{ scale: 1.02 }}

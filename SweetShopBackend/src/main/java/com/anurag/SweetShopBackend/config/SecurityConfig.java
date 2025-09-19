@@ -46,9 +46,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/sweets/{id}").authenticated()
                 .requestMatchers("/api/sweets/{id}/purchase").authenticated()
                 // Admin-only sweet endpoints
-                .requestMatchers("/api/sweets", "POST").hasRole("ADMIN")
-                .requestMatchers("/api/sweets/{id}", "PUT").hasRole("ADMIN")
-                .requestMatchers("/api/sweets/{id}", "DELETE").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/sweets").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/sweets/{id}").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/sweets/{id}").hasRole("ADMIN")
                 .requestMatchers("/api/sweets/{id}/restock").hasRole("ADMIN")
                 // Cart endpoints
                 .requestMatchers("/api/cart/**").authenticated()

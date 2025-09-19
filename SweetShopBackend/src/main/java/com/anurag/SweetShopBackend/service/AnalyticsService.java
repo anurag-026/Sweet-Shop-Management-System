@@ -3,6 +3,8 @@ package com.anurag.SweetShopBackend.service;
 import com.anurag.SweetShopBackend.model.*;
 import com.anurag.SweetShopBackend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -107,7 +109,8 @@ public class AnalyticsService {
     
     public List<Map<String, Object>> getMonthlySales(int months) {
         // Get data from MonthlySales table if available
-        List<MonthlySales> monthlySalesData = monthlySalesRepository.findRecentMonths(months);
+        Pageable pageable = PageRequest.of(0, months);
+        List<MonthlySales> monthlySalesData = monthlySalesRepository.findRecentMonths(pageable);
         
         // If data is available, convert to required format
         if (!monthlySalesData.isEmpty()) {
